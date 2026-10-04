@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>YUwiki</title>
+<title>YUpedia</title>
 <!-- ファビコン：パスは下の script 先頭の ASSETS で指定します（見つからない場合は内蔵アイコンを使います） -->
 <link id="favicon" rel="icon">
 <link id="touchicon" rel="apple-touch-icon">
@@ -151,6 +151,7 @@ body.editing #view{padding-top:calc(var(--hh) + var(--sh))}
 .art-head .h1{margin-right:8px}
 .ver-banner{background:var(--input);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:calc(14px*var(--fz))}
 .ver-banner a{margin-left:10px}
+.ver-banner .mini-btn{margin-left:10px}
 .art-wrap{display:grid;grid-template-columns:230px minmax(0,1fr);gap:32px;align-items:start}
 .toc{position:sticky;top:calc(var(--hh) + 16px);border:1px solid var(--border);background:var(--input);border-radius:12px;padding:14px 18px;transition:top .3s ease}
 body.hdr-hidden .toc{top:16px}
@@ -159,7 +160,7 @@ body.hdr-hidden .toc{top:16px}
 .toc-close{background:none;border:0;color:var(--sub);cursor:pointer;font-size:calc(13px*var(--fz));text-decoration:underline;padding:2px 4px;border-radius:6px}
 .toc-close:hover{color:var(--text);background:var(--hover)}
 .toc ol{margin:6px 0 0;padding-left:22px}
-.toc-link{background:none;border:0;color:var(--link);cursor:pointer;padding:3px 0;text-align:left}
+.toc-link{display:block;width:100%;background:none;border:0;color:var(--link);cursor:pointer;padding:3px 0;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .toc-link:hover{text-decoration:underline}
 .toc-open{display:none}
 .page.toc-closed .toc{display:none}
@@ -208,19 +209,13 @@ body.dark .cap-rich font[color="#000000"],body.dark .figcap font[color="#000000"
 .slot:hover{background:var(--hover)}
 .media{position:relative}
 .img-wrap{position:relative}
-.img-wrap img{width:100%;display:block;border-radius:10px;cursor:pointer}
+.img-wrap img{width:100%;display:block;border-radius:10px}
 .m-del{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:#dc2626;color:#fff;border:0;display:grid;place-items:center;cursor:pointer;padding:0;z-index:2}
-.m-cap{display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.75);color:#fff;border:0;border-radius:8px;padding:8px 14px;cursor:pointer;white-space:nowrap}
-.media.img.selected .m-cap{display:block}
-.media.img.has-cap .m-cap{display:none!important}
 .cap-rich{margin-top:6px;min-height:38px;padding:8px 10px;border:1px solid var(--border);background:var(--card);border-radius:10px;outline:0;font-size:calc(13px*var(--fz));font-style:italic;text-align:center;white-space:pre-wrap;word-break:break-word}
 .cap-rich:focus{border-color:var(--primary)}
 .cap-rich:empty::before{content:attr(data-ph);color:var(--sub);opacity:.7}
-.a-capbtn{margin-top:8px;padding:6px 12px;border:1px dashed var(--primary);color:var(--primary);background:transparent;border-radius:8px;cursor:pointer;font-size:calc(13px*var(--fz))}
-.a-capbtn:hover{background:var(--hover)}
-.media.aud.has-cap .a-capbtn{display:none}
 .media.aud{border:1px solid var(--border);background:var(--card);border-radius:10px;padding:10px}
-.add-sec{margin-top:20px;width:100%;padding:18px;border:2px dashed var(--border);background:transparent;color:var(--sub);border-radius:16px;font-weight:700;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:8px}
+.add-sec{margin-top:10px;width:100%;padding:16px;border:2px dashed var(--border);background:transparent;color:var(--sub);border-radius:16px;font-weight:700;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:8px}
 .add-sec:hover{background:var(--hover)}
 .place-banner{position:fixed;left:50%;transform:translateX(-50%);bottom:20px;z-index:150;background:var(--primary);color:#fff;padding:10px 18px;border-radius:999px;display:flex;gap:12px;align-items:center;box-shadow:var(--shadow);max-width:94vw;font-size:calc(14px*var(--fz))}
 .place-banner .btn{background:#fff;color:#111;padding:4px 14px}
@@ -327,6 +322,7 @@ body.dark .cap-rich font[color="#000000"],body.dark .figcap font[color="#000000"
   <div class="hdr-left">
     <a class="logo" id="hdrLogo" href="#/" title="ホーム"></a>
     <button type="button" class="icon-btn" id="backBtn" title="1つ前のページに戻る" aria-label="戻る"></button>
+    <button type="button" class="icon-btn" id="fwdBtn" title="次のページに進む" aria-label="進む"></button>
   </div>
   <div id="hdrCenter"></div>
   <div class="hdr-right" id="hdrRight"></div>
@@ -342,14 +338,14 @@ body.dark .cap-rich font[color="#000000"],body.dark .figcap font[color="#000000"
 <script>
 'use strict';
 /* ================= 画像ファイルの場所（ここだけ書き換えればOK） =================
-   同じフォルダなら ファイル名だけ、サブフォルダなら 'images/YUwiki.png' のように、
-   Web上に置く場合は 'https://…/YUwiki.png' のように指定できます。
+   同じフォルダなら ファイル名だけ、サブフォルダなら 'images/YUpedia.png' のように、
+   Web上に置く場合は 'https://…/YUpedia.png' のように指定できます。
    ファイルが見つからないときは、
      ① 設定の「ロゴ・アイコン画像」で選んでブラウザに保存した画像
-     ② 内蔵の文字ロゴ（YUwiki）／内蔵アイコン
+     ② 内蔵の文字ロゴ（YUpedia）／内蔵アイコン
    の順に自動で切り替わります。HTMLの中に画像データを入れる必要はありません。 */
 
-const ASSETS={logo:'https://pbs.twimg.com/media/HSp70NKbEAAgIJ1?format=jpg&name=small',icon:'https://pbs.twimg.com/media/HSp7t-sbsAAOYK1?format=png&name=small'};
+const ASSETS={logo:'https://pbs.twimg.com/media/HTqfVk6aIAAx-y_?format=png&name=small',icon:'https://pbs.twimg.com/media/HTqfmlzb0AAxvSt?format=png&name=360x360'};
 
 const FALLBACK_ICON='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#1e7bc9"/><text x="32" y="43" font-size="30" font-weight="700" text-anchor="middle" fill="#fff" font-family="sans-serif">YU</text></svg>');
 /* ブラウザに保存した画像（背景 bg／ロゴ logo／アイコン icon） */
@@ -363,8 +359,8 @@ const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
 
 /* ロゴ：保存した画像 → 画像ファイル → 文字ロゴ の順 */
 function logoHTML(cls=''){
-  if(assets.logo)return `<span class="logo-crop custom ${cls}"><img src="${esc(assets.logo)}" alt="YUwiki"></span>`;
-  return `<span class="logo-crop ${cls}"><img src="${esc(ASSETS.logo)}" alt="YUwiki" onerror="this.parentNode.classList.add('nofile')"><span class="wm"><b>YU</b>wiki</span></span>`;
+  if(assets.logo)return `<span class="logo-crop custom ${cls}"><img src="${esc(assets.logo)}" alt="YUpedia"></span>`;
+  return `<span class="logo-crop ${cls}"><img src="${esc(ASSETS.logo)}" alt="YUpedia" onerror="this.parentNode.classList.add('nofile')"><span class="wm"><b>YU</b>pedia</span></span>`;
 }
 function renderLogos(){const h=$('#hdrLogo');if(h)h.innerHTML=logoHTML()}
 function applyFavicon(){
@@ -432,8 +428,7 @@ const fmtDate=k=>{const [y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d
 const fmtDT=t=>new Date(t).toLocaleString('ja-JP',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'});
 const collator=new Intl.Collator('ja',{numeric:true,sensitivity:'base'});
 
-/* タグ：「#」（＃）から次の「#」までが1つのタグ。空白もタグの一部にできる
-   例）「#いちご おいしい」→ タグ1つ ／「#いちご #おいしい」→ タグ2つ */
+/* タグ：「#」（＃）から次の「#」までが1つのタグ。空白もタグの一部にできる */
 function parseTags(s){
   const out=[],seen=new Set();
   for(const m of String(s||'').matchAll(/[#＃]([^#＃]*)/g)){
@@ -620,7 +615,7 @@ function openLightbox(src){
 let hdrSearch;
 function buildSearch(big){
   const el=document.createElement('div');el.className='search-wrap'+(big?' big':'');
-  el.innerHTML=`<div class="search-box"><button type="button" class="s-btn" title="検索">${ic('search')}</button><input class="s-input" type="text" placeholder="YUwikiを検索（#タグ でタグ検索）" autocomplete="off" enterkeyhint="search"><div class="s-dd" hidden></div></div>`;
+  el.innerHTML=`<div class="search-box"><button type="button" class="s-btn" title="検索">${ic('search')}</button><input class="s-input" type="text" placeholder="YUpediaを検索" autocomplete="off" enterkeyhint="search"><div class="s-dd" hidden></div></div>`;
   const input=$('.s-input',el),dd=$('.s-dd',el);
   /* 文字が入力されている間は検索結果（最大3件）、空のときは検索履歴（最大5件） */
   const renderDD=()=>{
@@ -701,8 +696,8 @@ function searchArticles(q){
   return out.sort((x,y)=>x.score-y.score||collator.compare(x.a.title,y.a.title));
 }
 
-/* ================= ルーティング（戻るボタン対応） ================= */
-let lastHash=location.hash||'#/',guardSkip=false,curDepth=0,pendingReplace=false;
+/* ================= ルーティング（戻る／進む対応） ================= */
+let lastHash=location.hash||'#/',guardSkip=false,curDepth=0,maxDepth=0,pendingReplace=false;
 const setTitle=t=>document.title=t;
 /* 編集中に未保存の変更があるまま移動しようとしたら確認する */
 const askLeave=(dirty=true)=>confirmDialog({
@@ -720,15 +715,18 @@ function go(h,replace){
   if((location.hash||'#/')===h){route();return}
   if(replace){pendingReplace=true;location.replace(h)}else location.hash=h;
 }
-function updateBack(){const b=$('#backBtn');if(b)b.disabled=curDepth<=0}
+function updateNav(){
+  const b=$('#backBtn');if(b)b.disabled=curDepth<=0;
+  const f=$('#fwdBtn');if(f)f.disabled=curDepth>=maxDepth;
+}
 window.addEventListener('hashchange',()=>{
   const rep=pendingReplace;pendingReplace=false;
   const st=history.state;
   const d=rep?curDepth:(st&&typeof st.d==='number'?st.d:curDepth+1);
   try{history.replaceState({d},'')}catch{}
-  if(guardSkip){guardSkip=false;updateBack();return}
+  if(guardSkip){guardSkip=false;updateNav();return}
   if(isDirty()&&!confirm('保存されていない変更があります。破棄して移動しますか？')){guardSkip=true;pendingReplace=true;location.replace(lastHash);return}
-  curDepth=d;lastHash=location.hash||'#/';updateBack();
+  curDepth=d;if(curDepth>maxDepth)maxDepth=curDepth;lastHash=location.hash||'#/';updateNav();
   route();
 });
 window.addEventListener('beforeunload',e=>{if(isDirty()){e.preventDefault();e.returnValue=''}});
@@ -773,7 +771,7 @@ function homeSideHTML(kind){
     list.length?`<ul>${list.map(({a})=>`<li><a class="hs-item" href="${artHref(a)}" title="${esc(a.title)}">${esc(a.title)}</a></li>`).join('')}</ul>`:'<div class="hs-none">ブックマークはありません</div>'}</aside>`;
 }
 function renderHome(){
-  setTitle('YUwiki');
+  setTitle('YUpedia');
   const two=settings.homeHist||settings.homeBm;
   const L=settings.homeHist?homeSideHTML('hist'):(two?'<div></div>':'');
   const R=settings.homeBm?homeSideHTML('bm'):(two?'<div></div>':'');
@@ -790,28 +788,27 @@ function toggleList(){
 
 /* ---------- 検索結果 ---------- */
 function renderSearch(q){
-  setTitle('検索 -YUwiki');hdrSearch.input.value=q;
+  setTitle('検索 -YUpedia');hdrSearch.input.value=q;
   const res=searchArticles(q);
   const tagMode=isTagQuery(q);
   const base=location.href.split('#')[0];
   const rows=res.map(r=>{
     const on=isBM(r.a.id);
     const tg=(r.a.tags&&r.a.tags.length)?`<span class="r-tags">${r.a.tags.map(tagLink).join(' ')}</span>`:'';
-    return `<div class="result"><div class="r-row"><a class="r-title" href="#/article/${r.a.id}">${esc(r.a.title)}</a><a class="icon-btn" href="#/edit/${r.a.id}" title="編集">${ic('pencil',20)}</a><button class="icon-btn danger" data-act="del-article" data-id="${r.a.id}" title="記事を削除">${ic('trash',20)}</button><button class="icon-btn star${on?' on':''}" data-act="bm-toggle" data-id="${r.a.id}" data-s="20" title="ブックマーク">${ic('star',20,on)}</button>${tg}</div><div class="r-url">${esc(base+'#/article/'+r.a.id)}</div>${r.snippet?`<div class="r-snip">${esc(r.snippet)}</div>`:''}</div>`;
+    return `<div class="result"><div class="r-row"><a class="r-title" href="#/article/${r.a.id}">${esc(r.a.title)}</a><a class="icon-btn" href="#/edit/${r.a.id}" title="編集">${ic('pencil',20)}</a><button class="icon-btn danger" data-act="del-article" data-id="${r.a.id}" title="記事を削除">${ic('trash',20)}</button><a class="icon-btn" href="#/versions/${r.a.id}" title="編集履歴">${ic('clock',20)}</a><button class="icon-btn star${on?' on':''}" data-act="bm-toggle" data-id="${r.a.id}" data-s="20" title="ブックマーク">${ic('star',20,on)}</button>${tg}</div><div class="r-url">${esc(base+'#/article/'+r.a.id)}</div>${r.snippet?`<div class="r-snip">${esc(r.snippet)}</div>`:''}</div>`;
   }).join('');
-  const createBtn=tagMode?'':`<a class="btn primary" href="#/new/${encodeURIComponent(q)}">ページを作成</a>`;
+  const bottomBtns=`<div class="empty-btns"><a class="btn" href="#/">ホームに戻る</a><a class="btn primary" href="#/new/${encodeURIComponent(q)}">ページを作成</a></div>`;
   $('#view').innerHTML=`<div class="page"><h1 class="h1">「${esc(q)}」の${tagMode?'タグ検索結果':'検索結果'}</h1>${
-    res.length?`<div class="count-note">${res.length}件</div>`+rows
-    :`<div class="empty">検索結果なし<div class="empty-btns"><a class="btn" href="#/">ホームに戻る</a>${createBtn}</div></div>`}</div>`;
+    res.length?`<div class="count-note">${res.length}件</div>`+rows:`<div class="empty">検索結果なし</div>`}${bottomBtns}</div>`;
 }
 
 /* ---------- 記事表示（閲覧）：通常の記事・使い方・過去の版で共通 ---------- */
-function renderNotFound(){setTitle('YUwiki');$('#view').innerHTML='<div class="page"><div class="empty">記事が見つかりません<br><a href="#/">ホームへ戻る</a></div></div>'}
+function renderNotFound(){setTitle('YUpedia');$('#view').innerHTML='<div class="page"><div class="empty">記事が見つかりません<br><a href="#/">ホームへ戻る</a></div></div>'}
 const starBtn=(id,s=22)=>{const on=isBM(id);return `<button class="icon-btn star${on?' on':''}" data-act="bm-toggle" data-id="${id}" data-s="${s}" title="ブックマーク">${ic('star',s,on)}</button>`};
 function articleHTML(a,o={}){
   const heads=a.sections.map((s,i)=>({s,i})).filter(x=>x.s.heading);
   const toc=heads.length>=2
-    ?`<nav class="toc"><div class="toc-h"><span class="toc-t">目次</span><button type="button" class="toc-close" data-act="toc-toggle">閉じる</button></div><ol>${heads.map(x=>`<li><button class="toc-link" data-act="goto" data-i="${x.i}">${esc(x.s.heading)}</button></li>`).join('')}</ol></nav>`:'';
+    ?`<nav class="toc"><div class="toc-h"><span class="toc-t">目次</span><button type="button" class="toc-close" data-act="toc-toggle">閉じる</button></div><ol>${heads.map(x=>`<li><button class="toc-link" data-act="goto" data-i="${x.i}" title="${esc(x.s.heading)}">${esc(x.s.heading)}</button></li>`).join('')}</ol></nav>`:'';
   const secs=a.sections.map((s,i)=>{
     const has=s.media.length>0;
     const media=s.media.map(m=>{
@@ -827,7 +824,7 @@ function articleHTML(a,o={}){
   if(o.guide)tools=starBtn('guide');
   else if(!o.ver)tools=`<a class="icon-btn" href="#/edit/${a.id}" title="編集">${ic('pencil')}</a><button class="icon-btn danger" data-act="del-article" data-id="${a.id}" title="削除">${ic('trash')}</button><a class="icon-btn" href="#/versions/${a.id}" title="編集履歴">${ic('clock')}</a>${starBtn(a.id)}`;
   const tags=(a.tags&&a.tags.length)?`<div class="art-tags" data-act="tags-expand">${a.tags.map(tagLink).join(' ')}</div>`:'';
-  const banner=o.ver?`<div class="ver-banner">${esc(fmtDT(o.ver.t))} 時点の版を表示しています。<a href="#/versions/${o.ver.id}">編集履歴へ戻る</a><a href="#/article/${o.ver.id}">最新の記事へ</a></div>`:'';
+  const banner=o.ver?`<div class="ver-banner">${esc(fmtDT(o.ver.t))} 時点の版を表示しています。<a href="#/versions/${o.ver.id}">編集履歴へ戻る</a><a href="#/article/${o.ver.id}">最新の記事へ</a><button type="button" class="mini-btn" data-act="restore-version" data-id="${o.ver.id}" data-idx="${o.ver.idx}">復元する</button></div>`:'';
   const openBtn=toc?`<button type="button" class="mini-btn toc-open" data-act="toc-toggle">目次を開く</button>`:'';
   return `<div class="page wide${toc?'':' toc-closed'}">${banner}<div class="art-head"><h1 class="h1">${esc(a.title)}</h1>${tools}${openBtn}</div>${tags}<div class="art-wrap">${toc}<div class="art-body">${secs}</div></div></div>`;
 }
@@ -845,7 +842,7 @@ function resolveWikiLinks(root){
 function showArticle(a,o){$('#view').innerHTML=articleHTML(a,o);resolveWikiLinks($('#view'))}
 function renderArticle(id){
   const a=getArticle(id);if(!a)return renderNotFound();
-  setTitle(a.title+' -YUwiki');
+  setTitle(a.title+' -YUpedia');
   opened[id]=Date.now();LS.set('mywiki.opened',opened);
   showArticle(a,{});
 }
@@ -875,9 +872,24 @@ function buildVersions(old,rec){
   vs.push(snapRec(rec,rec.updated));
   return vs.slice(-5);
 }
+async function restoreVersion(id,idx){
+  const a=getArticle(id);if(!a)return;
+  const v=a.versions&&a.versions[idx];if(!v)return;
+  const ok=await confirmDialog({title:'この版を復元しますか？',message:fmtDT(v.t)+' 時点の内容に戻します。現在の内容は新しい版として履歴に残ります。',okText:'復元する',cancelText:'キャンセル'});
+  if(ok!==true)return;
+  const curSrc={};a.sections.forEach(s=>s.media.forEach(m=>{curSrc[m.mid]=m.src}));
+  const rec={id:a.id,title:v.title,tags:[...(v.tags||[])],created:a.created,updated:Date.now(),
+    sections:v.sections.map(s=>({sid:s.sid,heading:s.heading,html:s.html,
+      media:s.media.map(m=>({...m,src:m.src||curSrc[m.mid]||''}))}))};
+  rec.versions=buildVersions(a,rec);
+  try{await DB.put(rec)}catch{toast('復元に失敗しました');return}
+  const i=state.articles.findIndex(x=>x.id===id);if(i>=0)state.articles[i]=rec;
+  toast('復元しました');
+  navigate('#/article/'+id,true);
+}
 function renderVersions(id){
   const a=getArticle(id);if(!a)return renderNotFound();
-  setTitle(a.title+'の編集履歴 -YUwiki');
+  setTitle(a.title+'の編集履歴 -YUpedia');
   const vs=a.versions||[];
   const items=[];
   for(let i=vs.length-1;i>=0&&items.length<5;i--){
@@ -887,79 +899,73 @@ function renderVersions(id){
     items.length?`<ul class="ver-list">${items.join('')}</ul>`:'<div class="empty">編集履歴はありません<div class="hint">この記事を次に保存したときから記録されます。</div></div>'}</div>`;
 }
 function renderVersion(arg){
-  const [id,n]=String(arg).split('/');
-  const a=getArticle(id);const v=a&&a.versions&&a.versions[+n];
+  const [id,nStr]=String(arg).split('/');
+  const idx=+nStr;
+  const a=getArticle(id);const v=a&&a.versions&&a.versions[idx];
   if(!a||!v)return renderNotFound();
-  setTitle(v.title+'（'+fmtDT(v.t)+'の版） -YUwiki');
+  setTitle(v.title+'（'+fmtDT(v.t)+'の版） -YUpedia');
   const curSrc={};a.sections.forEach(s=>s.media.forEach(m=>{curSrc[m.mid]=m.src}));
   const pseudo={id:a.id,title:v.title,tags:v.tags||[],sections:v.sections.map(s=>({...s,media:s.media.map(m=>({...m,src:m.src||curSrc[m.mid]||''}))}))};
-  showArticle(pseudo,{ver:{id:a.id,t:v.t}});
+  showArticle(pseudo,{ver:{id:a.id,t:v.t,idx}});
 }
 
 /* ---------- 使い方ページ（保存データではない固定記事。検索・記事数・編集の対象外） ---------- */
-const GUIDE={id:'guide',title:'YUwikiの使い方',tags:[],sections:[
- {heading:'YUwikiについて',media:[],html:[
-  'YUwikiは、自分の知識やメモをまとめて記事にできる、ブラウザ上のWikiです。',
+const GUIDE={id:'guide',title:'YUpediaの使い方',tags:[],sections:[
+ {heading:'YUpediaについて',media:[],html:[
+  'YUpediaは、自分の知識やメモをまとめて記事にできる、ブラウザ上のWikiです。',
   '記事には文章・画像・音声・タグを付けられ、記事同士をリンクでつなげられます。',
   '記事や履歴などのデータは、お使いのブラウザ内に保存され、外部には送信されません。',
-  'スマートフォンで開くと、画面の幅に合わせて自動的にスマホ用の表示になります。',
   '別の端末へ移したいときや、バックアップを取りたいときは、設定の「エクスポート」「インポート」を使います。'].join('\n')},
  {heading:'記事の作成・編集方法',media:[],html:[
   '1. 画面右上の「＋」を押すと、ページ作成画面が開きます。作った記事は、記事ページや検索結果にある鉛筆マークから編集できます。',
   '2. 最初に「見出し」（記事のタイトル）を入力します。その下の「タグ」欄には、必要ならタグを入力します（詳しくは「タグについて」）。',
-  '3. 「目次を追加」を押すとセクションが増えます。セクションごとに、目次の名前と本文を入力します。目次が2つ以上あると、閲覧ページに目次が表示されます。',
+  '3. 「目次を追加」のボタンは、セクションとセクションの間や一番上にも表示されます。押した場所に新しいセクションが増えます。セクションごとに、目次の名前と本文を入力します。目次が2つ以上あると、閲覧ページに目次が表示されます。',
   '4. 上のバーから、URL・画像・音声・文字の色を追加できます。',
-  '　・URL：本文中の入れたい位置をクリックしてから押します。YUwiki内の記事を検索してリンクにするか、外部サイトのURLを入力できます。',
+  '　・URL：本文中の入れたい位置をクリックしてから押します。YUpedia内の記事を検索してリンクにするか、外部サイトのURLを入力できます。',
   '　・文字の色：色を変えたい文字を選択するか、入力したい位置をクリックしてから押します。',
   '5. 左右の矢印で「元に戻す」「やり直す」ができます（Ctrl+Z／Ctrl+Y）。',
-  '6. 「保存する」を押すと記事が確定します。「キャンセル」で編集をやめられます。'].join('\n')},
+  '6. 「保存する」を押すと記事が確定します。「キャンセル」で編集をやめられます。',
+  '7. 編集中にAltキーを使うと、他の記事へ飛ぶリンクを作れます。',
+  '　・Altキーを押しながら見出しの名前を入力し、Altキーを離すとリンクになります。',
+  '　・日本語入力（IME）を使うときは、Altキーを1回押して離し、見出しを入力してから、もう一度Altキーを押します（Escで取り消し）。',
+  '　・すでに入力した文字を選択してからAltキーを押して離すだけでも、その文字がリンクになります。',
+  '　・同じ見出しの記事があれば通常のリンクになり、無い場合は赤い下線で表示されます。赤いリンクを押すと、その見出しのページ作成画面が開きます。',
+  '　・閲覧中にこうしたリンクやタグを押して移動したときも、検索履歴に残ります。',
+  '8. Ctrl+S（または「一時保存」ボタン）で、編集中の内容を一時保存できます。編集画面に留まったまま保存され、次に同じ記事を編集するときに「復元しますか？」と表示されます。記事として確定するには、「保存する」を押してください。',
+  '　・保存していない変更があるまま、「キャンセル」を押したり、他のページへ移動しようとすると、警告が表示されます。',
+  '　・記事のタイトル横の時計マークからは、その記事の編集履歴（直近5回の保存）を見られます。日付を押すと、その時の版が表示され、「復元する」を押すと、その内容に戻せます。復元すると、新しい版として履歴に記録されます。'].join('\n')},
  {heading:'画像・音声・説明文',media:[],html:[
   '・上のバーの「画像」「音声」を押してファイルを選ぶと、「ここに設置」が表示されます。置きたい場所のボタンを押すと配置されます。',
   '・画像・音声の右上の×で削除できます。',
-  '・画像はクリックすると「説明を追加」が出ます。音声は下の「説明を追加」ボタンから、説明文を付けられます。',
-  '・説明文の中でも、「URL」「文字の色」が使えます。',
+  '・画像、音声を配置すると、その下に説明を入力する欄が最初から表示されます。必要なときに入力してください。',
+  '・説明の欄でも、「URL」「文字の色」が使えます。',
   '・音声を再生しているあいだに「目次を追加」を押しても、再生は止まりません。',
   '・閲覧中に画像をタップ（クリック）すると、大きく拡大して見られます。もう一度タップすると閉じます。'].join('\n')},
  {heading:'タグについて',media:[],html:[
-  '・見出しの下の「タグ」欄に「#歴史 #メモ」のように入力します。＃を付けるごとにタグが1つ増えます（全角の＃も使えます）。',
-  '・1つのタグは、その＃から次の＃までです。空白もタグの一部にできます。',
-  '　例）「#いちご おいしい」→ タグは「いちご おいしい」の1つ',
-  '　例）「#いちご #おいしい」→ タグは「いちご」「おいしい」の2つ',
-  '・閲覧画面では見出しの下に、検索結果では星マークの右に、青い文字で「#○○」と横に並びます。多いときは、最後が「…」で省略されます。',
+  '・見出しの下の「タグ」欄に「#歴史 #メモ」のように入力します。＃を付けるごとにタグが1つ増えます。',
+  '・閲覧画面では見出しの下に、検索結果では星マークの右に、青い文字で「#○○」と横に並びます。',
   '・タグを押すか、検索バーに「#いちご」のように入力すると、同じタグの記事を探せます。複数のタグを並べると、すべてを含む記事だけが表示されます。',
-  '・タグの検索では、タグの中の空白の数や有無、大文字・小文字の違いは区別されません。',
-  '　例）「#いち ごおい しい」で検索しても、「#いちごおいしい」や「#いちご おいしい」の記事が見つかります。'].join('\n')},
- {heading:'他の記事へのリンク（Altキー）',media:[],html:[
-  '編集中にAltキーを使うと、他の記事へ飛ぶリンクを作れます。',
-  '・Altキーを押しながら見出しの名前を入力し、Altキーを離すとリンクになります。',
-  '・日本語入力（IME）を使うときは、Altキーを1回押して離し、見出しを入力してから、もう一度Altキーを押します（Escで取り消し）。',
-  '・すでに入力した文字を選択してからAltキーを押して離すだけでも、その文字がリンクになります。',
-  '・同じ見出しの記事があれば通常のリンクになり、無い場合は赤い下線で表示されます。赤いリンクを押すと、その見出しのページ作成画面が開きます。',
-  '・閲覧中にこうしたリンクやタグを押して移動したときも、検索履歴に残ります。'].join('\n')},
- {heading:'一時保存・編集履歴',media:[],html:[
-  '・Ctrl+S（または「一時保存」ボタン）で、編集中の内容を一時保存できます。編集画面に留まったまま保存され、次に同じ記事を編集するときに「復元しますか？」と表示されます。記事として確定するには、「保存する」を押してください。',
-  '・保存していない変更があるまま、「キャンセル」を押したり、他のページへ移動しようとすると、警告が表示されます。',
-  '・記事のタイトル横の時計マークからは、その記事の編集履歴（直近5回の保存）を見られます。日付を押すと、その時の版が表示されます。'].join('\n')},
+  '・タグの検索では、タグの中の空白の数や有無、大文字・小文字の違いは区別されません。'].join('\n')},
  {heading:'閲覧・検索方法',media:[],html:[
   '上の検索バーにキーワードを入れてEnterキー（または虫眼鏡）を押すと、見出し・目次・本文・タグから記事を探せます。',
   '入力中は候補の記事が最大3件表示され、選ぶとすぐに開けます。入力欄が空のときは、最近の検索履歴が表示されます。候補の右の×は、検索バーの候補から消すだけで、履歴ページには残ります。',
   '検索結果が見つからないときは「ページを作成」から、その言葉の記事を作れます。',
   'ホーム画面の「記事数」を押すと、記事の一覧が表示されます。',
   '記事ページの「目次」は、右の「閉じる」を押すと閉じられ、本文が中央に寄ります。「目次を開く」で元に戻ります。',
-  '下にスクロールするとヘッダーが隠れ、上にスクロールすると再び表示されます。左上の矢印で、1つ前のページに戻れます。'].join('\n')},
+  '下にスクロールするとヘッダーが隠れ、上にスクロールすると再び表示されます。左上の矢印で、1つ前のページに戻れます。その右の矢印では、戻ったページをやり直せます。'].join('\n')},
  {heading:'ブックマークについて',media:[],html:[
   '記事ページ・検索結果・履歴ページ・この使い方ページにある星マークを押すと、ブックマークに登録できます。もう一度押すと外れます。間違えたときは、画面下の「キャンセル」で元に戻せます。',
   '右上の星アイコンでブックマーク一覧を開けます。「並べ替え」から、追加順・見出し順・最近開いた順に切り替えられます。',
-  '一覧のごみ箱アイコンを押すと削除モードになり、チェックを付けて「削除する」を押すと、まとめて外せます。'].join('\n')},
+  '一覧のごみ箱アイコンを押すと削除モードになり、「全選択」でまとめて選んでから「削除する」を押すと、まとめて外せます。'].join('\n')},
  {heading:'履歴について',media:[],html:[
-  '検索した言葉や開いた記事は、右上の時計アイコンの履歴ページに、日付ごと（新しい5日分）に並びます。長い言葉は、途中から「…」で省略されます。',
+  '検索した言葉や開いた記事は、右上の時計アイコンの履歴ページに、日付ごと（新しい5日分）に並びます。',
   '項目を押すと、その記事や検索結果をもう一度開けます。見出しが記事と一致する項目には星マークが表示され、そこからブックマークにも登録できます。',
-  'ごみ箱アイコンで削除モードにして、チェックを付けた履歴だけを消せます。日付の横のチェックで、その日の分をまとめて選べます。'].join('\n')},
+  'ごみ箱アイコンで削除モードにして、「全選択」でまとめて選んでから「削除する」を押すと、まとめて消せます。日付の横のチェックで、その日の分をまとめて選ぶこともできます。'].join('\n')},
  {heading:'設定について',media:[],html:[
   '・文字サイズ：小・中・大から選べます。',
   '・背景の色：白・黒・時間に合わせる、から選べます。「時間に合わせる」は、18:00〜翌朝6:00が黒、それ以外が白になります。',
   '・背景の画像：「インポートする」を押して画像ファイルを選ぶと、その画像が背景になります。文字が読みやすいように、本文の後ろには半透明の板が敷かれます。白・黒・時間に合わせるのどれかを選ぶと、画像は解除されます。画像を選んだときの文字色は、直前に選んでいた白・黒・時間の設定に従います。',
-  '・ホーム画面：「履歴」「ブックマーク」にチェックを入れると、ホームに一覧が表示されます。履歴はページの左側、ブックマークは右側です。履歴はここから削除できません。ブックマークは右上のプルダウンで並べ替えできます。',
+  '・ホーム画面：「履歴」「ブックマーク」にチェックを入れると、ホームに一覧が表示されます。履歴はページの左側、ブックマークは右側です。ブックマークは右上のプルダウンで並べ替えできます。',
   '・使い方：この使い方のページを開きます。',
   '・ロゴ・アイコン画像：ロゴやファビコンが表示されないときは、ここで画像を選ぶとブラウザに保存され、画像ファイルがなくても表示されます。何も設定しなければ、内蔵の文字ロゴが使われます。'].join('\n')},
  {heading:'データのエクスポート・インポート・削除',media:[],html:[
@@ -969,7 +975,7 @@ const GUIDE={id:'guide',title:'YUwikiの使い方',tags:[],sections:[
   '注意：ブラウザの閲覧データ（サイトデータ）を削除すると、記事も消えてしまいます。'].join('\n')}
 ]};
 function renderGuide(){
-  setTitle('使い方 -YUwiki');
+  setTitle('使い方 -YUpedia');
   opened.guide=Date.now();LS.set('mywiki.opened',opened);
   showArticle(GUIDE,{guide:true});
 }
@@ -981,7 +987,7 @@ function delBar(kind){
   const on=kind==='hist'?histDel:bmDel;
   const n=(kind==='hist'?histSel:bmSel).size;
   return on
-    ?`<div class="head-btns"><button class="btn" data-act="del-cancel" data-k="${kind}">キャンセル</button><button class="btn danger" data-act="del-exec" data-k="${kind}" ${n?'':'disabled'}>削除する</button></div>`
+    ?`<div class="head-btns"><button class="btn" data-act="del-cancel" data-k="${kind}">キャンセル</button><button class="btn" data-act="del-all" data-k="${kind}">全選択</button><button class="btn danger" data-act="del-exec" data-k="${kind}" ${n?'':'disabled'}>削除する</button></div>`
     :`<button class="icon-btn" data-act="del-mode" data-k="${kind}" title="削除">${ic('trash')}</button>`;
 }
 
@@ -992,7 +998,7 @@ function histStar(w){
   return `<button type="button" class="icon-btn star${on?' on':''}" data-act="bm-toggle" data-id="${a.id}" data-s="20" title="ブックマーク">${ic('star',20,on)}</button>`;
 }
 function renderHistory(){
-  setTitle('履歴 -YUwiki');
+  setTitle('履歴 -YUpedia');
   const groups=historyGroups();
   $('#view').innerHTML=`<div class="page"><div class="page-head"><h1 class="h1">履歴</h1>${groups.length||histDel?delBar('hist'):''}</div>${
     groups.length?groups.map(g=>`<div class="h-group"><div class="h-date">${histDel?`<input type="checkbox" class="chk" data-act="rm-date" data-d="${g.d}" ${g.items.every(it=>histSel.has(it.i))?'checked':''}>`:''}<span>${fmtDate(g.d)}</span></div><ul>${g.items.map(it=>`<li class="h-item">${histDel?`<input type="checkbox" class="chk" data-act="rm-item" data-i="${it.i}" ${histSel.has(it.i)?'checked':''}>`:''}<button class="h-word" data-act="h-open" data-w="${esc(it.w)}" title="${esc(it.w)}">${ic('search',16)}<span>${esc(it.w)}</span></button>${histStar(it.w)}</li>`).join('')}</ul></div>`).join('')
@@ -1001,7 +1007,7 @@ function renderHistory(){
 
 /* ---------- ブックマークページ ---------- */
 function renderBookmarks(){
-  setTitle('ブックマーク -YUwiki');
+  setTitle('ブックマーク -YUpedia');
   const list=sortedBM();
   const cur=settings.bmSort||'added';
   $('#view').innerHTML=`<div class="page"><div class="page-head"><h1 class="h1">ブックマーク</h1>${list.length||bmDel?delBar('bm'):''}</div>${
@@ -1012,7 +1018,7 @@ function renderBookmarks(){
 
 /* ---------- 設定（順番：文字サイズ／背景の色／ホーム画面／使い方／データ／ロゴ・アイコン／データ削除） ---------- */
 function renderSettings(){
-  setTitle('設定 -YUwiki');
+  setTitle('設定 -YUpedia');
   const th=settings.theme,fs=settings.fontSize||'m';
   const bgOn=!!(settings.bgImage&&assets.bg);
   $('#view').innerHTML=`<div class="page"><h1 class="h1" style="margin-bottom:16px">設定</h1>
@@ -1033,7 +1039,7 @@ function renderSettings(){
   <div class="card pad set-card"><div class="set-t">ホーム画面</div>
     <label class="chk-row"><input type="checkbox" class="chk blue" data-act="home-hist" ${settings.homeHist?'checked':''}>履歴（ページの左側に表示）</label>
     <label class="chk-row"><input type="checkbox" class="chk blue" data-act="home-bm" ${settings.homeBm?'checked':''}>ブックマーク（ページの右側に表示）</label>
-    <p class="hint">ホーム画面に表示する一覧を選びます。履歴はここから削除できません。</p></div>
+    <p class="hint">ホーム画面に表示する一覧を選びます。</p></div>
   <div class="card pad set-card"><div class="set-t">使い方</div>
     <a class="btn" href="#/guide">使い方のページを開く</a></div>
   <div class="card pad set-card"><div class="set-t">データのインポート・エクスポート</div>
@@ -1045,8 +1051,7 @@ function renderSettings(){
       <button class="btn" data-act="asset-reset" data-k="logo" ${assets.logo?'':'disabled'}>ロゴを初期に戻す</button>
       <button class="btn" data-act="asset-pick" data-k="icon">アイコンを選ぶ</button>
       <button class="btn" data-act="asset-reset" data-k="icon" ${assets.icon?'':'disabled'}>アイコンを初期に戻す</button>
-    </div>
-    <p class="hint">ロゴやファビコン（タブの小さなアイコン）が表示されないときは、ここで画像を選んでください。選んだ画像はこのブラウザに保存され、HTMLファイルと同じ場所に画像ファイルがなくても表示されます。何も設定せず、画像ファイルも見つからない場合は、内蔵の文字ロゴが表示されます。</p></div>
+    </div></div>
   <div class="card pad set-card danger-zone"><div class="set-t">データの削除</div>
     <p>記事・ブックマーク・履歴・設定・一時保存・保存した画像をすべて削除します。この操作は元に戻せません。</p>
     <button class="btn danger" data-act="wipe">全データを削除</button></div></div>`;
@@ -1081,10 +1086,10 @@ async function resetAsset(key){
 /* ---------- エクスポート / インポート / 全削除 ---------- */
 function exportData(){
   const as={};Object.entries(assets).forEach(([k,v])=>{if(v)as[k]=v});
-  const data={app:'YUwiki',version:3,exportedAt:new Date().toISOString(),articles:state.articles,bookmarks:bms,history:hist,opened,settings,assets:as};
+  const data={app:'YUpedia',version:3,exportedAt:new Date().toISOString(),articles:state.articles,bookmarks:bms,history:hist,opened,settings,assets:as};
   const blob=new Blob([JSON.stringify(data)],{type:'application/json'});
   const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download='YUwiki-'+dateKey(Date.now())+'.json';
+  const a=document.createElement('a');a.href=url;a.download='YUpedia-'+dateKey(Date.now())+'.json';
   document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),3000);
   toast('エクスポートしました（記事'+state.articles.length+'件）');
@@ -1123,7 +1128,7 @@ function pickImport(){
   inp.onchange=async()=>{
     const f=inp.files[0];if(!f)return;
     let data;
-    try{data=parseImport(await f.text())}catch{toast('読み込めないファイルです（YUwikiのエクスポートファイルを選んでください）');return}
+    try{data=parseImport(await f.text())}catch{toast('読み込めないファイルです（YUpediaのエクスポートファイルを選んでください）');return}
     const ok=await confirmDialog({title:'警告',message:'このページをエクスポートしていない場合データがすべて消えますがよろしいですか',okText:'する',cancelText:'しない',danger:true,warn:true,okFirst:true});
     if(ok!==true)return;
     try{await DB.replaceAll(data.articles);await DB.clearDrafts();await DB.replaceAssets(data.assets)}catch{toast('インポートに失敗しました');return}
@@ -1156,8 +1161,13 @@ const clone=a=>({id:a.id,title:a.title,tags:[...(a.tags||[])],sections:a.section
 const sig=a=>JSON.stringify([a.title,a.tags||[],a.sections.map(s=>[s.sid,s.heading,s.html,s.media.map(m=>[m.mid,m.caption])])]);
 const draftKey=()=>ed.isNew?'new':ed.a.id;
 
-function renderNew(t){startEditor({id:null,title:t||'',tags:[],sections:[]},true);setTitle('ページ作成 -YUwiki')}
-function renderEdit(id){const a=getArticle(id);if(!a)return renderNotFound();startEditor(a,false);setTitle(a.title+'を編集 -YUwiki')}
+function renderNew(t){
+  t=t||'';
+  if(isTagQuery(t))startEditor({id:null,title:'',tags:parseTags(t),sections:[]},true);
+  else startEditor({id:null,title:t,tags:[],sections:[]},true);
+  setTitle('ページ作成 -YUpedia');
+}
+function renderEdit(id){const a=getArticle(id);if(!a)return renderNotFound();startEditor(a,false);setTitle(a.title+'を編集 -YUpedia')}
 function startEditor(a,isNew){
   ed={isNew,a:clone(a),stack:[],idx:0,timer:null,lastRange:null,placing:null,saved:false,leaving:false};
   ed.a.sections.forEach(s=>{
@@ -1174,15 +1184,20 @@ function startEditor(a,isNew){
 }
 function isDirty(){if(!ed||ed.saved||ed.leaving)return false;syncFromDOM();return sig(ed.a)!==ed.initSig}
 
-/* 画像・音声の1件分（説明はどちらも文字色・URL付きで入力可能） */
+/* 画像・音声の1件分（説明の入力欄は最初から表示） */
 function mediaHTML(m){
-  const has=typeof m.caption==='string';
-  const cap=has?`<div class="cap-rich" contenteditable="true" spellcheck="false" data-mid="${m.mid}" data-ph="説明を入力"></div>`:'';
-  if(m.type==='image')return `<figure class="media img${has?' has-cap':''}" data-mid="${m.mid}" style="margin:0"><div class="img-wrap"><img src="${esc(m.src)}" alt="" data-act="img-sel"><button type="button" class="m-del" data-act="m-del" title="削除">${ic('x',14)}</button><button type="button" class="m-cap" data-act="m-cap">説明を追加</button></div>${cap}</figure>`;
-  return `<div class="media aud${has?' has-cap':''}" data-mid="${m.mid}"><button type="button" class="m-del" data-act="m-del" title="削除">${ic('x',14)}</button><div class="fname">${esc(m.name)}</div><audio controls src="${esc(m.src)}"></audio><button type="button" class="a-capbtn" data-act="m-cap">説明を追加</button>${cap}</div>`;
+  const cap=`<div class="cap-rich" contenteditable="true" spellcheck="false" data-mid="${m.mid}" data-ph="説明を入力"></div>`;
+  if(m.type==='image')return `<figure class="media img" data-mid="${m.mid}" style="margin:0"><div class="img-wrap"><img src="${esc(m.src)}" alt=""><button type="button" class="m-del" data-act="m-del" title="削除">${ic('x',14)}</button></div>${cap}</figure>`;
+  return `<div class="media aud" data-mid="${m.mid}"><button type="button" class="m-del" data-act="m-del" title="削除">${ic('x',14)}</button><div class="fname">${esc(m.name)}</div><audio controls src="${esc(m.src)}"></audio>${cap}</div>`;
 }
 const mediaColHTML=s=>s.media.map(mediaHTML).join('')||'<div class="media-empty">画像・音声</div>';
 const secHTML=(s,i)=>`<div class="card section" data-i="${i}"><div class="sec-top"><span class="sec-no">目次セクション ${i+1}</span><button class="sec-del" data-act="sec-del" title="このセクションを削除">${ic('trash',18)}</button></div><div class="sec-grid"><div class="sec-left"><label class="lbl">目次を入力</label><input class="sec-heading" type="text" autocomplete="off"><label class="lbl">テキストを入力</label><div class="rich" contenteditable="true" spellcheck="false"></div></div><div class="sec-right">${mediaColHTML(s)}</div></div></div>`;
+const addBtnHTML=pos=>`<button type="button" class="add-sec" data-act="add-sec" data-pos="${pos}">${ic('plus',20)} 目次を追加</button>`;
+function secsHTML(a){
+  let h=addBtnHTML(0);
+  a.sections.forEach((s,i)=>{h+=secHTML(s,i)+addBtnHTML(i+1)});
+  return h;
+}
 function fillSection(el,s){
   $('.sec-heading',el).value=s.heading;
   $('.rich',el).innerHTML=s.html;
@@ -1191,10 +1206,19 @@ function fillSection(el,s){
 function fillCaps(root,s){
   $$('.cap-rich',root).forEach(inp=>{const m=s.media.find(m=>m.mid===inp.dataset.mid);inp.innerHTML=sanitize((m&&m.caption)||'')});
 }
+/* セクションと「目次を追加」ボタンの番号・位置を振り直す */
+function renumberSecs(){
+  const container=$('#secs');if(!container)return;
+  let n=0;
+  [...container.children].forEach(ch=>{
+    if(ch.classList.contains('add-sec')){ch.dataset.pos=n}
+    else if(ch.classList.contains('section')){ch.dataset.i=n;const no=$('.sec-no',ch);if(no)no.textContent='目次セクション '+(n+1);n++}
+  });
+}
 
 function renderEditor(){
   const y=window.scrollY,a=ed.a;
-  $('#view').innerHTML=`<div class="page" id="editor"><div class="page-head"><h1 class="h1">${ed.isNew?'ページを作成':'ページを編集'}</h1><div class="head-btns"><button class="btn" data-act="cancel">キャンセル</button><button class="btn" data-act="draft" title="Ctrl+S">一時保存</button><button class="btn primary" data-act="save">保存する</button></div></div><div class="field-label">見出し</div><div class="card"><input id="titleInput" class="title-input" type="text" autocomplete="off"></div><div class="field-label">タグ</div><div class="card"><input id="tagInput" class="title-input tag-input" type="text" autocomplete="off" placeholder="#タグ #タグ …（＃から次の＃までが1つのタグ。空白も含められます）"></div><div id="secs">${a.sections.map(secHTML).join('')}</div><button class="add-sec" data-act="add-sec">${ic('plus',20)} 目次を追加</button></div>`;
+  $('#view').innerHTML=`<div class="page" id="editor"><div class="page-head"><h1 class="h1">${ed.isNew?'ページを作成':'ページを編集'}</h1><div class="head-btns"><button class="btn" data-act="cancel">キャンセル</button><button class="btn" data-act="draft" title="Ctrl+S">一時保存</button><button class="btn primary" data-act="save">保存する</button></div></div><div class="field-label">見出し</div><div class="card"><input id="titleInput" class="title-input" type="text" autocomplete="off"></div><div class="field-label">タグ</div><div class="card"><input id="tagInput" class="title-input tag-input" type="text" autocomplete="off" placeholder="#タグ #タグ …（＃から次の＃までが1つのタグ。空白も含められます）"></div><div id="secs">${secsHTML(a)}</div></div>`;
   $('#titleInput').value=a.title;
   $('#tagInput').value=(a.tags||[]).map(t=>'#'+t).join(' ');
   $$('.section').forEach((el,i)=>fillSection(el,a.sections[i]));
@@ -1231,18 +1255,35 @@ function drawSlots(){
     }
   });
 }
-/* 目次の追加：DOMに追加するだけなので、再生中の音声は止まらない */
-function addSection(){
+/* 目次の追加：クリックした位置に挿入し、DOMに追加するだけなので、再生中の音声は止まらない */
+function addSectionAt(pos){
   if(!ed)return;
   commit();
-  const s=newSection();ed.a.sections.push(s);
-  const i=ed.a.sections.length-1;
-  const wrap=document.createElement('div');wrap.innerHTML=secHTML(s,i);
-  const el=wrap.firstElementChild;
-  $('#secs').appendChild(el);
-  fillSection(el,s);
+  const s=newSection();
+  ed.a.sections.splice(pos,0,s);
+  const btns=[...$$('#secs > [data-act="add-sec"]')];
+  const clickedBtn=btns[pos];if(!clickedBtn){renderEditor();commit();return}
+  const secWrap=document.createElement('div');secWrap.innerHTML=secHTML(s,pos);
+  const secEl=secWrap.firstElementChild;
+  const btnWrap=document.createElement('div');btnWrap.innerHTML=addBtnHTML(pos+1);
+  const newBtn=btnWrap.firstElementChild;
+  clickedBtn.after(secEl);
+  secEl.after(newBtn);
+  fillSection(secEl,s);
+  renumberSecs();
   drawSlots();
   commit();
+}
+/* セクション削除：ページ作成時のみ確認を挟む */
+async function handleSecDel(el){
+  if(!ed)return;
+  const sec=el.closest('.section');if(!sec)return;
+  const i=+sec.dataset.i;
+  const doDel=()=>{commit();ed.a.sections.splice(i,1);sec.remove();renumberSecs();drawSlots();commit()};
+  if(ed.isNew){
+    const ok=await confirmDialog({title:'目次を削除しますか？',message:'このセクションの内容が失われます。',okText:'削除する',danger:true});
+    if(ok===true)doDel();
+  }else doDel();
 }
 
 /* ---- 元に戻す / やり直す ---- */
@@ -1330,7 +1371,7 @@ function pickFile(type){
     const fr=new FileReader();
     fr.onload=()=>{
       commit();
-      ed.placing={item:{mid:uid(),type,name:f.name,src:fr.result,caption:null}};
+      ed.placing={item:{mid:uid(),type,name:f.name,src:fr.result,caption:''}};
       drawSlots();updatePlaceBanner();toast('設置したい場所の「ここに設置」を押してください');
     };
     fr.readAsDataURL(f);
@@ -1379,7 +1420,7 @@ function normUrl(s){
 function openUrlModal(){
   if(!getRange()){toast('先に、リンクを入れたい本文（または説明文）中の位置をクリックしてください');return}
   const box=document.createElement('div');box.className='modal-box square';
-  box.innerHTML=`<button class="modal-x icon-btn" aria-label="閉じる">${ic('x')}</button><div><input id="uWiki" class="m-input" placeholder="YUwiki内を検索" autocomplete="off"><div id="uRes" class="u-res"></div></div><div class="row"><input id="uUrl" class="m-input" placeholder="URLを入力" autocomplete="off"><button class="btn primary" id="uGo">挿入</button></div>`;
+  box.innerHTML=`<button class="modal-x icon-btn" aria-label="閉じる">${ic('x')}</button><div><input id="uWiki" class="m-input" placeholder="YUpedia内を検索" autocomplete="off"><div id="uRes" class="u-res"></div></div><div class="row"><input id="uUrl" class="m-input" placeholder="URLを入力" autocomplete="off"><button class="btn primary" id="uGo">挿入</button></div>`;
   const close=openModal(box);
   const res=$('#uRes',box),q=$('#uWiki',box);
   const draw=()=>{
@@ -1530,7 +1571,6 @@ function applyColor(c){
 /* ================= イベント ================= */
 const view=$('#view');
 view.addEventListener('click',e=>{
-  if(ed&&!e.target.closest('.media.img'))$$('.media.img.selected').forEach(x=>x.classList.remove('selected'));
   if(ed&&e.target.closest('.rich a,.cap-rich a'))e.preventDefault();
   /* 閲覧中：他の記事へのリンク・タグを押したら検索履歴に残す */
   if(!ed){const ha=e.target.closest('a[data-hist]');if(ha&&ha.dataset.hist)addHistory(ha.dataset.hist)}
@@ -1541,6 +1581,7 @@ view.addEventListener('click',e=>{
     case 'del-article':deleteArticle(el.dataset.id);break;
     case 'bm-toggle':toggleBM(el.dataset.id);break;
     case 'zoom':openLightbox(el.getAttribute('src'));break;
+    case 'restore-version':restoreVersion(el.dataset.id,+el.dataset.idx);break;
     case 'tags-expand':if(e.target.closest('a'))break;el.classList.toggle('open');break;
     case 'goto':{const s=document.getElementById('sec-'+el.dataset.i);if(s)s.scrollIntoView({behavior:'smooth',block:'start'});break}
     case 'toc-toggle':{const p=$('.page.wide');if(p)p.classList.toggle('toc-closed');break}
@@ -1562,6 +1603,15 @@ view.addEventListener('click',e=>{
       if(el.dataset.k==='hist'){histDel=false;histSel.clear();renderHistory()}
       else{bmDel=false;bmSel.clear();renderBookmarks()}
       break;
+    case 'del-all':
+      if(el.dataset.k==='hist'){
+        historyGroups().forEach(g=>g.items.forEach(it=>histSel.add(it.i)));
+        renderHistory();
+      }else{
+        sortedBM().forEach(({a})=>bmSel.add(a.id));
+        renderBookmarks();
+      }
+      break;
     case 'del-exec':
       if(el.dataset.k==='hist'){
         if(!histSel.size)break;
@@ -1580,31 +1630,14 @@ view.addEventListener('click',e=>{
     case 'save':saveEditor();break;
     case 'draft':saveDraft();break;
     case 'cancel':cancelEditor();break;
-    case 'add-sec':addSection();break;
-    case 'sec-del':{
-      if(!ed)break;
-      const sec=el.closest('.section'),i=+sec.dataset.i;
-      commit();ed.a.sections.splice(i,1);sec.remove();
-      $$('#editor .section').forEach((x,k)=>{x.dataset.i=k;$('.sec-no',x).textContent='目次セクション '+(k+1)});
-      drawSlots();commit();break}
+    case 'add-sec':addSectionAt(+el.dataset.pos);break;
+    case 'sec-del':handleSecDel(el);break;
     case 'slot':placeMedia(+el.dataset.sec,+el.dataset.pos);break;
     case 'm-del':{
       if(!ed)break;
       const med=el.closest('.media'),mid=med.dataset.mid,sec=el.closest('.section'),i=+sec.dataset.i;
       commit();const s=ed.a.sections[i];s.media=s.media.filter(m=>m.mid!==mid);
       med.remove();drawSlots();commit();break}
-    case 'm-cap':{
-      if(!ed)break;
-      const med=el.closest('.media'),mid=med.dataset.mid,i=+el.closest('.section').dataset.i;
-      commit();const m=ed.a.sections[i].media.find(m=>m.mid===mid);if(!m)break;
-      m.caption='';
-      const d=document.createElement('div');d.className='cap-rich';d.contentEditable='true';d.spellcheck=false;d.dataset.mid=mid;d.dataset.ph='説明を入力';
-      med.classList.add('has-cap');med.appendChild(d);d.focus();
-      commit();break}
-    case 'img-sel':{
-      const fig=el.closest('.media.img');const was=fig.classList.contains('selected');
-      $$('.media.img.selected').forEach(x=>x.classList.remove('selected'));
-      if(!was)fig.classList.add('selected');break}
   }
 });
 /* チェックボックス・プルダウン */
@@ -1694,11 +1727,14 @@ window.addEventListener('scroll',()=>{
 (async function init(){
   applyTheme();applyFont();
   $('#backBtn').innerHTML=ic('left');
+  $('#fwdBtn').innerHTML=ic('right');
   $('#backBtn').addEventListener('click',()=>{if(curDepth>0)history.back()});
+  $('#fwdBtn').addEventListener('click',()=>{if(curDepth<maxDepth)history.forward()});
   const st0=history.state;
   if(st0&&typeof st0.d==='number')curDepth=st0.d;
   else{try{history.replaceState({d:0},'')}catch{}}
-  updateBack();
+  maxDepth=curDepth;
+  updateNav();
   $('#hdrRight').innerHTML=
     `<a class="icon-btn" href="#/new" title="ページ作成">${ic('plus')}</a>`+
     `<a class="icon-btn" href="#/bookmarks" title="ブックマーク">${ic('star')}</a>`+
