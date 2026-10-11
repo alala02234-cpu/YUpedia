@@ -13,6 +13,7 @@
   --hh:max(56px,calc(100vh / 12));
   --sh:52px;
   --fz:1;
+  --ff:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif;
   --bg:#ffffff;--card:#ffffff;--text:#111827;--sub:#6b7280;--border:#e5e7eb;--input:#f5f6f8;
   --primary:#2563eb;--link:#1d4ed8;--tag:#2563eb;--hover:rgba(0,0,0,.07);--shadow:0 2px 12px rgba(0,0,0,.12);
   --panel:rgba(255,255,255,.88);
@@ -26,7 +27,7 @@ body.dark{
 [hidden]{display:none!important}
 html,body{margin:0}
 html{-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--text);font-size:calc(16px*var(--fz));font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif;line-height:1.6;transition:background .2s,color .2s}
+body{background:var(--bg);color:var(--text);font-size:calc(16px*var(--fz));font-family:var(--ff);line-height:1.6;transition:background .2s,color .2s}
 button,input,select{font:inherit;color:inherit}
 a{color:var(--link)}
 
@@ -36,10 +37,9 @@ body.has-bg .page,body.has-bg .all-list{background:var(--panel);border-radius:18
 body.has-bg .page{margin-top:10px;margin-bottom:10px}
 body.has-bg .count{background:var(--panel)}
 
-/* ===== ロゴ（画像の余白を切り抜いて表示／画像が無いときは文字ロゴ） ===== */
-.logo-crop{position:relative;display:block;overflow:hidden;aspect-ratio:1879/557;background:#fff;border-radius:8px;container-type:inline-size}
-.logo-crop img{position:absolute;left:-4.364%;top:-77.02%;width:106.44%;height:auto;max-width:none;display:block}
-.logo-crop.custom img{left:0;top:0;width:100%;height:100%;object-fit:contain}
+/* ===== ロゴ（画像全体をそのまま表示／画像が無いときは文字ロゴ／背景は常に透明） ===== */
+.logo-crop{position:relative;display:block;overflow:hidden;aspect-ratio:3/1;background:transparent;border-radius:8px;container-type:inline-size}
+.logo-crop img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
 .logo-crop .wm{display:none;position:absolute;inset:0;align-items:center;justify-content:center;font-weight:800;font-size:20px;font-size:24cqw;letter-spacing:-.01em;color:#f29b42;font-family:"Segoe UI","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif;line-height:1}
 .logo-crop .wm b{color:#1e7bc9;font-weight:800}
 .logo-crop.nofile .wm{display:flex}
@@ -83,7 +83,7 @@ body.hdr-hidden .subbar{top:0}
 .tb{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:10px;cursor:pointer;font-size:calc(14px*var(--fz));white-space:nowrap}
 .tb:hover:not(:disabled){background:var(--hover)}
 .tb:disabled{opacity:.35;cursor:default}
-.tb[data-act=tb-url] svg{color:#2563eb}.tb[data-act=tb-image] svg{color:#10b981}.tb[data-act=tb-audio] svg{color:#a855f7}.tb[data-act=tb-color] svg{color:#f59e0b}
+.tb[data-act=tb-url] svg{color:#2563eb}.tb[data-act=tb-image] svg{color:#10b981}.tb[data-act=tb-video] svg{color:#ef4444}.tb[data-act=tb-audio] svg{color:#a855f7}.tb[data-act=tb-color] svg{color:#f59e0b}
 .tb-sep{width:1px;height:24px;background:var(--border)}
 
 /* ===== ページ共通 ===== */
@@ -179,6 +179,10 @@ body.hdr-hidden .toc{top:16px}
 .figcap a{color:var(--link);text-decoration:underline}
 .v-aud{border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:14px;background:var(--input)}
 .v-aud audio,.media.aud audio{width:100%}
+.v-vid{border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:14px;background:var(--input)}
+.v-vid video,.media.vid video{width:100%;border-radius:8px;display:block}
+.totop{position:fixed;right:18px;bottom:18px;z-index:120;background:var(--primary);color:#fff;width:46px;height:46px;box-shadow:var(--shadow);transition:opacity .2s,transform .2s}
+.totop:hover{filter:brightness(1.1)}
 .fname{font-size:calc(12px*var(--fz));color:var(--sub);margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:26px}
 .rich a,.rich-view a,.cap-rich a{color:var(--link)!important;text-decoration:underline!important}
 /* 存在しない見出しへのリンク：赤＋下線 */
@@ -215,6 +219,10 @@ body.dark .cap-rich font[color="#000000"],body.dark .figcap font[color="#000000"
 .cap-rich:focus{border-color:var(--primary)}
 .cap-rich:empty::before{content:attr(data-ph);color:var(--sub);opacity:.7}
 .media.aud{border:1px solid var(--border);background:var(--card);border-radius:10px;padding:10px}
+.media.vid{border:1px solid var(--border);background:var(--card);border-radius:10px;padding:10px}
+.media[draggable="true"]{cursor:grab}
+.media.dragging{opacity:.4}
+.sec-right.drag-over{outline:2px dashed var(--primary);outline-offset:2px;border-radius:12px}
 .add-sec{margin-top:10px;width:100%;padding:16px;border:2px dashed var(--border);background:transparent;color:var(--sub);border-radius:16px;font-weight:700;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:8px}
 .add-sec:hover{background:var(--hover)}
 .place-banner{position:fixed;left:50%;transform:translateX(-50%);bottom:20px;z-index:150;background:var(--primary);color:#fff;padding:10px 18px;border-radius:999px;display:flex;gap:12px;align-items:center;box-shadow:var(--shadow);max-width:94vw;font-size:calc(14px*var(--fz))}
@@ -334,6 +342,7 @@ body.dark .cap-rich font[color="#000000"],body.dark .figcap font[color="#000000"
 <div id="altBanner" class="place-banner alt" hidden></div>
 <div id="toast" class="toast"></div>
 <div id="snack" class="snack"></div>
+<button type="button" id="toTopBtn" class="icon-btn totop" title="ページ上部へ戻る" aria-label="上部へ戻る" hidden></button>
 
 <script>
 'use strict';
@@ -359,8 +368,8 @@ const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
 
 /* ロゴ：保存した画像 → 画像ファイル → 文字ロゴ の順 */
 function logoHTML(cls=''){
-  if(assets.logo)return `<span class="logo-crop custom ${cls}"><img src="${esc(assets.logo)}" alt="YUpedia"></span>`;
-  return `<span class="logo-crop ${cls}"><img src="${esc(ASSETS.logo)}" alt="YUpedia" onerror="this.parentNode.classList.add('nofile')"><span class="wm"><b>YU</b>pedia</span></span>`;
+  if(assets.logo)return `<span class="logo-crop custom ${cls}"><img src="${esc(assets.logo)}" alt="YUpedia" draggable="false"></span>`;
+  return `<span class="logo-crop ${cls}"><img src="${esc(ASSETS.logo)}" alt="YUpedia" draggable="false" onerror="this.parentNode.classList.add('nofile')"><span class="wm"><b>YU</b>pedia</span></span>`;
 }
 function renderLogos(){const h=$('#hdrLogo');if(h)h.innerHTML=logoHTML()}
 function applyFavicon(){
@@ -392,7 +401,9 @@ const ICONS={
  mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1M12 18v4"/>',
  palette:'<circle cx="13.5" cy="6.5" r=".8"/><circle cx="17.5" cy="10.5" r=".8"/><circle cx="8.5" cy="7.5" r=".8"/><circle cx="6.5" cy="12.5" r=".8"/><path d="M12 2a10 10 0 1 0 0 20 2 2 0 0 0 1.5-3.3 2 2 0 0 1 1.5-3.3H17a5 5 0 0 0 5-5C22 6 17.5 2 12 2z"/>',
  left:'<path d="M19 12H5M12 19l-7-7 7-7"/>',
- right:'<path d="M5 12h14M12 5l7 7-7 7"/>'
+ right:'<path d="M5 12h14M12 5l7 7-7 7"/>',
+ up:'<path d="M12 19V5M5 12l7-7 7 7"/>',
+ video:'<rect x="2" y="5" width="15" height="14" rx="2"/><path d="m22 8-5 4 5 4V8z"/>'
 };
 const ic=(n,s=22,f=false)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="${f?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]}</svg>`;
 
@@ -471,7 +482,7 @@ const LS={
   get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}},
   set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{toast('保存できませんでした')}}
 };
-const DEFAULT_SETTINGS={theme:'light',fontSize:'m',bgImage:false,bmSort:'added',homeHist:false,homeBm:false};
+const DEFAULT_SETTINGS={theme:'light',fontSize:'m',fontFamily:'default',bgImage:false,bmSort:'added',homeHist:false,homeBm:false,homeLogo:true,tocOpen:true};
 let settings=Object.assign({},DEFAULT_SETTINGS,LS.get('mywiki.settings',{}));
 let hist=LS.get('mywiki.history',[]);        // {i,w,d,t,hd?}  hd=検索バーの候補から消した印（履歴ページには残る）
 let bms=LS.get('mywiki.bookmarks',[]);       // {id,t}
@@ -489,6 +500,14 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&settings.
 /* 文字サイズ：小 / 中 / 大 */
 const FONT_SCALE={s:.9,m:1,l:1.15};
 const applyFont=()=>document.documentElement.style.setProperty('--fz',FONT_SCALE[settings.fontSize]||1);
+/* フォント：デフォルト / ゴシック / 明朝体 / 手書き */
+const FONT_STACKS={
+  default:'-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif',
+  gothic:'"Yu Gothic UI","Yu Gothic","Hiragino Kaku Gothic ProN","Hiragino Sans","Meiryo",sans-serif',
+  mincho:'"Yu Mincho","Hiragino Mincho ProN","MS PMincho",serif',
+  hand:'"Yuji Syuku","klee","HGP創英角ポップ体","Comic Sans MS",cursive'
+};
+const applyFontFamily=()=>document.documentElement.style.setProperty('--ff',FONT_STACKS[settings.fontFamily]||FONT_STACKS.default);
 
 const DB={
   db:null,
@@ -742,9 +761,10 @@ document.addEventListener('click',e=>{
   askLeave(true).then(ok=>{if(ok===true&&ed){ed.leaving=true;go(href)}});
 },true);
 
+let isArticlePage=false;
 function route(){
   closeModal();
-  if(ed){clearTimeout(ed.timer);ed=null}
+  if(ed){clearTimeout(ed.timer);clearInterval(ed.autoTimer);ed=null}
   cancelAltLink();
   histDel=false;histSel.clear();bmDel=false;bmSel.clear();bmSortOpen=false;
   document.body.classList.remove('editing');$('#subbar').hidden=true;updatePlaceBanner();
@@ -754,6 +774,10 @@ function route(){
   const page=seg[0]||'home';
   let arg=seg.slice(1).join('/');try{arg=decodeURIComponent(arg)}catch{}
   window.scrollTo(0,0);lastY=0;showHeader();
+  /* 検索バーは1ページに1つ：ホームは専用の大きい検索バーを使うので、ヘッダーの検索バーは隠す */
+  hdrSearch.el.hidden=(page==='home');
+  isArticlePage=(page==='article'||page==='guide'||page==='version');
+  const tb=$('#toTopBtn');if(tb)tb.hidden=true;
   const pages={home:renderHome,search:()=>renderSearch(arg),article:()=>renderArticle(arg),edit:()=>renderEdit(arg),'new':()=>renderNew(arg),history:renderHistory,bookmarks:renderBookmarks,settings:renderSettings,guide:renderGuide,versions:()=>renderVersions(arg),version:()=>renderVersion(arg)};
   (pages[page]||renderHome)();
 }
@@ -775,7 +799,7 @@ function renderHome(){
   const two=settings.homeHist||settings.homeBm;
   const L=settings.homeHist?homeSideHTML('hist'):(two?'<div></div>':'');
   const R=settings.homeBm?homeSideHTML('bm'):(two?'<div></div>':'');
-  $('#view').innerHTML=`<div class="home"><div class="home-grid${two?' two':''}">${L}<div class="home-top">${logoHTML('big')}<div id="homeSearch"></div><button class="count" data-act="toggle-list">記事数 ${state.articles.length}件</button></div>${R}</div><div id="allList" class="all-list" hidden></div></div>`;
+  $('#view').innerHTML=`<div class="home"><div class="home-grid${two?' two':''}">${L}<div class="home-top">${settings.homeLogo?logoHTML('big'):''}<div id="homeSearch"></div><button class="count" data-act="toggle-list">記事数 ${state.articles.length}件</button></div>${R}</div><div id="allList" class="all-list" hidden></div></div>`;
   $('#homeSearch').appendChild(buildSearch(true).el);
 }
 function toggleList(){
@@ -814,9 +838,9 @@ function articleHTML(a,o={}){
     const media=s.media.map(m=>{
       const cap=(m.caption&&textOf(m.caption))?`<div class="figcap">${sanitize(m.caption)}</div>`:'';
       if(!m.src)return `<div class="v-aud"><div class="fname">${esc(m.name)}</div><div class="figcap">（この版のファイルは保存されていません）</div></div>`;
-      return m.type==='image'
-        ?`<figure><img src="${esc(m.src)}" alt="" data-act="zoom">${cap}</figure>`
-        :`<div class="v-aud"><div class="fname">${esc(m.name)}</div><audio controls src="${esc(m.src)}"></audio>${cap}</div>`;
+      if(m.type==='image')return `<figure><img src="${esc(m.src)}" alt="" data-act="zoom">${cap}</figure>`;
+      if(m.type==='video')return `<div class="v-vid"><div class="fname">${esc(m.name)}</div><video controls src="${esc(m.src)}"></video>${cap}</div>`;
+      return `<div class="v-aud"><div class="fname">${esc(m.name)}</div><audio controls src="${esc(m.src)}"></audio>${cap}</div>`;
     }).join('');
     return `<section class="v-sec" id="sec-${i}">${s.heading?`<h2>${esc(s.heading)}</h2>`:''}<div class="v-grid${has?'':' full'}"><div class="rich-view">${sanitize(s.html)}</div>${has?`<div class="v-media">${media}</div>`:''}</div></section>`;
   }).join('');
@@ -826,7 +850,8 @@ function articleHTML(a,o={}){
   const tags=(a.tags&&a.tags.length)?`<div class="art-tags" data-act="tags-expand">${a.tags.map(tagLink).join(' ')}</div>`:'';
   const banner=o.ver?`<div class="ver-banner">${esc(fmtDT(o.ver.t))} 時点の版を表示しています。<a href="#/versions/${o.ver.id}">編集履歴へ戻る</a><a href="#/article/${o.ver.id}">最新の記事へ</a><button type="button" class="mini-btn" data-act="restore-version" data-id="${o.ver.id}" data-idx="${o.ver.idx}">復元する</button></div>`:'';
   const openBtn=toc?`<button type="button" class="mini-btn toc-open" data-act="toc-toggle">目次を開く</button>`:'';
-  return `<div class="page wide${toc?'':' toc-closed'}">${banner}<div class="art-head"><h1 class="h1">${esc(a.title)}</h1>${tools}${openBtn}</div>${tags}<div class="art-wrap">${toc}<div class="art-body">${secs}</div></div></div>`;
+  const closedCls=(!toc||!settings.tocOpen)?' toc-closed':'';
+  return `<div class="page wide${closedCls}">${banner}<div class="art-head"><h1 class="h1">${esc(a.title)}</h1>${tools}${openBtn}</div>${tags}<div class="art-wrap">${toc}<div class="art-body">${secs}</div></div></div>`;
 }
 /* 「Altで作ったリンク」を現在の記事の有無に合わせて設定（無い見出しは赤＋下線→作成画面へ） */
 function resolveWikiLinks(root){
@@ -931,15 +956,15 @@ const GUIDE={id:'guide',title:'YUpediaの使い方',tags:[],sections:[
   '　・すでに入力した文字を選択してからAltキーを押して離すだけでも、その文字がリンクになります。',
   '　・同じ見出しの記事があれば通常のリンクになり、無い場合は赤い下線で表示されます。赤いリンクを押すと、その見出しのページ作成画面が開きます。',
   '　・閲覧中にこうしたリンクやタグを押して移動したときも、検索履歴に残ります。',
-  '8. Ctrl+S（または「一時保存」ボタン）で、編集中の内容を一時保存できます。編集画面に留まったまま保存され、次に同じ記事を編集するときに「復元しますか？」と表示されます。記事として確定するには、「保存する」を押してください。',
+  '8. Ctrl+S（または「一時保存」ボタン）で、編集中の内容を一時保存できます。編集中は30秒ごとにも自動で一時保存されます。編集画面に留まったまま保存され、次に同じ記事を編集するときに「復元しますか？」と表示されます。記事として確定するには、「保存する」を押してください。',
   '　・保存していない変更があるまま、「キャンセル」を押したり、他のページへ移動しようとすると、警告が表示されます。',
   '　・記事のタイトル横の時計マークからは、その記事の編集履歴（直近5回の保存）を見られます。日付を押すと、その時の版が表示され、「復元する」を押すと、その内容に戻せます。復元すると、新しい版として履歴に記録されます。'].join('\n')},
- {heading:'画像・音声・説明文',media:[],html:[
-  '・上のバーの「画像」「音声」を押してファイルを選ぶと、「ここに設置」が表示されます。置きたい場所のボタンを押すと配置されます。',
-  '・画像・音声の右上の×で削除できます。',
-  '・画像、音声を配置すると、その下に説明を入力する欄が最初から表示されます。必要なときに入力してください。',
+ {heading:'画像・映像・音声・説明文',media:[],html:[
+  '・上のバーの「画像」「映像」「音声」を押してファイルを選ぶと、「ここに設置」が表示されます。置きたい場所のボタンを押すと配置されます。',
+  '・画像・映像・音声の右上の×で削除できます。ドラッグして別の場所や別のセクションへ動かすこともできます。',
+  '・配置すると、その下に説明を入力する欄が最初から表示されます。必要なときに入力してください。',
   '・説明の欄でも、「URL」「文字の色」が使えます。',
-  '・音声を再生しているあいだに「目次を追加」を押しても、再生は止まりません。',
+  '・音声や映像を再生しているあいだに「目次を追加」を押しても、再生は止まりません。',
   '・閲覧中に画像をタップ（クリック）すると、大きく拡大して見られます。もう一度タップすると閉じます。'].join('\n')},
  {heading:'タグについて',media:[],html:[
   '・見出しの下の「タグ」欄に「#歴史 #メモ」のように入力します。＃を付けるごとにタグが1つ増えます。',
@@ -951,8 +976,8 @@ const GUIDE={id:'guide',title:'YUpediaの使い方',tags:[],sections:[
   '入力中は候補の記事が最大3件表示され、選ぶとすぐに開けます。入力欄が空のときは、最近の検索履歴が表示されます。候補の右の×は、検索バーの候補から消すだけで、履歴ページには残ります。',
   '検索結果が見つからないときは「ページを作成」から、その言葉の記事を作れます。',
   'ホーム画面の「記事数」を押すと、記事の一覧が表示されます。',
-  '記事ページの「目次」は、右の「閉じる」を押すと閉じられ、本文が中央に寄ります。「目次を開く」で元に戻ります。',
-  '下にスクロールするとヘッダーが隠れ、上にスクロールすると再び表示されます。左上の矢印で、1つ前のページに戻れます。その右の矢印では、戻ったページをやり直せます。'].join('\n')},
+  '記事ページの「目次」は、右の「閉じる」を押すと閉じられ、本文が中央に寄ります。「目次を開く」で元に戻ります。一度閉じると、次に開くまですべての記事で閉じたままになります。',
+  '下にスクロールするとヘッダーが隠れ、上にスクロールすると再び表示されます。ある程度下にスクロールすると、画面右下に上へ戻るボタンが表示されます。左上の矢印で、1つ前のページに戻れます。その右の矢印では、戻ったページをやり直せます。'].join('\n')},
  {heading:'ブックマークについて',media:[],html:[
   '記事ページ・検索結果・履歴ページ・この使い方ページにある星マークを押すと、ブックマークに登録できます。もう一度押すと外れます。間違えたときは、画面下の「キャンセル」で元に戻せます。',
   '右上の星アイコンでブックマーク一覧を開けます。「並べ替え」から、追加順・見出し順・最近開いた順に切り替えられます。',
@@ -963,9 +988,10 @@ const GUIDE={id:'guide',title:'YUpediaの使い方',tags:[],sections:[
   'ごみ箱アイコンで削除モードにして、「全選択」でまとめて選んでから「削除する」を押すと、まとめて消せます。日付の横のチェックで、その日の分をまとめて選ぶこともできます。'].join('\n')},
  {heading:'設定について',media:[],html:[
   '・文字サイズ：小・中・大から選べます。',
+  '・フォント：デフォルト・ゴシック・明朝体・手書きから選べます。ページ全体の文字の書体が切り替わります。',
   '・背景の色：白・黒・時間に合わせる、から選べます。「時間に合わせる」は、18:00〜翌朝6:00が黒、それ以外が白になります。',
   '・背景の画像：「インポートする」を押して画像ファイルを選ぶと、その画像が背景になります。文字が読みやすいように、本文の後ろには半透明の板が敷かれます。白・黒・時間に合わせるのどれかを選ぶと、画像は解除されます。画像を選んだときの文字色は、直前に選んでいた白・黒・時間の設定に従います。',
-  '・ホーム画面：「履歴」「ブックマーク」にチェックを入れると、ホームに一覧が表示されます。履歴はページの左側、ブックマークは右側です。ブックマークは右上のプルダウンで並べ替えできます。',
+  '・ホーム画面：「ロゴ」「履歴」「ブックマーク」にチェックを入れると、ホームに表示されます。履歴はページの左側、ブックマークは右側です。ブックマークは右上のプルダウンで並べ替えできます。',
   '・使い方：この使い方のページを開きます。',
   '・ロゴ・アイコン画像：ロゴやファビコンが表示されないときは、ここで画像を選ぶとブラウザに保存され、画像ファイルがなくても表示されます。何も設定しなければ、内蔵の文字ロゴが使われます。'].join('\n')},
  {heading:'データのエクスポート・インポート・削除',media:[],html:[
@@ -1016,10 +1042,10 @@ function renderBookmarks(){
     :'<div class="empty">ブックマークはありません</div>'}</div>`;
 }
 
-/* ---------- 設定（順番：文字サイズ／背景の色／ホーム画面／使い方／データ／ロゴ・アイコン／データ削除） ---------- */
+/* ---------- 設定（順番：文字サイズ／フォント／背景の色／ホーム画面／使い方／データ／ロゴ・アイコン／データ削除） ---------- */
 function renderSettings(){
   setTitle('設定 -YUpedia');
-  const th=settings.theme,fs=settings.fontSize||'m';
+  const th=settings.theme,fs=settings.fontSize||'m',ff=settings.fontFamily||'default';
   const bgOn=!!(settings.bgImage&&assets.bg);
   $('#view').innerHTML=`<div class="page"><h1 class="h1" style="margin-bottom:16px">設定</h1>
   <div class="card pad set-card"><div class="set-t">文字サイズ</div>
@@ -1027,6 +1053,13 @@ function renderSettings(){
       <button class="theme-opt ${fs==='s'?'on':''}" data-act="fontsize" data-v="s">小</button>
       <button class="theme-opt ${fs==='m'?'on':''}" data-act="fontsize" data-v="m">中</button>
       <button class="theme-opt ${fs==='l'?'on':''}" data-act="fontsize" data-v="l">大</button>
+    </div></div>
+  <div class="card pad set-card"><div class="set-t">フォント</div>
+    <div class="theme-opts">
+      <button class="theme-opt ${ff==='default'?'on':''}" data-act="fontfamily" data-v="default">デフォルト</button>
+      <button class="theme-opt ${ff==='gothic'?'on':''}" data-act="fontfamily" data-v="gothic">ゴシック</button>
+      <button class="theme-opt ${ff==='mincho'?'on':''}" data-act="fontfamily" data-v="mincho">明朝体</button>
+      <button class="theme-opt ${ff==='hand'?'on':''}" data-act="fontfamily" data-v="hand">手書き</button>
     </div></div>
   <div class="card pad set-card"><div class="set-t">背景の色</div>
     <div class="theme-opts">
@@ -1037,9 +1070,10 @@ function renderSettings(){
     </div>
     <p class="hint">「時間に合わせる」は、18:00〜翌朝6:00が黒、それ以外が白になります。「インポートする」は、選んだ画像ファイルを背景にします（画像の上の文字色は、直前に選んでいた白・黒・時間の設定のままです）。白・黒・時間に合わせるのどれかを選ぶと、画像は解除されます。変更は自動的にこのブラウザへ保存されます。</p></div>
   <div class="card pad set-card"><div class="set-t">ホーム画面</div>
+    <label class="chk-row"><input type="checkbox" class="chk blue" data-act="home-logo" ${settings.homeLogo?'checked':''}>ロゴ（中央に表示）</label>
     <label class="chk-row"><input type="checkbox" class="chk blue" data-act="home-hist" ${settings.homeHist?'checked':''}>履歴（ページの左側に表示）</label>
     <label class="chk-row"><input type="checkbox" class="chk blue" data-act="home-bm" ${settings.homeBm?'checked':''}>ブックマーク（ページの右側に表示）</label>
-    <p class="hint">ホーム画面に表示する一覧を選びます。</p></div>
+    <p class="hint">ホーム画面に表示する項目を選びます。</p></div>
   <div class="card pad set-card"><div class="set-t">使い方</div>
     <a class="btn" href="#/guide">使い方のページを開く</a></div>
   <div class="card pad set-card"><div class="set-t">データのインポート・エクスポート</div>
@@ -1097,7 +1131,7 @@ function exportData(){
 const normTags=t=>Array.isArray(t)?t.filter(x=>typeof x==='string'&&x).map(String):[];
 const normSecs=(secs,needSrc)=>(Array.isArray(secs)?secs:[]).map(s=>({
   sid:(s&&s.sid)||uid(),heading:String((s&&s.heading)||''),html:String((s&&s.html)||''),
-  media:(Array.isArray(s&&s.media)?s.media:[]).filter(m=>m&&(m.type==='image'||m.type==='audio')&&(!needSrc||typeof m.src==='string')).map(m=>{
+  media:(Array.isArray(s&&s.media)?s.media:[]).filter(m=>m&&(m.type==='image'||m.type==='audio'||m.type==='video')&&(!needSrc||typeof m.src==='string')).map(m=>{
     const o={mid:m.mid||uid(),type:m.type,name:String(m.name||''),caption:typeof m.caption==='string'?m.caption:null};
     if(typeof m.src==='string')o.src=m.src;return o})
 }));
@@ -1137,7 +1171,7 @@ function pickImport(){
     assets=Object.assign({bg:null,logo:null,icon:null},data.assets);
     settings=Object.assign({},DEFAULT_SETTINGS,data.settings);
     saveBM();LS.set('mywiki.history',hist);LS.set('mywiki.opened',opened);LS.set('mywiki.settings',settings);
-    applyTheme();applyFont();applyBg();renderLogos();applyFavicon();renderSettings();
+    applyTheme();applyFont();applyFontFamily();applyBg();renderLogos();applyFavicon();renderSettings();
     toast('インポートしました（記事'+data.articles.length+'件）');
   };
   inp.click();
@@ -1150,7 +1184,7 @@ async function wipeAll(){
   assets={bg:null,logo:null,icon:null};
   settings=Object.assign({},DEFAULT_SETTINGS);
   ['mywiki.settings','mywiki.history','mywiki.bookmarks','mywiki.opened'].forEach(k=>{try{localStorage.removeItem(k)}catch{}});
-  applyTheme();applyFont();applyBg();renderLogos();applyFavicon();renderSettings();
+  applyTheme();applyFont();applyFontFamily();applyBg();renderLogos();applyFavicon();renderSettings();
   toast('全データを削除しました');
 }
 
@@ -1181,16 +1215,18 @@ function startEditor(a,isNew){
   ed.stack=[{a:clone(ed.a),s:sig(ed.a)}];ed.idx=0;ed.initSig=ed.stack[0].s;
   updateUndoBtns();
   checkDraft();
+  ed.autoTimer=setInterval(()=>{if(ed)saveDraft(true)},30000);
 }
 function isDirty(){if(!ed||ed.saved||ed.leaving)return false;syncFromDOM();return sig(ed.a)!==ed.initSig}
 
-/* 画像・音声の1件分（説明の入力欄は最初から表示） */
+/* 画像・音声・映像の1件分（説明の入力欄は最初から表示。ドラッグで移動できる） */
 function mediaHTML(m){
   const cap=`<div class="cap-rich" contenteditable="true" spellcheck="false" data-mid="${m.mid}" data-ph="説明を入力"></div>`;
-  if(m.type==='image')return `<figure class="media img" data-mid="${m.mid}" style="margin:0"><div class="img-wrap"><img src="${esc(m.src)}" alt=""><button type="button" class="m-del" data-act="m-del" title="削除">${ic('x',14)}</button></div>${cap}</figure>`;
-  return `<div class="media aud" data-mid="${m.mid}"><button type="button" class="m-del" data-act="m-del" title="削除">${ic('x',14)}</button><div class="fname">${esc(m.name)}</div><audio controls src="${esc(m.src)}"></audio>${cap}</div>`;
+  if(m.type==='image')return `<figure class="media img" draggable="true" data-mid="${m.mid}" style="margin:0"><div class="img-wrap"><img src="${esc(m.src)}" alt="" draggable="false"><button type="button" class="m-del" data-act="m-del" title="削除">${ic('x',14)}</button></div>${cap}</figure>`;
+  if(m.type==='video')return `<div class="media vid" draggable="true" data-mid="${m.mid}"><button type="button" class="m-del" data-act="m-del" title="削除">${ic('x',14)}</button><div class="fname">${esc(m.name)}</div><video controls src="${esc(m.src)}" draggable="false"></video>${cap}</div>`;
+  return `<div class="media aud" draggable="true" data-mid="${m.mid}"><button type="button" class="m-del" data-act="m-del" title="削除">${ic('x',14)}</button><div class="fname">${esc(m.name)}</div><audio controls src="${esc(m.src)}" draggable="false"></audio>${cap}</div>`;
 }
-const mediaColHTML=s=>s.media.map(mediaHTML).join('')||'<div class="media-empty">画像・音声</div>';
+const mediaColHTML=s=>s.media.map(mediaHTML).join('')||'<div class="media-empty">画像・映像・音声</div>';
 const secHTML=(s,i)=>`<div class="card section" data-i="${i}"><div class="sec-top"><span class="sec-no">目次セクション ${i+1}</span><button class="sec-del" data-act="sec-del" title="このセクションを削除">${ic('trash',18)}</button></div><div class="sec-grid"><div class="sec-left"><label class="lbl">目次を入力</label><input class="sec-heading" type="text" autocomplete="off"><label class="lbl">テキストを入力</label><div class="rich" contenteditable="true" spellcheck="false"></div></div><div class="sec-right">${mediaColHTML(s)}</div></div></div>`;
 const addBtnHTML=pos=>`<button type="button" class="add-sec" data-act="add-sec" data-pos="${pos}">${ic('plus',20)} 目次を追加</button>`;
 function secsHTML(a){
@@ -1206,6 +1242,16 @@ function fillSection(el,s){
 function fillCaps(root,s){
   $$('.cap-rich',root).forEach(inp=>{const m=s.media.find(m=>m.mid===inp.dataset.mid);inp.innerHTML=sanitize((m&&m.caption)||'')});
 }
+/* セクション削除後、「目次を追加」ボタンが2つ連続で並ばないようにする */
+function dedupeAddBtns(){
+  const container=$('#secs');if(!container)return;
+  const children=[...container.children];
+  for(let i=children.length-1;i>0;i--){
+    if(children[i].classList.contains('add-sec')&&children[i-1].classList.contains('add-sec')){
+      children[i].remove();
+    }
+  }
+}
 /* セクションと「目次を追加」ボタンの番号・位置を振り直す */
 function renumberSecs(){
   const container=$('#secs');if(!container)return;
@@ -1218,7 +1264,7 @@ function renumberSecs(){
 
 function renderEditor(){
   const y=window.scrollY,a=ed.a;
-  $('#view').innerHTML=`<div class="page" id="editor"><div class="page-head"><h1 class="h1">${ed.isNew?'ページを作成':'ページを編集'}</h1><div class="head-btns"><button class="btn" data-act="cancel">キャンセル</button><button class="btn" data-act="draft" title="Ctrl+S">一時保存</button><button class="btn primary" data-act="save">保存する</button></div></div><div class="field-label">見出し</div><div class="card"><input id="titleInput" class="title-input" type="text" autocomplete="off"></div><div class="field-label">タグ</div><div class="card"><input id="tagInput" class="title-input tag-input" type="text" autocomplete="off" placeholder="#タグ #タグ …（＃から次の＃までが1つのタグ。空白も含められます）"></div><div id="secs">${secsHTML(a)}</div></div>`;
+  $('#view').innerHTML=`<div class="page" id="editor"><div class="page-head"><h1 class="h1">${ed.isNew?'ページを作成':'ページを編集'}</h1><div class="head-btns"><button class="btn" data-act="cancel">キャンセル</button><button class="btn" data-act="draft" title="Ctrl+S">一時保存</button><button class="btn primary" data-act="save">保存する</button></div></div><div class="field-label">見出し</div><div class="card"><input id="titleInput" class="title-input" type="text" autocomplete="off"></div><div class="field-label">タグ</div><div class="card"><input id="tagInput" class="title-input tag-input" type="text" autocomplete="off" placeholder="#タグ #タグ …"></div><div id="secs">${secsHTML(a)}</div></div>`;
   $('#titleInput').value=a.title;
   $('#tagInput').value=(a.tags||[]).map(t=>'#'+t).join(' ');
   $$('.section').forEach((el,i)=>fillSection(el,a.sections[i]));
@@ -1237,7 +1283,7 @@ function syncFromDOM(){
   });
 }
 
-/* 「ここに設置」ボタンを画面全体を作り直さずに出し入れする（再生中の音声を止めないため） */
+/* 「ここに設置」ボタンを画面全体を作り直さずに出し入れする（再生中の音声・映像を止めないため） */
 function drawSlots(){
   if(!$('#editor'))return;
   $$('#editor .slot').forEach(x=>x.remove());
@@ -1251,11 +1297,11 @@ function drawSlots(){
       items.forEach((it,j)=>right.insertBefore(mk(j),it));
       right.appendChild(mk(items.length));
     }else if(!items.length&&!em){
-      const d=document.createElement('div');d.className='media-empty';d.textContent='画像・音声';right.appendChild(d);
+      const d=document.createElement('div');d.className='media-empty';d.textContent='画像・映像・音声';right.appendChild(d);
     }
   });
 }
-/* 目次の追加：クリックした位置に挿入し、DOMに追加するだけなので、再生中の音声は止まらない */
+/* 目次の追加：クリックした位置に挿入し、DOMに追加するだけなので、再生中の音声・映像は止まらない */
 function addSectionAt(pos){
   if(!ed)return;
   commit();
@@ -1279,7 +1325,7 @@ async function handleSecDel(el){
   if(!ed)return;
   const sec=el.closest('.section');if(!sec)return;
   const i=+sec.dataset.i;
-  const doDel=()=>{commit();ed.a.sections.splice(i,1);sec.remove();renumberSecs();drawSlots();commit()};
+  const doDel=()=>{commit();ed.a.sections.splice(i,1);sec.remove();dedupeAddBtns();renumberSecs();drawSlots();commit()};
   if(ed.isNew){
     const ok=await confirmDialog({title:'目次を削除しますか？',message:'このセクションの内容が失われます。',okText:'削除する',danger:true});
     if(ok===true)doDel();
@@ -1307,14 +1353,14 @@ function updateUndoBtns(){
   u.disabled=!ed||ed.idx===0;r.disabled=!ed||ed.idx>=ed.stack.length-1;
 }
 
-/* ---- 一時保存（Ctrl+S）と復元 ---- */
-async function saveDraft(){
+/* ---- 一時保存（Ctrl+S／30秒ごとの自動保存）と復元 ---- */
+async function saveDraft(silent){
   if(!ed)return;
   commit();
   try{
     await DB.putDraft({key:draftKey(),t:Date.now(),a:clone(ed.a)});
-    toast('一時保存しました（確定するには「保存する」を押してください）');
-  }catch{toast('一時保存に失敗しました')}
+    if(!silent)toast('一時保存しました（確定するには「保存する」を押してください）');
+  }catch{if(!silent)toast('一時保存に失敗しました')}
 }
 async function checkDraft(){
   const my=ed;if(!my)return;
@@ -1361,13 +1407,15 @@ async function cancelEditor(){
   else navigate(ed.isNew?'#/':'#/article/'+ed.a.id,true);
 }
 
-/* ---- 画像・音声 ---- */
+/* ---- 画像・映像・音声 ---- */
 function pickFile(type){
   if(!ed.a.sections.length){toast('先に「目次を追加」を押してセクションを作ってください');return}
-  const inp=document.createElement('input');inp.type='file';inp.accept=type==='image'?'image/*':'audio/*';
+  const inp=document.createElement('input');inp.type='file';
+  inp.accept=type==='image'?'image/*':type==='video'?'video/*':'audio/*';
+  const maxSize=type==='video'?200*1024*1024:50*1024*1024;
   inp.onchange=()=>{
     const f=inp.files[0];if(!f)return;
-    if(f.size>50*1024*1024){toast('ファイルが大きすぎます（50MBまで）');return}
+    if(f.size>maxSize){toast('ファイルが大きすぎます（'+(maxSize/1024/1024)+'MBまで）');return}
     const fr=new FileReader();
     fr.onload=()=>{
       commit();
@@ -1390,9 +1438,26 @@ function placeMedia(si,pos){
   right.insertBefore(t.firstElementChild,slotEl);
   drawSlots();updatePlaceBanner();commit();
 }
+/* 画像・映像・音声をドラッグして移動・挿入する */
+function moveMedia(si,mid,targetSi,targetMid,before){
+  if(!ed)return;
+  commit();
+  const srcSec=ed.a.sections[si];if(!srcSec)return;
+  const idx=srcSec.media.findIndex(m=>m.mid===mid);if(idx<0)return;
+  const dstSec=ed.a.sections[targetSi];if(!dstSec)return;
+  const[item]=srcSec.media.splice(idx,1);
+  let pos=dstSec.media.length;
+  if(targetMid){
+    const ti=dstSec.media.findIndex(m=>m.mid===targetMid);
+    if(ti>=0)pos=before?ti:ti+1;
+  }
+  dstSec.media.splice(pos,0,item);
+  renderEditor();
+  commit();
+}
 function updatePlaceBanner(){
   const b=$('#placeBanner');
-  if(ed&&ed.placing){b.hidden=false;b.innerHTML=`${ed.placing.item.type==='image'?'画像':'音声'}を置く場所の「ここに設置」を押してください <button class="btn" id="placeCancel">キャンセル</button>`}
+  if(ed&&ed.placing){const tn=ed.placing.item.type==='image'?'画像':ed.placing.item.type==='video'?'映像':'音声';b.hidden=false;b.innerHTML=`${tn}を置く場所の「ここに設置」を押してください <button class="btn" id="placeCancel">キャンセル</button>`}
   else b.hidden=true;
 }
 $('#placeBanner').addEventListener('click',e=>{if(e.target.closest('#placeCancel')&&ed){ed.placing=null;drawSlots();updatePlaceBanner()}});
@@ -1584,9 +1649,10 @@ view.addEventListener('click',e=>{
     case 'restore-version':restoreVersion(el.dataset.id,+el.dataset.idx);break;
     case 'tags-expand':if(e.target.closest('a'))break;el.classList.toggle('open');break;
     case 'goto':{const s=document.getElementById('sec-'+el.dataset.i);if(s)s.scrollIntoView({behavior:'smooth',block:'start'});break}
-    case 'toc-toggle':{const p=$('.page.wide');if(p)p.classList.toggle('toc-closed');break}
+    case 'toc-toggle':{const p=$('.page.wide');if(p){p.classList.toggle('toc-closed');settings.tocOpen=!p.classList.contains('toc-closed');LS.set('mywiki.settings',settings)}break}
     case 'h-open':openHistoryWord(el.dataset.w);break;
     case 'fontsize':settings.fontSize=el.dataset.v;LS.set('mywiki.settings',settings);applyFont();renderSettings();toast('設定を保存しました');break;
+    case 'fontfamily':settings.fontFamily=el.dataset.v;LS.set('mywiki.settings',settings);applyFontFamily();renderSettings();toast('設定を保存しました');break;
     case 'theme':settings.theme=el.dataset.v;settings.bgImage=false;LS.set('mywiki.settings',settings);applyTheme();applyBg();renderSettings();toast('設定を保存しました');break;
     case 'bg-import':pickAsset('bg');break;
     case 'asset-pick':pickAsset(el.dataset.k);break;
@@ -1651,6 +1717,7 @@ view.addEventListener('change',e=>{
       if(g)g.items.forEach(it=>el.checked?histSel.add(it.i):histSel.delete(it.i));
       renderHistory();break}
     case 'bm-item':el.checked?bmSel.add(el.dataset.i):bmSel.delete(el.dataset.i);renderBookmarks();break;
+    case 'home-logo':settings.homeLogo=el.checked;LS.set('mywiki.settings',settings);toast('設定を保存しました');return;
     case 'home-hist':settings.homeHist=el.checked;LS.set('mywiki.settings',settings);toast('設定を保存しました');return;
     case 'home-bm':settings.homeBm=el.checked;LS.set('mywiki.settings',settings);toast('設定を保存しました');return;
     case 'home-sort':{
@@ -1661,6 +1728,47 @@ view.addEventListener('change',e=>{
   }
   window.scrollTo(0,y);
 });
+/* 画像・映像・音声のドラッグによる並び替え・セクション間の移動 */
+let dragMedia=null;
+view.addEventListener('dragstart',e=>{
+  if(!ed)return;
+  const med=e.target.closest('#editor .media');if(!med)return;
+  const sec=med.closest('.section');if(!sec)return;
+  dragMedia={si:+sec.dataset.i,mid:med.dataset.mid};
+  if(e.dataTransfer){e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain','')}catch{}}
+  med.classList.add('dragging');
+});
+view.addEventListener('dragend',()=>{
+  $$('.media.dragging').forEach(x=>x.classList.remove('dragging'));
+  $$('.sec-right.drag-over').forEach(x=>x.classList.remove('drag-over'));
+  dragMedia=null;
+});
+view.addEventListener('dragover',e=>{
+  if(!ed||!dragMedia)return;
+  const right=e.target.closest('#editor .sec-right');
+  if(!right)return;
+  e.preventDefault();
+  $$('.sec-right.drag-over').forEach(x=>{if(x!==right)x.classList.remove('drag-over')});
+  right.classList.add('drag-over');
+});
+view.addEventListener('drop',e=>{
+  if(!ed||!dragMedia)return;
+  const right=e.target.closest('#editor .sec-right');if(!right)return;
+  e.preventDefault();
+  right.classList.remove('drag-over');
+  const sec=right.closest('.section');if(!sec)return;
+  const targetSi=+sec.dataset.i;
+  const med=e.target.closest('.media');
+  let targetMid=null,before=true;
+  if(med){
+    targetMid=med.dataset.mid;
+    const r=med.getBoundingClientRect();
+    before=(e.clientY-r.top)<r.height/2;
+  }
+  const dm=dragMedia;dragMedia=null;
+  if(dm.si===targetSi&&dm.mid===targetMid)return;
+  moveMedia(dm.si,dm.mid,targetSi,targetMid,before);
+});
 view.addEventListener('input',e=>{if(ed&&e.target.closest('.rich,.cap-rich,.sec-heading,#titleInput,#tagInput'))commitSoon()});
 view.addEventListener('paste',e=>{
   if(!ed||!e.target.closest('.rich,.cap-rich'))return;
@@ -1668,7 +1776,12 @@ view.addEventListener('paste',e=>{
   const t=(e.clipboardData||window.clipboardData).getData('text/plain');
   document.execCommand('insertText',false,t);
 });
-view.addEventListener('drop',e=>{if(e.target.closest&&e.target.closest('.rich,.cap-rich'))e.preventDefault()});
+view.addEventListener('drop',e=>{
+  if(!(e.target.closest&&e.target.closest('.rich,.cap-rich')))return;
+  const dt=e.dataTransfer;
+  if(dt&&dt.files&&dt.files.length){e.preventDefault();return} // 外部からのファイルのドロップは無視（画像・映像・音声は専用ボタンから追加）
+  // それ以外（本文中のURLや文字の移動）は、ブラウザの既定の動作にまかせる
+});
 /* 説明文でEnterを押したら改行（<br>）にする */
 view.addEventListener('keydown',e=>{
   if(!ed||e.key!=='Enter'||e.isComposing||e.keyCode===229)return;
@@ -1679,6 +1792,7 @@ view.addEventListener('keydown',e=>{
 $('#subbar').innerHTML=`
   <button class="tb" data-act="tb-url">${ic('link',18)}URL</button>
   <button class="tb" data-act="tb-image">${ic('image',18)}画像</button>
+  <button class="tb" data-act="tb-video">${ic('video',18)}映像</button>
   <button class="tb" data-act="tb-audio">${ic('mic',18)}音声</button>
   <button class="tb" data-act="tb-color">${ic('palette',18)}文字の色</button>
   <span class="tb-sep"></span>
@@ -1690,6 +1804,7 @@ $('#subbar').addEventListener('click',e=>{
   switch(b.dataset.act){
     case 'tb-url':openUrlModal();break;
     case 'tb-image':pickFile('image');break;
+    case 'tb-video':pickFile('video');break;
     case 'tb-audio':pickFile('audio');break;
     case 'tb-color':openColorModal();break;
     case 'tb-undo':undo();break;
@@ -1711,13 +1826,14 @@ document.addEventListener('beforeinput',e=>{
   if(ed&&(e.inputType==='historyUndo'||e.inputType==='historyRedo')&&!(e.target.closest&&e.target.closest('#header')))e.preventDefault();
 });
 
-/* ヘッダーのスクロール表示切り替え */
+/* ヘッダーのスクロール表示切り替え／上部へ戻るボタン */
 let lastY=0;
 const hasOpenDD=()=>$$('.s-dd').some(d=>!d.hidden);
 function hideHeader(){$('#header').classList.add('hide');document.body.classList.add('hdr-hidden')}
 function showHeader(){$('#header').classList.remove('hide');document.body.classList.remove('hdr-hidden')}
 window.addEventListener('scroll',()=>{
   const y=window.scrollY;
+  const tb=$('#toTopBtn');if(tb)tb.hidden=!(isArticlePage&&y>400);
   if(Math.abs(y-lastY)<6)return;
   if(y>lastY&&y>60){if(!hasOpenDD())hideHeader()}else showHeader();
   lastY=y;
@@ -1725,11 +1841,13 @@ window.addEventListener('scroll',()=>{
 
 /* ================= 起動 ================= */
 (async function init(){
-  applyTheme();applyFont();
+  applyTheme();applyFont();applyFontFamily();
   $('#backBtn').innerHTML=ic('left');
   $('#fwdBtn').innerHTML=ic('right');
   $('#backBtn').addEventListener('click',()=>{if(curDepth>0)history.back()});
   $('#fwdBtn').addEventListener('click',()=>{if(curDepth<maxDepth)history.forward()});
+  $('#toTopBtn').innerHTML=ic('up');
+  $('#toTopBtn').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
   const st0=history.state;
   if(st0&&typeof st0.d==='number')curDepth=st0.d;
   else{try{history.replaceState({d:0},'')}catch{}}
