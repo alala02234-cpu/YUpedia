@@ -16,12 +16,12 @@
   --ff:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif;
   --bg:#ffffff;--card:#ffffff;--text:#111827;--sub:#6b7280;--border:#e5e7eb;--input:#f5f6f8;
   --primary:#2563eb;--link:#1d4ed8;--tag:#2563eb;--hover:rgba(0,0,0,.07);--shadow:0 2px 12px rgba(0,0,0,.12);
-  --panel:rgba(255,255,255,.88);
+  --panel:rgba(255,255,255,.88);--line:#9ca3af;
 }
 body.dark{
   --bg:#000000;--card:#111318;--text:#f3f4f6;--sub:#9ca3af;--border:#2a2e37;--input:#1a1d24;
   --primary:#3b82f6;--link:#6ea8ff;--tag:#60a5fa;--hover:rgba(255,255,255,.12);--shadow:0 2px 12px rgba(255,255,255,.08);
-  --panel:rgba(12,14,18,.8);
+  --panel:rgba(12,14,18,.8);--line:#6b7280;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -108,13 +108,18 @@ body.editing #view{padding-top:calc(var(--hh) + var(--sh))}
 .mini-btn{padding:4px 12px;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:8px;cursor:pointer;font-size:calc(13px*var(--fz))}
 .mini-btn:hover{background:var(--hover)}
 
-/* ===== タグ ===== */
-.tag{color:var(--tag);text-decoration:none;margin-right:.9em}
-.tag:hover{text-decoration:underline}
-.art-tags{margin:-8px 0 18px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;font-size:calc(15px*var(--fz))}
-.art-tags.open{white-space:normal}
-.r-tags{display:block;flex:1 1 60px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-left:6px;font-size:calc(14px*var(--fz))}
-.tag-input{font-size:calc(16px*var(--fz));font-weight:400}
+/* ===== ヘッダー中央（検索バー＋タブ） ===== */
+#hdrCenter{display:flex;align-items:center;gap:8px;min-width:0}
+#hdrCenter .search-wrap{flex:1;min-width:0}
+.tab-btn{width:34px;height:34px;border:2px solid var(--text);border-radius:8px;display:inline-grid;place-items:center;font-size:calc(14px*var(--fz));font-weight:700;line-height:1;color:var(--text);text-decoration:none;flex:none;background:transparent;cursor:pointer}
+.tab-btn:hover{background:var(--hover)}
+/* ===== タブのページ ===== */
+.tab-list{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-direction:column;gap:10px}
+.tab-row{display:flex;align-items:center;gap:6px;background:var(--card);border:2px solid var(--border);border-radius:14px;padding:4px 6px 4px 4px}
+.tab-row.on{border-color:var(--primary)}
+.tab-name{flex:1;min-width:0;text-align:left;background:none;border:0;cursor:pointer;padding:12px 14px;border-radius:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text);font-size:calc(16px*var(--fz))}
+.tab-name:hover{background:var(--hover)}
+.modal-box.square .u-res{max-height:120px}
 
 /* ===== ホーム ===== */
 .home-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;padding:0 20px;align-items:center}
@@ -166,10 +171,10 @@ body.hdr-hidden .toc{top:16px}
 .page.toc-closed .toc{display:none}
 .page.toc-closed .toc-open{display:inline-block}
 .page.toc-closed .art-wrap{grid-template-columns:minmax(0,1fr)}
-.page.toc-closed .art-head,.page.toc-closed .art-wrap,.page.toc-closed .art-tags,.page.toc-closed .ver-banner{max-width:820px;margin-left:auto;margin-right:auto}
+.page.toc-closed .art-head,.page.toc-closed .art-wrap,.page.toc-closed .ver-banner{max-width:820px;margin-left:auto;margin-right:auto}
 .v-sec{scroll-margin-top:calc(var(--hh) + 12px)}
 .v-sec:first-child h2{margin-top:0}
-.v-sec h2{font-size:calc(22px*var(--fz));border-bottom:1px solid var(--border);padding-bottom:6px;margin:28px 0 12px}
+.v-sec h2{font-size:calc(22px*var(--fz));border-bottom:2px solid var(--line);padding-bottom:6px;margin:28px 0 12px}
 .v-grid{display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:start}
 .v-grid.full{grid-template-columns:1fr}
 .rich-view,.rich{white-space:pre-wrap;word-break:break-word;line-height:1.8}
@@ -227,7 +232,6 @@ body.dark .cap-rich font[color="#000000"],body.dark .figcap font[color="#000000"
 .add-sec:hover{background:var(--hover)}
 .place-banner{position:fixed;left:50%;transform:translateX(-50%);bottom:20px;z-index:150;background:var(--primary);color:#fff;padding:10px 18px;border-radius:999px;display:flex;gap:12px;align-items:center;box-shadow:var(--shadow);max-width:94vw;font-size:calc(14px*var(--fz))}
 .place-banner .btn{background:#fff;color:#111;padding:4px 14px}
-.place-banner.alt{background:#d97706;bottom:76px;border-radius:14px}
 
 /* ===== 履歴 / ブックマーク / 設定 ===== */
 .h-group{margin-bottom:22px}
@@ -315,12 +319,11 @@ body.dark .cap-rich font[color="#000000"],body.dark .figcap font[color="#000000"
   .subbar{justify-content:flex-start}
   .h1{font-size:calc(22px*var(--fz))}
   .page{padding:18px 14px 90px}
-  .title-input,.sec-heading,.m-input,.tag-input{font-size:max(16px,calc(16px*var(--fz)))}
+  .title-input,.sec-heading,.m-input{font-size:max(16px,calc(16px*var(--fz)))}
   .title-input{font-size:max(18px,calc(18px*var(--fz)))}
   .rich,.cap-rich{font-size:max(16px,calc(16px*var(--fz)))}
   .theme-opt{padding:12px 16px}
   .r-row{flex-wrap:wrap}
-  .r-tags{flex:1 0 100%;padding-left:0}
 }
 </style>
 </head>
@@ -339,7 +342,6 @@ body.dark .cap-rich font[color="#000000"],body.dark .figcap font[color="#000000"
 <div id="subbar" class="subbar" hidden></div>
 <main id="view"></main>
 <div id="placeBanner" class="place-banner" hidden></div>
-<div id="altBanner" class="place-banner alt" hidden></div>
 <div id="toast" class="toast"></div>
 <div id="snack" class="snack"></div>
 <button type="button" id="toTopBtn" class="icon-btn totop" title="ページ上部へ戻る" aria-label="上部へ戻る" hidden></button>
@@ -439,20 +441,6 @@ const fmtDate=k=>{const [y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d
 const fmtDT=t=>new Date(t).toLocaleString('ja-JP',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'});
 const collator=new Intl.Collator('ja',{numeric:true,sensitivity:'base'});
 
-/* タグ：「#」（＃）から次の「#」までが1つのタグ。空白もタグの一部にできる */
-function parseTags(s){
-  const out=[],seen=new Set();
-  for(const m of String(s||'').matchAll(/[#＃]([^#＃]*)/g)){
-    const t=m[1].trim();if(!t)continue;
-    const k=tagKey(t);if(!k||seen.has(k))continue;
-    seen.add(k);out.push(t);
-  }
-  return out;
-}
-/* 検索用の正規化：空白をすべて無視・大文字小文字を無視・全角/半角英数を統一 */
-const tagKey=s=>String(s||'').normalize('NFKC').toLowerCase().replace(/\s+/g,'');
-const tagLink=t=>`<a class="tag" href="#/search/${encodeURIComponent('#'+t)}" data-hist="#${esc(t)}">#${esc(t)}</a>`;
-
 /* 画像ファイルを読み込む（maxSide>0なら大きい画像を縮小） */
 function readImage(file,maxSide){
   return new Promise((ok,ng)=>{
@@ -482,11 +470,16 @@ const LS={
   get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}},
   set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{toast('保存できませんでした')}}
 };
-const DEFAULT_SETTINGS={theme:'light',fontSize:'m',fontFamily:'default',bgImage:false,bmSort:'added',homeHist:false,homeBm:false,homeLogo:true,tocOpen:true};
+const DEFAULT_SETTINGS={theme:'light',fontSize:'m',fontFamily:'gothic',bgImage:false,bmSort:'added',homeHist:false,homeBm:false,homeLogo:true,tocOpen:true};
 let settings=Object.assign({},DEFAULT_SETTINGS,LS.get('mywiki.settings',{}));
 let hist=LS.get('mywiki.history',[]);        // {i,w,d,t,hd?}  hd=検索バーの候補から消した印（履歴ページには残る）
 let bms=LS.get('mywiki.bookmarks',[]);       // {id,t}
 let opened=LS.get('mywiki.opened',{});       // {記事id:最後に開いた時刻}
+let tabs=LS.get('mywiki.tabs',[]);            // {id,h}  h=そのタブで開いているページのハッシュ
+if(!Array.isArray(tabs))tabs=[];
+tabs=tabs.filter(t=>t&&typeof t.id==='string'&&typeof t.h==='string'&&t.h!=='#/tabs');
+let activeTab=LS.get('mywiki.activeTab',null);
+if(!tabs.some(t=>t.id===activeTab))activeTab=null;
 const state={articles:[]};
 
 /* 背景色：light / dark / time（18:00〜翌6:00は黒） */
@@ -500,14 +493,12 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&settings.
 /* 文字サイズ：小 / 中 / 大 */
 const FONT_SCALE={s:.9,m:1,l:1.15};
 const applyFont=()=>document.documentElement.style.setProperty('--fz',FONT_SCALE[settings.fontSize]||1);
-/* フォント：デフォルト / ゴシック / 明朝体 / 手書き */
+/* フォント：ゴシック / 明朝体 */
 const FONT_STACKS={
-  default:'-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif',
   gothic:'"Yu Gothic UI","Yu Gothic","Hiragino Kaku Gothic ProN","Hiragino Sans","Meiryo",sans-serif',
-  mincho:'"Yu Mincho","Hiragino Mincho ProN","MS PMincho",serif',
-  hand:'"Yuji Syuku","klee","HGP創英角ポップ体","Comic Sans MS",cursive'
+  mincho:'"Yu Mincho","Hiragino Mincho ProN","MS PMincho",serif'
 };
-const applyFontFamily=()=>document.documentElement.style.setProperty('--ff',FONT_STACKS[settings.fontFamily]||FONT_STACKS.default);
+const applyFontFamily=()=>document.documentElement.style.setProperty('--ff',FONT_STACKS[settings.fontFamily]||FONT_STACKS.gothic);
 
 const DB={
   db:null,
@@ -686,27 +677,12 @@ function openHistoryWord(w){
   const a=state.articles.find(x=>x.title===w);
   navigate(a?'#/article/'+a.id:'#/search/'+encodeURIComponent(w));
 }
-/* タグ検索：空白・大文字小文字を区別しない。検索語と同じタグがあればそれだけ、無ければ部分一致（複数タグはAND） */
-function searchByTags(tags){
-  const qs=tags.map(tagKey).filter(Boolean);
-  if(!qs.length)return [];
-  const all=new Set(state.articles.flatMap(a=>(a.tags||[]).map(tagKey)));
-  const out=[];
-  for(const a of state.articles){
-    const at=(a.tags||[]).map(tagKey);
-    const ok=qs.every(k=>all.has(k)?at.includes(k):at.some(x=>x.includes(k)));
-    if(ok)out.push({a,score:0,snippet:''});
-  }
-  return out.sort((x,y)=>collator.compare(x.a.title,y.a.title));
-}
-const isTagQuery=q=>/^[#＃]/.test(q.trim())&&parseTags(q).length>0;
 function searchArticles(q){
-  if(isTagQuery(q))return searchByTags(parseTags(q));
-  const k=q.toLowerCase(),kt=tagKey(q),out=[];
+  const k=q.toLowerCase(),out=[];
   for(const a of state.articles){
     const t=a.title.toLowerCase();let score=99,snippet='';
     if(t===k)score=0;else if(t.includes(k))score=1;
-    if(score>1&&(a.sections.some(s=>s.heading.toLowerCase().includes(k))||(kt&&(a.tags||[]).some(x=>tagKey(x).includes(kt)))))score=2;
+    if(score>1&&a.sections.some(s=>s.heading.toLowerCase().includes(k)))score=2;
     const body=a.sections.map(s=>textOf(s.html)).join(' ');
     const bi=body.toLowerCase().indexOf(k);
     if(bi>=0){if(score>3)score=3;snippet=(bi>30?'…':'')+body.slice(Math.max(0,bi-30),bi+90)+(body.length>bi+90?'…':'')}
@@ -765,7 +741,6 @@ let isArticlePage=false;
 function route(){
   closeModal();
   if(ed){clearTimeout(ed.timer);clearInterval(ed.autoTimer);ed=null}
-  cancelAltLink();
   histDel=false;histSel.clear();bmDel=false;bmSel.clear();bmSortOpen=false;
   document.body.classList.remove('editing');$('#subbar').hidden=true;updatePlaceBanner();
   hdrSearch.input.value='';$('.s-dd',hdrSearch.el).hidden=true;
@@ -774,12 +749,75 @@ function route(){
   const page=seg[0]||'home';
   let arg=seg.slice(1).join('/');try{arg=decodeURIComponent(arg)}catch{}
   window.scrollTo(0,0);lastY=0;showHeader();
-  /* 検索バーは1ページに1つ：ホームは専用の大きい検索バーを使うので、ヘッダーの検索バーは隠す */
-  hdrSearch.el.hidden=(page==='home');
+  hdrSearch.el.hidden=false;
+  if(page!=='tabs')trackTab(h);
   isArticlePage=(page==='article'||page==='guide'||page==='version');
   const tb=$('#toTopBtn');if(tb)tb.hidden=true;
-  const pages={home:renderHome,search:()=>renderSearch(arg),article:()=>renderArticle(arg),edit:()=>renderEdit(arg),'new':()=>renderNew(arg),history:renderHistory,bookmarks:renderBookmarks,settings:renderSettings,guide:renderGuide,versions:()=>renderVersions(arg),version:()=>renderVersion(arg)};
+  const pages={home:renderHome,search:()=>renderSearch(arg),article:()=>renderArticle(arg),edit:()=>renderEdit(arg),'new':()=>renderNew(arg),tabs:renderTabs,history:renderHistory,bookmarks:renderBookmarks,settings:renderSettings,guide:renderGuide,versions:()=>renderVersions(arg),version:()=>renderVersion(arg)};
   (pages[page]||renderHome)();
+}
+
+
+/* ================= タブ ================= */
+const saveTabs=()=>{LS.set('mywiki.tabs',tabs);LS.set('mywiki.activeTab',activeTab);updateTabBtn()};
+function updateTabBtn(){const b=$('#tabBtn');if(b)b.textContent=tabs.length>99?'99+':String(tabs.length)}
+/* いま開いているページを、選択中のタブに記録する（タブが無ければ作る） */
+function trackTab(h){
+  let t=tabs.find(x=>x.id===activeTab);
+  if(!t){t={id:uid(),h};tabs.push(t);activeTab=t.id}
+  t.h=h;saveTabs();
+}
+function pageName(h){
+  const seg=String(h||'#/').replace(/^#\/?/,'').split('/');
+  const p=seg[0]||'home';
+  let arg=seg.slice(1).join('/');try{arg=decodeURIComponent(arg)}catch{}
+  switch(p){
+    case 'article':{const a=getArticle(arg);return a?a.title:'記事'}
+    case 'edit':{const a=getArticle(arg);return a?a.title+'（編集）':'編集'}
+    case 'new':return arg?arg+'（作成）':'ページ作成';
+    case 'search':return '検索：'+arg;
+    case 'versions':case 'version':{const a=getArticle(arg.split('/')[0]);return a?a.title+'（編集履歴）':'編集履歴'}
+    case 'guide':return 'YUpediaの使い方';
+    case 'history':return '履歴';
+    case 'bookmarks':return 'ブックマーク';
+    case 'settings':return '設定';
+    default:return 'ホーム';
+  }
+}
+function renderTabs(){
+  setTitle('タブ -YUpedia');
+  const rows=tabs.map(t=>{const n=pageName(t.h);
+    return `<li class="tab-row${t.id===activeTab?' on':''}"><button type="button" class="tab-name" data-act="tab-open" data-id="${t.id}" title="${esc(n)}">${esc(n)}</button><button type="button" class="icon-btn danger" data-act="tab-del" data-id="${t.id}" title="このタブを削除">${ic('trash',20)}</button></li>`}).join('');
+  $('#view').innerHTML=`<div class="page"><div class="page-head"><h1 class="h1">タブ</h1><div class="head-btns"><button type="button" class="btn danger" data-act="tab-del-all" ${tabs.length?'':'disabled'}>すべて削除</button></div></div>${
+    tabs.length?`<ul class="tab-list">${rows}</ul>`:'<div class="empty" style="padding:30px 0">タブはありません</div>'}<button type="button" class="add-sec" data-act="tab-add">${ic('plus',20)} 新しく追加</button></div>`;
+}
+const onTabsPage=()=>(location.hash||'')==='#/tabs';
+function tabOpen(id){const t=tabs.find(x=>x.id===id);if(!t)return;activeTab=t.id;saveTabs();navigate(t.h||'#/')}
+function tabAdd(){
+  const t={id:uid(),h:'#/'};tabs.push(t);activeTab=t.id;saveTabs();renderTabs();
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
+function tabDel(id){
+  const i=tabs.findIndex(x=>x.id===id);if(i<0)return;
+  const t=tabs[i],wasActive=(activeTab===id),name=pageName(t.h);
+  tabs.splice(i,1);if(wasActive)activeTab=null;saveTabs();
+  if(onTabsPage())renderTabs();
+  snack(name+'を削除しました','キャンセル',()=>{
+    if(!tabs.some(x=>x.id===t.id))tabs.splice(Math.min(i,tabs.length),0,t);
+    if(wasActive&&!activeTab)activeTab=t.id;
+    saveTabs();if(onTabsPage())renderTabs();
+  });
+}
+function tabDelAll(){
+  if(!tabs.length)return;
+  const backup=tabs.slice(),prev=activeTab;
+  tabs=[];activeTab=null;saveTabs();
+  if(onTabsPage())renderTabs();
+  snack('すべてのタブを削除しました','キャンセル',()=>{
+    tabs=backup.concat(tabs);
+    if(!activeTab)activeTab=prev;
+    saveTabs();if(onTabsPage())renderTabs();
+  });
 }
 
 /* ---------- ホーム（設定で履歴＝左／ブックマーク＝右を表示） ---------- */
@@ -814,15 +852,13 @@ function toggleList(){
 function renderSearch(q){
   setTitle('検索 -YUpedia');hdrSearch.input.value=q;
   const res=searchArticles(q);
-  const tagMode=isTagQuery(q);
   const base=location.href.split('#')[0];
   const rows=res.map(r=>{
     const on=isBM(r.a.id);
-    const tg=(r.a.tags&&r.a.tags.length)?`<span class="r-tags">${r.a.tags.map(tagLink).join(' ')}</span>`:'';
-    return `<div class="result"><div class="r-row"><a class="r-title" href="#/article/${r.a.id}">${esc(r.a.title)}</a><a class="icon-btn" href="#/edit/${r.a.id}" title="編集">${ic('pencil',20)}</a><button class="icon-btn danger" data-act="del-article" data-id="${r.a.id}" title="記事を削除">${ic('trash',20)}</button><a class="icon-btn" href="#/versions/${r.a.id}" title="編集履歴">${ic('clock',20)}</a><button class="icon-btn star${on?' on':''}" data-act="bm-toggle" data-id="${r.a.id}" data-s="20" title="ブックマーク">${ic('star',20,on)}</button>${tg}</div><div class="r-url">${esc(base+'#/article/'+r.a.id)}</div>${r.snippet?`<div class="r-snip">${esc(r.snippet)}</div>`:''}</div>`;
+    return `<div class="result"><div class="r-row"><a class="r-title" href="#/article/${r.a.id}">${esc(r.a.title)}</a><a class="icon-btn" href="#/edit/${r.a.id}" title="編集">${ic('pencil',20)}</a><button class="icon-btn danger" data-act="del-article" data-id="${r.a.id}" title="記事を削除">${ic('trash',20)}</button><a class="icon-btn" href="#/versions/${r.a.id}" title="編集履歴">${ic('clock',20)}</a><button class="icon-btn star${on?' on':''}" data-act="bm-toggle" data-id="${r.a.id}" data-s="20" title="ブックマーク">${ic('star',20,on)}</button></div><div class="r-url">${esc(base+'#/article/'+r.a.id)}</div>${r.snippet?`<div class="r-snip">${esc(r.snippet)}</div>`:''}</div>`;
   }).join('');
   const bottomBtns=`<div class="empty-btns"><a class="btn" href="#/">ホームに戻る</a><a class="btn primary" href="#/new/${encodeURIComponent(q)}">ページを作成</a></div>`;
-  $('#view').innerHTML=`<div class="page"><h1 class="h1">「${esc(q)}」の${tagMode?'タグ検索結果':'検索結果'}</h1>${
+  $('#view').innerHTML=`<div class="page"><h1 class="h1">「${esc(q)}」の検索結果</h1>${
     res.length?`<div class="count-note">${res.length}件</div>`+rows:`<div class="empty">検索結果なし</div>`}${bottomBtns}</div>`;
 }
 
@@ -847,14 +883,13 @@ function articleHTML(a,o={}){
   let tools='';
   if(o.guide)tools=starBtn('guide');
   else if(!o.ver)tools=`<a class="icon-btn" href="#/edit/${a.id}" title="編集">${ic('pencil')}</a><button class="icon-btn danger" data-act="del-article" data-id="${a.id}" title="削除">${ic('trash')}</button><a class="icon-btn" href="#/versions/${a.id}" title="編集履歴">${ic('clock')}</a>${starBtn(a.id)}`;
-  const tags=(a.tags&&a.tags.length)?`<div class="art-tags" data-act="tags-expand">${a.tags.map(tagLink).join(' ')}</div>`:'';
   const banner=o.ver?`<div class="ver-banner">${esc(fmtDT(o.ver.t))} 時点の版を表示しています。<a href="#/versions/${o.ver.id}">編集履歴へ戻る</a><a href="#/article/${o.ver.id}">最新の記事へ</a><button type="button" class="mini-btn" data-act="restore-version" data-id="${o.ver.id}" data-idx="${o.ver.idx}">復元する</button></div>`:'';
   const openBtn=toc?`<button type="button" class="mini-btn toc-open" data-act="toc-toggle">目次を開く</button>`:'';
   const closedCls=(!toc||!settings.tocOpen)?' toc-closed':'';
-  return `<div class="page wide${closedCls}">${banner}<div class="art-head"><h1 class="h1">${esc(a.title)}</h1>${tools}${openBtn}</div>${tags}<div class="art-wrap">${toc}<div class="art-body">${secs}</div></div></div>`;
+  return `<div class="page wide${closedCls}">${banner}<div class="art-head"><h1 class="h1">${esc(a.title)}</h1>${tools}${openBtn}</div><div class="art-wrap">${toc}<div class="art-body">${secs}</div></div></div>`;
 }
-/* 「Altで作ったリンク」を現在の記事の有無に合わせて設定（無い見出しは赤＋下線→作成画面へ） */
-function resolveWikiLinks(root){
+/* [[記事名]]で作ったリンクを現在の記事の有無に合わせて設定（無い見出しは赤＋下線→作成画面へ） */
+function resolveWikiLinks(root,cur){
   $$('a[data-wt]',root).forEach(a=>{
     const t=a.dataset.wt,art=findByTitle(t);
     a.classList.remove('wl-missing');a.removeAttribute('title');
@@ -863,8 +898,16 @@ function resolveWikiLinks(root){
     a.removeAttribute('target');
   });
   $$('a[data-wiki]',root).forEach(a=>{const art=getArticle(a.dataset.wiki);if(art)a.dataset.hist=art.title});
+  /* {{目次名}} のリンク：この記事内の目次に飛ぶ（無い目次は赤＋下線） */
+  $$('a[data-toc]',root).forEach(a=>{
+    const t=(a.dataset.toc||'').trim();
+    const ok=!!(cur&&cur.sections.some(x=>(x.heading||'').trim()===t));
+    a.href='#';a.removeAttribute('target');a.removeAttribute('data-hist');
+    a.classList.toggle('wl-missing',!ok);
+    if(ok)a.removeAttribute('title');else a.title='この記事に該当する目次がありません';
+  });
 }
-function showArticle(a,o){$('#view').innerHTML=articleHTML(a,o);resolveWikiLinks($('#view'))}
+function showArticle(a,o){$('#view').innerHTML=articleHTML(a,o);resolveWikiLinks($('#view'),a)}
 function renderArticle(id){
   const a=getArticle(id);if(!a)return renderNotFound();
   setTitle(a.title+' -YUpedia');
@@ -938,24 +981,22 @@ function renderVersion(arg){
 const GUIDE={id:'guide',title:'YUpediaの使い方',tags:[],sections:[
  {heading:'YUpediaについて',media:[],html:[
   'YUpediaは、自分の知識やメモをまとめて記事にできる、ブラウザ上のWikiです。',
-  '記事には文章・画像・音声・タグを付けられ、記事同士をリンクでつなげられます。',
+  '記事には文章・画像・音声を載せられ、記事同士をリンクでつなげられます。',
   '記事や履歴などのデータは、お使いのブラウザ内に保存され、外部には送信されません。',
-  '別の端末へ移したいときや、バックアップを取りたいときは、設定の「エクスポート」「インポート」を使います。'].join('\n')},
+  '別の端末へ移したいときは、設定の「他の端末へ共有」を押して共有メニューから送り、受け取った側で「インポート」します。バックアップには「エクスポート」を使います。'].join('\n')},
  {heading:'記事の作成・編集方法',media:[],html:[
   '1. 画面右上の「＋」を押すと、ページ作成画面が開きます。作った記事は、記事ページや検索結果にある鉛筆マークから編集できます。',
-  '2. 最初に「見出し」（記事のタイトル）を入力します。その下の「タグ」欄には、必要ならタグを入力します（詳しくは「タグについて」）。',
+  '2. 最初に「見出し」（記事のタイトル）を入力します。',
   '3. 「目次を追加」のボタンは、セクションとセクションの間や一番上にも表示されます。押した場所に新しいセクションが増えます。セクションごとに、目次の名前と本文を入力します。目次が2つ以上あると、閲覧ページに目次が表示されます。',
   '4. 上のバーから、URL・画像・音声・文字の色を追加できます。',
-  '　・URL：本文中の入れたい位置をクリックしてから押します。YUpedia内の記事を検索してリンクにするか、外部サイトのURLを入力できます。',
+  '　・URL：本文中の入れたい位置をクリックしてから押します。YUpedia内の記事を検索してリンクにするか、「この記事の目次」から選んでその目次へ飛ぶリンクにするか、外部サイトのURLを入力できます。',
   '　・文字の色：色を変えたい文字を選択するか、入力したい位置をクリックしてから押します。',
   '5. 左右の矢印で「元に戻す」「やり直す」ができます（Ctrl+Z／Ctrl+Y）。',
   '6. 「保存する」を押すと記事が確定します。「キャンセル」で編集をやめられます。',
-  '7. 編集中にAltキーを使うと、他の記事へ飛ぶリンクを作れます。',
-  '　・Altキーを押しながら見出しの名前を入力し、Altキーを離すとリンクになります。',
-  '　・日本語入力（IME）を使うときは、Altキーを1回押して離し、見出しを入力してから、もう一度Altキーを押します（Escで取り消し）。',
-  '　・すでに入力した文字を選択してからAltキーを押して離すだけでも、その文字がリンクになります。',
-  '　・同じ見出しの記事があれば通常のリンクになり、無い場合は赤い下線で表示されます。赤いリンクを押すと、その見出しのページ作成画面が開きます。',
-  '　・閲覧中にこうしたリンクやタグを押して移動したときも、検索履歴に残ります。',
+  '7. 文字を二重の角かっこで囲むと、リンクを作れます。',
+  '　・[[記事名]]：閉じ括弧の「]]」まで入力すると、その記事へ飛ぶリンクに変わります。同じ見出しの記事があれば通常のリンクになり、無い場合は赤い下線で表示されます。赤いリンクを押すと、その見出しのページ作成画面が開きます。',
+  '　・{{目次名}}：閉じ括弧の「}}」まで入力すると、この記事内のその目次へ飛ぶリンクに変わります。同じ名前の目次が無い場合は赤い下線で表示されます。',
+  '　・閲覧中に記事へのリンクを押して移動したときも、検索履歴に残ります。',
   '8. Ctrl+S（または「一時保存」ボタン）で、編集中の内容を一時保存できます。編集中は30秒ごとにも自動で一時保存されます。編集画面に留まったまま保存され、次に同じ記事を編集するときに「復元しますか？」と表示されます。記事として確定するには、「保存する」を押してください。',
   '　・保存していない変更があるまま、「キャンセル」を押したり、他のページへ移動しようとすると、警告が表示されます。',
   '　・記事のタイトル横の時計マークからは、その記事の編集履歴（直近5回の保存）を見られます。日付を押すと、その時の版が表示され、「復元する」を押すと、その内容に戻せます。復元すると、新しい版として履歴に記録されます。'].join('\n')},
@@ -966,18 +1007,18 @@ const GUIDE={id:'guide',title:'YUpediaの使い方',tags:[],sections:[
   '・説明の欄でも、「URL」「文字の色」が使えます。',
   '・音声や映像を再生しているあいだに「目次を追加」を押しても、再生は止まりません。',
   '・閲覧中に画像をタップ（クリック）すると、大きく拡大して見られます。もう一度タップすると閉じます。'].join('\n')},
- {heading:'タグについて',media:[],html:[
-  '・見出しの下の「タグ」欄に「#歴史 #メモ」のように入力します。＃を付けるごとにタグが1つ増えます。',
-  '・閲覧画面では見出しの下に、検索結果では星マークの右に、青い文字で「#○○」と横に並びます。',
-  '・タグを押すか、検索バーに「#いちご」のように入力すると、同じタグの記事を探せます。複数のタグを並べると、すべてを含む記事だけが表示されます。',
-  '・タグの検索では、タグの中の空白の数や有無、大文字・小文字の違いは区別されません。'].join('\n')},
  {heading:'閲覧・検索方法',media:[],html:[
-  '上の検索バーにキーワードを入れてEnterキー（または虫眼鏡）を押すと、見出し・目次・本文・タグから記事を探せます。',
+  '上の検索バーにキーワードを入れてEnterキー（または虫眼鏡）を押すと、見出し・目次・本文から記事を探せます。',
   '入力中は候補の記事が最大3件表示され、選ぶとすぐに開けます。入力欄が空のときは、最近の検索履歴が表示されます。候補の右の×は、検索バーの候補から消すだけで、履歴ページには残ります。',
   '検索結果が見つからないときは「ページを作成」から、その言葉の記事を作れます。',
   'ホーム画面の「記事数」を押すと、記事の一覧が表示されます。',
   '記事ページの「目次」は、右の「閉じる」を押すと閉じられ、本文が中央に寄ります。「目次を開く」で元に戻ります。一度閉じると、次に開くまですべての記事で閉じたままになります。',
   '下にスクロールするとヘッダーが隠れ、上にスクロールすると再び表示されます。ある程度下にスクロールすると、画面右下に上へ戻るボタンが表示されます。左上の矢印で、1つ前のページに戻れます。その右の矢印では、戻ったページをやり直せます。'].join('\n')},
+ {heading:'タブについて',media:[],html:[
+  '検索バーの右にある□のマーク（中の数字は開いているタブの数）を押すと、タブのページが開きます。',
+  'タブごとに別々の記事やページを開いておけます。タブの名前を押すと、そのページに切り替わります。',
+  'ごみ箱のマークでそのタブを閉じられます。上の「すべて削除」で全部のタブを閉じられ、一番下の「新しく追加」で新しいタブが増えます。',
+  '削除したときに画面下に表示される「キャンセル」を押すと、元に戻せます。'].join('\n')},
  {heading:'ブックマークについて',media:[],html:[
   '記事ページ・検索結果・履歴ページ・この使い方ページにある星マークを押すと、ブックマークに登録できます。もう一度押すと外れます。間違えたときは、画面下の「キャンセル」で元に戻せます。',
   '右上の星アイコンでブックマーク一覧を開けます。「並べ替え」から、追加順・見出し順・最近開いた順に切り替えられます。',
@@ -988,13 +1029,14 @@ const GUIDE={id:'guide',title:'YUpediaの使い方',tags:[],sections:[
   'ごみ箱アイコンで削除モードにして、「全選択」でまとめて選んでから「削除する」を押すと、まとめて消せます。日付の横のチェックで、その日の分をまとめて選ぶこともできます。'].join('\n')},
  {heading:'設定について',media:[],html:[
   '・文字サイズ：小・中・大から選べます。',
-  '・フォント：デフォルト・ゴシック・明朝体・手書きから選べます。ページ全体の文字の書体が切り替わります。',
+  '・フォント：ゴシック・明朝体から選べます。ページ全体の文字の書体が切り替わります。',
   '・背景の色：白・黒・時間に合わせる、から選べます。「時間に合わせる」は、18:00〜翌朝6:00が黒、それ以外が白になります。',
   '・背景の画像：「インポートする」を押して画像ファイルを選ぶと、その画像が背景になります。文字が読みやすいように、本文の後ろには半透明の板が敷かれます。白・黒・時間に合わせるのどれかを選ぶと、画像は解除されます。画像を選んだときの文字色は、直前に選んでいた白・黒・時間の設定に従います。',
   '・ホーム画面：「ロゴ」「履歴」「ブックマーク」にチェックを入れると、ホームに表示されます。履歴はページの左側、ブックマークは右側です。ブックマークは右上のプルダウンで並べ替えできます。',
   '・使い方：この使い方のページを開きます。',
   '・ロゴ・アイコン画像：ロゴやファビコンが表示されないときは、ここで画像を選ぶとブラウザに保存され、画像ファイルがなくても表示されます。何も設定しなければ、内蔵の文字ロゴが使われます。'].join('\n')},
  {heading:'データのエクスポート・インポート・削除',media:[],html:[
+  '他の端末へ共有：共有メニューが開くので、AirDrop・LINE・メール・クラウドなどへそのまま送れます。受け取った側で「インポート」を押してそのファイルを選びます。共有メニューが使えない環境では、ファイルとして保存されます。',
   'エクスポート：すべての記事・ブックマーク・履歴・設定・背景やロゴの画像を、1つのファイルとして保存します。ときどきバックアップとして保存しておくと安心です。',
   'インポート：エクスポートしたファイルを選ぶと、確認のあとにデータが読み込まれます。現在のデータはすべて消えて、ファイルの内容に置き換わります。',
   '全データ削除：記事・ブックマーク・履歴・設定・一時保存・保存した画像をすべて消します。元に戻せないので、必要ならエクスポートしてから実行してください。',
@@ -1045,7 +1087,7 @@ function renderBookmarks(){
 /* ---------- 設定（順番：文字サイズ／フォント／背景の色／ホーム画面／使い方／データ／ロゴ・アイコン／データ削除） ---------- */
 function renderSettings(){
   setTitle('設定 -YUpedia');
-  const th=settings.theme,fs=settings.fontSize||'m',ff=settings.fontFamily||'default';
+  const th=settings.theme,fs=settings.fontSize||'m',ff=FONT_STACKS[settings.fontFamily]?settings.fontFamily:'gothic';
   const bgOn=!!(settings.bgImage&&assets.bg);
   $('#view').innerHTML=`<div class="page"><h1 class="h1" style="margin-bottom:16px">設定</h1>
   <div class="card pad set-card"><div class="set-t">文字サイズ</div>
@@ -1056,10 +1098,8 @@ function renderSettings(){
     </div></div>
   <div class="card pad set-card"><div class="set-t">フォント</div>
     <div class="theme-opts">
-      <button class="theme-opt ${ff==='default'?'on':''}" data-act="fontfamily" data-v="default">デフォルト</button>
       <button class="theme-opt ${ff==='gothic'?'on':''}" data-act="fontfamily" data-v="gothic">ゴシック</button>
       <button class="theme-opt ${ff==='mincho'?'on':''}" data-act="fontfamily" data-v="mincho">明朝体</button>
-      <button class="theme-opt ${ff==='hand'?'on':''}" data-act="fontfamily" data-v="hand">手書き</button>
     </div></div>
   <div class="card pad set-card"><div class="set-t">背景の色</div>
     <div class="theme-opts">
@@ -1077,7 +1117,8 @@ function renderSettings(){
   <div class="card pad set-card"><div class="set-t">使い方</div>
     <a class="btn" href="#/guide">使い方のページを開く</a></div>
   <div class="card pad set-card"><div class="set-t">データのインポート・エクスポート</div>
-    <div class="btn-row"><button class="btn primary" data-act="export">エクスポート</button><button class="btn" data-act="import">インポート</button></div>
+    <div class="btn-row"><button class="btn primary" data-act="share">他の端末へ共有</button><button class="btn" data-act="export">エクスポート</button><button class="btn" data-act="import">インポート</button></div>
+    <p class="hint">「他の端末へ共有」を押すと共有メニューが開き、AirDrop・LINE・メール・クラウドなどへそのまま送れます。受け取った側は「インポート」でそのファイルを選びます。共有メニューが使えない環境では、ファイルとして保存されます。</p>
     <p class="hint">エクスポートは、すべての記事・ブックマーク・履歴・設定・背景やロゴの画像を1つのファイルに保存します。インポートは、選んだファイルの内容で現在のデータをすべて置き換えます。</p></div>
   <div class="card pad set-card"><div class="set-t">ロゴ・アイコン画像</div>
     <div class="btn-row">
@@ -1118,12 +1159,28 @@ async function resetAsset(key){
 }
 
 /* ---------- エクスポート / インポート / 全削除 ---------- */
-function exportData(){
+function buildExport(){
   const as={};Object.entries(assets).forEach(([k,v])=>{if(v)as[k]=v});
   const data={app:'YUpedia',version:3,exportedAt:new Date().toISOString(),articles:state.articles,bookmarks:bms,history:hist,opened,settings,assets:as};
-  const blob=new Blob([JSON.stringify(data)],{type:'application/json'});
+  return {blob:new Blob([JSON.stringify(data)],{type:'application/json'}),name:'YUpedia-'+dateKey(Date.now())+'.json'};
+}
+/* 共有：スマホ・PCの「共有メニュー」（AirDrop・LINE・メール・ファイル等）からそのまま送れる */
+async function shareData(){
+  const {blob,name}=buildExport();
+  const file=new File([blob],name,{type:'application/json'});
+  try{
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({files:[file],title:'YUpediaのデータ'});
+      toast('共有しました');return;
+    }
+  }catch(err){if(err&&err.name==='AbortError')return}
+  exportData();
+  toast('この環境では共有メニューを開けないため、ファイルとして保存しました');
+}
+function exportData(){
+  const {blob,name}=buildExport();
   const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download='YUpedia-'+dateKey(Date.now())+'.json';
+  const a=document.createElement('a');a.href=url;a.download=name;
   document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),3000);
   toast('エクスポートしました（記事'+state.articles.length+'件）');
@@ -1197,8 +1254,7 @@ const draftKey=()=>ed.isNew?'new':ed.a.id;
 
 function renderNew(t){
   t=t||'';
-  if(isTagQuery(t))startEditor({id:null,title:'',tags:parseTags(t),sections:[]},true);
-  else startEditor({id:null,title:t,tags:[],sections:[]},true);
+  startEditor({id:null,title:t,tags:[],sections:[]},true);
   setTitle('ページ作成 -YUpedia');
 }
 function renderEdit(id){const a=getArticle(id);if(!a)return renderNotFound();startEditor(a,false);setTitle(a.title+'を編集 -YUpedia')}
@@ -1264,9 +1320,8 @@ function renumberSecs(){
 
 function renderEditor(){
   const y=window.scrollY,a=ed.a;
-  $('#view').innerHTML=`<div class="page" id="editor"><div class="page-head"><h1 class="h1">${ed.isNew?'ページを作成':'ページを編集'}</h1><div class="head-btns"><button class="btn" data-act="cancel">キャンセル</button><button class="btn" data-act="draft" title="Ctrl+S">一時保存</button><button class="btn primary" data-act="save">保存する</button></div></div><div class="field-label">見出し</div><div class="card"><input id="titleInput" class="title-input" type="text" autocomplete="off"></div><div class="field-label">タグ</div><div class="card"><input id="tagInput" class="title-input tag-input" type="text" autocomplete="off" placeholder="#タグ #タグ …"></div><div id="secs">${secsHTML(a)}</div></div>`;
+  $('#view').innerHTML=`<div class="page" id="editor"><div class="page-head"><h1 class="h1">${ed.isNew?'ページを作成':'ページを編集'}</h1><div class="head-btns"><button class="btn" data-act="cancel">キャンセル</button><button class="btn" data-act="draft" title="Ctrl+S">一時保存</button><button class="btn primary" data-act="save">保存する</button></div></div><div class="field-label">見出し</div><div class="card"><input id="titleInput" class="title-input" type="text" autocomplete="off"></div><div id="secs">${secsHTML(a)}</div></div>`;
   $('#titleInput').value=a.title;
-  $('#tagInput').value=(a.tags||[]).map(t=>'#'+t).join(' ');
   $$('.section').forEach((el,i)=>fillSection(el,a.sections[i]));
   window.scrollTo(0,y);ed.lastRange=null;
   drawSlots();updatePlaceBanner();updateUndoBtns();
@@ -1274,7 +1329,6 @@ function renderEditor(){
 function syncFromDOM(){
   if(!ed||!$('#editor'))return;
   ed.a.title=$('#titleInput').value;
-  const ti=$('#tagInput');if(ti)ed.a.tags=parseTags(ti.value);
   $$('#editor .section').forEach((el,i)=>{
     const s=ed.a.sections[i];if(!s)return;
     s.heading=$('.sec-heading',el).value;
@@ -1484,8 +1538,10 @@ function normUrl(s){
 }
 function openUrlModal(){
   if(!getRange()){toast('先に、リンクを入れたい本文（または説明文）中の位置をクリックしてください');return}
+  syncFromDOM();
+  const heads=[...new Set(ed.a.sections.map(x=>(x.heading||'').trim()).filter(Boolean))];
   const box=document.createElement('div');box.className='modal-box square';
-  box.innerHTML=`<button class="modal-x icon-btn" aria-label="閉じる">${ic('x')}</button><div><input id="uWiki" class="m-input" placeholder="YUpedia内を検索" autocomplete="off"><div id="uRes" class="u-res"></div></div><div class="row"><input id="uUrl" class="m-input" placeholder="URLを入力" autocomplete="off"><button class="btn primary" id="uGo">挿入</button></div>`;
+  box.innerHTML=`<button class="modal-x icon-btn" aria-label="閉じる">${ic('x')}</button><div><input id="uWiki" class="m-input" placeholder="YUpedia内を検索" autocomplete="off"><div id="uRes" class="u-res"></div><div class="lbl">この記事の目次</div><div id="uToc" class="u-res">${heads.length?heads.map(h=>`<button class="u-item" data-toc="${esc(h)}">${esc(h)}</button>`).join(''):'<div class="u-none">目次がまだありません</div>'}</div></div><div class="row"><input id="uUrl" class="m-input" placeholder="URLを入力" autocomplete="off"><button class="btn primary" id="uGo">挿入</button></div>`;
   const close=openModal(box);
   const res=$('#uRes',box),q=$('#uWiki',box);
   const draw=()=>{
@@ -1495,18 +1551,20 @@ function openUrlModal(){
   };
   draw();q.addEventListener('input',draw);
   res.addEventListener('click',e=>{const b=e.target.closest('.u-item');if(!b)return;const a=getArticle(b.dataset.id);close();insertLink('#/article/'+a.id,a.title,a.id)});
+  $('#uToc',box).addEventListener('click',e=>{const b=e.target.closest('.u-item');if(!b)return;const h=b.dataset.toc;close();insertLink('#',h,null,h)});
   const go=()=>{const u=normUrl($('#uUrl',box).value);if(!u){toast('正しいURLを入力してください（http / https）');return}close();insertLink(u,u,null)};
   $('#uGo',box).addEventListener('click',go);
   $('#uUrl',box).addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing&&e.keyCode!==229){e.preventDefault();go()}});
   q.focus();
 }
-function insertLink(href,label,wikiId){
+function insertLink(href,label,wikiId,tocTitle){
   const r=getRange();if(!r){toast('挿入位置が見つかりません');return}
   const rich=richOf(r);if(!rich){toast('挿入位置が見つかりません');return}
   rich.focus();
   const sel=getSelection();sel.removeAllRanges();sel.addRange(r);
   const a=document.createElement('a');a.href=href;
-  if(wikiId){a.dataset.wiki=wikiId;a.dataset.hist=label;a.textContent=label}
+  if(tocTitle){a.dataset.toc=tocTitle;a.textContent=(!r.collapsed&&r.toString())||label}
+  else if(wikiId){a.dataset.wiki=wikiId;a.dataset.hist=label;a.textContent=label}
   else{a.target='_blank';a.rel='noopener noreferrer';a.textContent=(!r.collapsed&&r.toString())||label}
   r.deleteContents();r.insertNode(a);
   const sp=document.createTextNode('\u00A0');a.after(sp);
@@ -1515,25 +1573,8 @@ function insertLink(href,label,wikiId){
   commit();
 }
 
-/* ---- Altキーで「見出しリンク」を作る ----
-   押しながら入力 → 離すと確定 ／ 1回押して離す→入力→もう一度押すと確定（日本語IME向け）／ 選択して押して離す */
-const altLink={mode:null,holding:false,used:false,range:null,rich:null,selText:'',ignoreUp:false,composing:false,pendingFin:false};
-const isMac=/Mac|iPhone|iPad/.test(navigator.platform||navigator.userAgent||'');
-function editableOfSel(){
-  const s=getSelection();if(!s.rangeCount)return null;
-  const n=s.anchorNode;const el=n&&(n.nodeType===1?n:n.parentElement);
-  return el&&el.closest?el.closest('#editor .rich,#editor .cap-rich'):null;
-}
-function updateAltBanner(){
-  const b=$('#altBanner');
-  if(altLink.mode==='hold'&&altLink.holding){b.hidden=false;b.textContent='リンク入力中：Altキーを離すと確定します（Escで取消）'}
-  else if(altLink.mode){b.hidden=false;b.textContent='リンク入力中：入力後にもう一度Altキーを押すと確定します（Escで取消）'}
-  else b.hidden=true;
-}
-function cancelAltLink(){
-  altLink.mode=null;altLink.holding=false;altLink.range=null;altLink.pendingFin=false;altLink.selText='';altLink.ignoreUp=false;
-  updateAltBanner();
-}
+/* ---- [[記事名]] → 記事へのリンク ／ {{目次名}} → この記事内の目次へのリンク ----
+   閉じ括弧まで入力すると、自動でリンクに変わります（全角の［］｛｝でも可） */
 function makeWikiLinkEl(title){
   const a=document.createElement('a');a.dataset.wt=title;a.textContent=title;
   const art=findByTitle(title);
@@ -1541,80 +1582,51 @@ function makeWikiLinkEl(title){
   else{a.href='#/new/'+encodeURIComponent(title);a.classList.add('wl-missing');a.title='この見出しの記事はまだありません'}
   return a;
 }
-function wrapAsWikiLink(r,title,rich){
-  rich.focus();
-  r.deleteContents();
-  const a=makeWikiLinkEl(title);r.insertNode(a);
-  const sp=document.createTextNode('\u00A0');a.after(sp);
-  const nr=document.createRange();nr.setStart(sp,1);nr.collapse(true);
-  const s=getSelection();s.removeAllRanges();s.addRange(nr);ed.lastRange=nr.cloneRange();
-  commit();
+function makeTocLinkEl(title){
+  const a=document.createElement('a');a.dataset.toc=title;a.textContent=title;a.href='#';
+  return a;
 }
-function beginAltLink(){
-  const s=getSelection();if(!s.rangeCount)return false;
-  altLink.range=s.getRangeAt(0).cloneRange();altLink.range.collapse(true);
-  altLink.mode='hold';return true;
+const LINK_RE=/[\[［]{2}([^\[\]［］]+?)[\]］]{2}|[{｛]{2}([^{}｛｝]+?)[}｝]{2}/;
+function autoLink(rich){
+  if(!ed||!rich)return;
+  let changed=false;
+  for(let guard=0;guard<30;guard++){
+    const w=document.createTreeWalker(rich,NodeFilter.SHOW_TEXT,{acceptNode:n=>(n.parentElement&&n.parentElement.closest('a'))?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
+    let node,tn=null,m=null;
+    while((node=w.nextNode())){const mm=LINK_RE.exec(node.nodeValue);if(mm){tn=node;m=mm;break}}
+    if(!tn)break;
+    const title=(m[1]!==undefined?m[1]:m[2]).replace(/\s+/g,' ').trim();
+    if(!title)break;
+    const sel=getSelection();
+    const hadCaret=sel.rangeCount&&sel.anchorNode===tn;
+    const r=document.createRange();r.setStart(tn,m.index);r.setEnd(tn,m.index+m[0].length);
+    r.deleteContents();
+    const a=m[1]!==undefined?makeWikiLinkEl(title):makeTocLinkEl(title);
+    r.insertNode(a);
+    let nxt=a.nextSibling;
+    if(nxt&&nxt.nodeType===3&&nxt.nodeValue===''){nxt.remove();nxt=a.nextSibling}
+    const nr=document.createRange();
+    if(nxt&&nxt.nodeType===3){nr.setStart(nxt,0)}
+    else{const sp=document.createTextNode('\u00A0');a.after(sp);nr.setStart(sp,1)}
+    nr.collapse(true);
+    if(hadCaret){sel.removeAllRanges();sel.addRange(nr);ed.lastRange=nr.cloneRange()}
+    changed=true;
+  }
+  if(changed)commit();
 }
-function endAltLink(){
-  if(altLink.composing){altLink.pendingFin=true;return}
-  const rich=altLink.rich,start=altLink.range;
-  cancelAltLink();
-  if(!ed||!rich||!start||!document.body.contains(rich))return;
-  const s=getSelection();if(!s.rangeCount)return;
-  const end=s.getRangeAt(0);
-  if(!rich.contains(end.endContainer)||!rich.contains(start.startContainer))return;
-  const r=document.createRange();
-  try{r.setStart(start.startContainer,start.startOffset);r.setEnd(end.endContainer,end.endOffset)}catch{return}
-  const title=r.toString().replace(/\s+/g,' ').trim();
-  if(!title)return;
-  wrapAsWikiLink(r,title,rich);
-}
-document.addEventListener('keydown',e=>{
+$('#view').addEventListener('input',e=>{
+  if(!ed||e.isComposing)return;
+  const rich=e.target.closest&&e.target.closest('.rich,.cap-rich');
+  if(rich)autoLink(rich);
+});
+$('#view').addEventListener('compositionend',e=>{
   if(!ed)return;
-  if(e.key==='Escape'&&altLink.mode){cancelAltLink();return}
-  if(e.key==='Alt'){
-    if(e.repeat){e.preventDefault();return}
-    if(altLink.mode&&!altLink.holding){altLink.ignoreUp=true;e.preventDefault();endAltLink();return}
-    const rich=editableOfSel();if(!rich)return;
-    e.preventDefault();
-    altLink.rich=rich;altLink.used=false;altLink.holding=true;
-    const s=getSelection();altLink.selText=s.isCollapsed?'':s.toString();
-    if(!altLink.selText)beginAltLink();
-    updateAltBanner();
-    return;
-  }
-  if(altLink.holding&&e.altKey){
-    altLink.used=true;altLink.selText='';
-    if(!isMac&&e.key.length===1&&!e.ctrlKey&&!e.metaKey&&!e.isComposing){
-      e.preventDefault();document.execCommand('insertText',false,e.key);
-    }
-  }
+  const rich=e.target.closest&&e.target.closest('.rich,.cap-rich');
+  if(rich)setTimeout(()=>{if(ed&&document.body.contains(rich))autoLink(rich)},0);
 });
-document.addEventListener('keyup',e=>{
-  if(!ed||e.key!=='Alt')return;
-  e.preventDefault();
-  if(altLink.ignoreUp){altLink.ignoreUp=false;altLink.holding=false;return}
-  if(!altLink.holding)return;
-  altLink.holding=false;
-  if(altLink.selText){
-    const s=getSelection();
-    if(s.rangeCount&&!s.isCollapsed&&altLink.rich&&altLink.rich.contains(s.getRangeAt(0).commonAncestorContainer)){
-      const r=s.getRangeAt(0).cloneRange();
-      const title=r.toString().replace(/\s+/g,' ').trim();
-      if(title)wrapAsWikiLink(r,title,altLink.rich);
-    }
-    altLink.selText='';updateAltBanner();return;
-  }
-  if(altLink.mode==='hold'){
-    if(altLink.used)endAltLink();                 // 押しながら入力した → 離したら確定
-    else updateAltBanner();                        // 押して離しただけ → 入力後にもう一度Alt
-  }
-});
-$('#view').addEventListener('compositionstart',()=>{altLink.composing=true});
-$('#view').addEventListener('compositionend',()=>{altLink.composing=false;if(altLink.pendingFin)setTimeout(endAltLink,0)});
 
 /* ---- 文字の色 ---- */
-const COLORS=[['緑','#16a34a','#fff'],['黄','#eab308','#111'],['赤','#dc2626','#fff'],['青','#2563eb','#fff'],['黒','#000000','#fff']];
+const COLORS=[['緑','#16a34a','#fff'],['黄','#eab308','#111'],['赤','#dc2626','#fff'],['青','#2563eb','#fff'],['灰','#6b7280','#fff'],['黒','#000000','#fff']];
 function openColorModal(){
   if(!getRange()){toast('先に、文字を入力したい本文（または説明文）中の位置をクリックしてください');return}
   const box=document.createElement('div');box.className='modal-box square';
@@ -1637,7 +1649,18 @@ function applyColor(c){
 const view=$('#view');
 view.addEventListener('click',e=>{
   if(ed&&e.target.closest('.rich a,.cap-rich a'))e.preventDefault();
-  /* 閲覧中：他の記事へのリンク・タグを押したら検索履歴に残す */
+  /* 閲覧中：{{目次名}}のリンクはこの記事内の目次へ飛ぶ */
+  if(!ed){
+    const ta=e.target.closest('a[data-toc]');
+    if(ta){
+      e.preventDefault();
+      const t=(ta.dataset.toc||'').trim();
+      const sec=$$('.v-sec').find(x=>{const h=$('h2',x);return h&&h.textContent.trim()===t});
+      if(sec)sec.scrollIntoView({behavior:'smooth',block:'start'});
+      return;
+    }
+  }
+  /* 閲覧中：他の記事へのリンクを押したら検索履歴に残す */
   if(!ed){const ha=e.target.closest('a[data-hist]');if(ha&&ha.dataset.hist)addHistory(ha.dataset.hist)}
   const el=e.target.closest('[data-act]');if(!el)return;
   const act=el.dataset.act;
@@ -1647,7 +1670,10 @@ view.addEventListener('click',e=>{
     case 'bm-toggle':toggleBM(el.dataset.id);break;
     case 'zoom':openLightbox(el.getAttribute('src'));break;
     case 'restore-version':restoreVersion(el.dataset.id,+el.dataset.idx);break;
-    case 'tags-expand':if(e.target.closest('a'))break;el.classList.toggle('open');break;
+    case 'tab-open':tabOpen(el.dataset.id);break;
+    case 'tab-del':tabDel(el.dataset.id);break;
+    case 'tab-del-all':tabDelAll();break;
+    case 'tab-add':tabAdd();break;
     case 'goto':{const s=document.getElementById('sec-'+el.dataset.i);if(s)s.scrollIntoView({behavior:'smooth',block:'start'});break}
     case 'toc-toggle':{const p=$('.page.wide');if(p){p.classList.toggle('toc-closed');settings.tocOpen=!p.classList.contains('toc-closed');LS.set('mywiki.settings',settings)}break}
     case 'h-open':openHistoryWord(el.dataset.w);break;
@@ -1657,6 +1683,7 @@ view.addEventListener('click',e=>{
     case 'bg-import':pickAsset('bg');break;
     case 'asset-pick':pickAsset(el.dataset.k);break;
     case 'asset-reset':resetAsset(el.dataset.k);break;
+    case 'share':shareData();break;
     case 'export':exportData();break;
     case 'import':pickImport();break;
     case 'wipe':wipeAll();break;
@@ -1769,7 +1796,7 @@ view.addEventListener('drop',e=>{
   if(dm.si===targetSi&&dm.mid===targetMid)return;
   moveMedia(dm.si,dm.mid,targetSi,targetMid,before);
 });
-view.addEventListener('input',e=>{if(ed&&e.target.closest('.rich,.cap-rich,.sec-heading,#titleInput,#tagInput'))commitSoon()});
+view.addEventListener('input',e=>{if(ed&&e.target.closest('.rich,.cap-rich,.sec-heading,#titleInput'))commitSoon()});
 view.addEventListener('paste',e=>{
   if(!ed||!e.target.closest('.rich,.cap-rich'))return;
   e.preventDefault();
@@ -1859,6 +1886,8 @@ window.addEventListener('scroll',()=>{
     `<a class="icon-btn" href="#/history" title="履歴">${ic('clock')}</a>`+
     `<a class="icon-btn" href="#/settings" title="設定">${ic('gear')}</a>`;
   hdrSearch=buildSearch(false);$('#hdrCenter').appendChild(hdrSearch.el);
+  const tbn=document.createElement('a');tbn.className='tab-btn';tbn.id='tabBtn';tbn.href='#/tabs';tbn.title='タブ';tbn.setAttribute('aria-label','タブ');
+  $('#hdrCenter').appendChild(tbn);updateTabBtn();
   try{
     await DB.open();
     state.articles=(await DB.all())||[];
