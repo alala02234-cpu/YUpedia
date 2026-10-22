@@ -77,6 +77,8 @@ body.bar-bottom #header .s-dd{top:auto;bottom:calc(100% + 6px)}
 #header.bar-v .tab-link:hover{background:var(--hover)}
 #header.bar-v .logo,#header.bar-v .logo .logo-crop{width:100%}
 .logo{display:block;line-height:0;flex:none}
+.bar-gap{flex:none;width:28px;height:1px}
+#header.bar-v .bar-gap{width:100%;height:18px}
 .tab-link{display:inline-flex;align-items:center;gap:12px;color:var(--text);text-decoration:none;flex:none}
 .icon-btn{width:40px;height:40px;border:0;background:transparent;color:var(--text);border-radius:50%;cursor:pointer;display:inline-grid;place-items:center;text-decoration:none;flex:none}
 .icon-btn:hover:not(:disabled){background:var(--hover)}
@@ -106,9 +108,9 @@ body.bar-right.bar-opened .bar-toggle{right:calc(var(--bw) + 8px)}
 .s-input{flex:1;min-width:0;border:0;outline:0;background:transparent;padding:0 8px;font-size:calc(15px*var(--fz))}
 .search-wrap.big .s-input{font-size:calc(18px*var(--fz))}
 .s-dd{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--card);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;z-index:200}
-.dd-row{display:flex;align-items:center;justify-content:space-between;padding:6px 8px 6px 16px;min-height:40px;cursor:pointer}
+.dd-row{display:flex;align-items:flex-start;justify-content:space-between;padding:6px 8px 6px 16px;min-height:40px;cursor:pointer}
 .dd-row:hover{background:var(--hover)}
-.dd-w{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dd-w{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-top:4px}
 .dd-none{padding:10px 16px;color:var(--sub);font-size:calc(14px*var(--fz))}
 .dd-x{width:28px;height:28px;border:0;background:transparent;border-radius:50%;cursor:pointer;display:grid;place-items:center;color:var(--sub);flex:none}
 .dd-x:hover{background:var(--hover);color:var(--text)}
@@ -119,7 +121,7 @@ body.hdr-hidden .subbar{top:0}
 .tb{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:10px;cursor:pointer;font-size:calc(14px*var(--fz));white-space:nowrap}
 .tb:hover:not(:disabled){background:var(--hover)}
 .tb:disabled{opacity:.35;cursor:default}
-.tb[data-act=tb-url] svg{color:#2563eb}.tb[data-act=tb-image] svg{color:#10b981}.tb[data-act=tb-video] svg{color:#ef4444}.tb[data-act=tb-audio] svg{color:#a855f7}.tb[data-act=tb-color] svg{color:#f59e0b}
+.tb[data-act=tb-url] svg{color:#2563eb}.tb[data-act=tb-image] svg{color:#10b981}.tb[data-act=tb-video] svg{color:#ef4444}.tb[data-act=tb-audio] svg{color:#a855f7}.tb[data-act=tb-text] svg{color:#f59e0b}
 .tb-sep{width:1px;height:24px;background:var(--border)}
 
 /* ===== ページ共通 ===== */
@@ -306,7 +308,7 @@ body.dark .cap-rich font[color="#000000"],body.dark .figcap font[color="#000000"
 .rich a .wl-sec-missing,.rich-view a .wl-sec-missing,.cap-rich a .wl-sec-missing,.figcap a .wl-sec-missing{color:#dc2626!important}
 body.dark .rich a .wl-sec-missing,body.dark .rich-view a .wl-sec-missing,body.dark .cap-rich a .wl-sec-missing,body.dark .figcap a .wl-sec-missing{color:#f87171!important}
 /* ===== ページバーの並び順（設定） ===== */
-.mock-wrap{position:relative;margin:16px 14px 8px 0}
+.mock-wrap{position:relative;margin:12px 0 8px}
 .mock-bar{border:1px solid var(--border);border-radius:12px;background:var(--card);padding:10px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;min-height:60px}
 .mock-bar.v{flex-direction:column;align-items:stretch;flex-wrap:nowrap;width:220px;max-width:100%}
 .mi{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-width:40px;min-height:40px;padding:4px 8px;border-radius:10px;border:1px dashed transparent;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;color:var(--text);background:var(--card)}
@@ -325,13 +327,37 @@ body.dark .rich a .wl-sec-missing,body.dark .rich-view a .wl-sec-missing,body.da
 .mock-menu button{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);background:var(--card);border-radius:10px;cursor:pointer;color:var(--text)}
 .mock-menu button:hover{background:var(--hover)}
 
+
+/* ===== 追加ボタン（空白）／常に表示される追加メニュー ===== */
+.mi-space{border:1px dashed var(--sub);border-radius:6px;padding:2px 12px;color:var(--sub);font-size:calc(12px*var(--fz))}
+/* ===== 書き出し・共有の記事選択 ===== */
+.modal-box.wide{width:min(560px,94vw);max-height:86vh;display:flex;flex-direction:column}
+.sel-list{overflow:auto;flex:1;min-height:0;border:1px solid var(--border);border-radius:10px}
+.sel-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-bottom:1px solid var(--border);cursor:pointer}
+.sel-row:last-child{border-bottom:0}
+.sel-row:hover{background:var(--hover)}
+.sel-row span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.col-btns{display:flex;flex-direction:column;gap:10px}
+.col-btns .btn{width:100%;padding:12px}
+/* ===== 文字変更／検索と置き換えのパネル ===== */
+.float-panel{position:fixed;z-index:120;top:calc(var(--ot) + var(--sh) + 8px);right:calc(12px + var(--or));width:min(340px,calc(100vw - 24px));max-height:calc(100vh - var(--ot) - var(--sh) - 24px);overflow:auto;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);padding:16px 16px 14px}
+.float-panel .modal-x{position:absolute;top:6px;right:6px}
+.float-panel .row{flex-wrap:wrap}
+.swatches{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.swatch{aspect-ratio:1;border-radius:50%;border:2px solid var(--border);cursor:pointer;padding:0}
+.swatch:hover{transform:scale(1.12);border-color:var(--text)}
+.color-pick{width:42px;height:38px;padding:0;border:1px solid var(--border);border-radius:8px;background:none;cursor:pointer;flex:none}
+::highlight(find-all){background:rgba(250,204,21,.45);color:inherit}
+::highlight(find-cur){background:#fb923c;color:#000}
+@media(max-width:820px){.float-panel{left:8px;right:8px;width:auto}}
+
 /* ===== モーダル / トースト ===== */
 .modal-back{position:fixed;inset:0;background:rgba(0,0,0,.5);display:grid;place-items:center;z-index:300;padding:12px}
 .modal-back.lb{background:rgba(0,0,0,.92);padding:0}
 .modal-box{position:relative;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:18px;padding:24px;width:min(440px,92vw);box-shadow:0 10px 40px rgba(0,0,0,.35)}
 .modal-box.square{min-height:min(440px,80vw);display:flex;flex-direction:column;justify-content:space-between;gap:18px;padding-top:50px}
 .modal-box .modal-x{position:absolute;top:8px;right:8px}
-.modal-box h3{margin:0 0 8px}
+.modal-box h3{margin:0 0 8px;padding-right:34px}
 .modal-box p{margin:0 0 18px;color:var(--sub)}
 .modal-box p.warn{color:#dc2626;font-weight:700}
 .lb-box{display:grid;place-items:center}
@@ -460,6 +486,7 @@ const ICONS={
  help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h.01"/>',
  home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
  tri:'<polygon points="4 7 20 7 12 19"/>',
+ type:'<path d="M4 7V4h16v3M9 20h6M12 4v16"/>',
  video:'<rect x="2" y="5" width="15" height="14" rx="2"/><path d="m22 8-5 4 5 4V8z"/>'
 };
 const ic=(n,s=22,f=false)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="${f?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]}</svg>`;
@@ -797,7 +824,7 @@ function route(){
   closeModal();
   if(ed){clearTimeout(ed.timer);clearInterval(ed.autoTimer);ed=null}
   histDel=false;histSel.clear();bmDel=false;bmSel.clear();bmSortOpen=false;
-  document.body.classList.remove('editing');$('#subbar').hidden=true;updatePlaceBanner();
+  document.body.classList.remove('editing');$('#subbar').hidden=true;updatePlaceBanner();closePanels();
   hdrSearch.input.value='';$('.s-dd',hdrSearch.el).hidden=true;
   const h=location.hash||'#/';
   const seg=h.replace(/^#\/?/,'').split('/');
@@ -1060,29 +1087,27 @@ const GUIDE={id:'guide',title:'YUpediaの使い方',tags:[],sections:[
   '記事や履歴などのデータは、お使いのブラウザ内に保存され、外部には送信されません。',
   '別の端末へ移したいときは、設定の「他の端末へ共有」を押して共有メニューから送り、受け取った側で「インポート」します。バックアップには「エクスポート」を使います。'].join('\n')},
  {heading:'記事の作成・編集方法',media:[],html:[
-  '1. 画面右上の「＋」を押すと、ページ作成画面が開きます。作った記事は、記事ページや検索結果にある鉛筆マークから編集できます。',
+  '1. 画面右上の「＋」を押すと、ページ作成画面が開きます。作った記事は、記事ページや検索結果の鉛筆マークから編集できます。',
   '2. 最初に「見出し」（記事のタイトル）を入力します。',
-  '3. 「目次を追加」のボタンは、セクションとセクションの間や一番上にも表示されます。押した場所に新しいセクションが増えます。セクションごとに、目次の名前と本文を入力します。目次が2つ以上あると、閲覧ページに目次が表示されます。',
-  '4. 上のバーから、URL・画像・映像・音声・文字の色・太字を追加できます。右端の「プレビュー」を押すと、保存せずに閲覧モードでの見え方を確認できます。',
-  '　・URL：本文中の入れたい位置をクリックしてから押します。YUpedia内の記事を検索してリンクにするか、「この記事の目次」から選んでその目次へ飛ぶリンクにするか、外部サイトのURLを入力できます。',
-  '　・文字の色：色を変えたい文字を選択するか、入力したい位置をクリックしてから押します（緑・黄・赤・青・灰・黒）。',
-  '　・太字：太くしたい文字を選択してから押します。もう一度押すと元に戻ります。',
-  '　・プレビュー：その時点の内容が閲覧モードで表示されます（保存はされません）。「この記事は保存されていません」と表示され、「戻る」を押すと編集画面に戻ります。',
+  '3. 「目次を追加」を押すと、その場所に新しいセクションが増えます。セクションごとに、目次の名前と本文を入力します。目次が2つ以上あると、閲覧ページに目次が表示されます。',
+  '4. 上のバーから、URL・画像・映像・音声・文字変更を追加できます。',
+  '　・URL：本文中の入れたい位置をクリックしてから押します。YUpedia内の記事、この記事の目次、外部サイトのURLのリンクを入れられます。',
+  '　・文字変更：文字を選択してから押すと、色・太字・斜体・下線・大きさを変えられます。色は12色のパレットのほか、色の選択やカラーコード（例：#2563eb）でも決められます。大きさは、文字を選択してから選びます。',
+  '　・プレビュー：その時点の内容を、保存せずに閲覧モードで確認できます。「戻る」で編集に戻ります。',
   '5. 左右の矢印で「元に戻す」「やり直す」ができます（Ctrl+Z／Ctrl+Y）。',
-  '6. 「保存する」を押すと記事が確定します。「キャンセル」で編集をやめられます。',
-  '7. 文字を二重の角かっこで囲むと、リンクを作れます。',
-  '　・[[記事名]]：閉じ括弧の「]]」まで入力すると、その記事へ飛ぶリンクに変わります。同じ見出しの記事があれば通常のリンクになり、無い場合は赤い下線で表示されます。赤いリンクを押すと、その見出しのページ作成画面が開きます。',
-  '　・[[記事名§目次名]]：たとえば[[おにぎり§具材]]と入力すると、「おにぎり」の記事の「具材」の目次まで直接飛ぶリンクになります。その記事に該当する目次が無いときは、目次名の部分だけが赤くなります（記事自体は開けます）。',
-  '　・{{目次名}}：閉じ括弧の「}}」まで入力すると、この記事内のその目次へ飛ぶリンクに変わります。同じ名前の目次が無い場合は赤い下線で表示されます。',
-  '　・閲覧中に記事へのリンクを押して移動したときも、検索履歴に残ります。',
-  '8. Ctrl+S（または「一時保存」ボタン）で、編集中の内容を一時保存できます。編集中は30秒ごとにも自動で一時保存されます。編集画面に留まったまま保存され、次に同じ記事を編集するときに「復元しますか？」と表示されます。記事として確定するには、「保存する」を押してください。',
-  '　・保存していない変更があるまま、「キャンセル」を押したり、他のページへ移動しようとすると、警告が表示されます。',
-  '　・記事のタイトル横の時計マークからは、その記事の編集履歴（直近5回の保存）を見られます。日付を押すと、その時の版が表示され、「復元する」を押すと、その内容に戻せます。復元すると、新しい版として履歴に記録されます。'].join('\n')},
+  '6. 「保存する」（Ctrl+S）で記事が確定します。「キャンセル」で編集をやめられます。保存していない変更があるまま移動しようとすると、警告が表示されます。',
+  '7. 「一時保存」（Ctrl+Shift+S）で、編集中の内容を仮に保存できます（30秒ごとにも自動で保存されます）。次に同じ記事を編集するとき、「復元しますか？」と表示されます。',
+  '8. Ctrl+Hで「検索と置き換え」が開きます。単語を探して1つずつ、またはすべて置き換えられます（本文・説明文・見出し・目次名が対象で、リンクの文字は対象外です）。',
+  '9. 文字を二重の角かっこで囲むと、リンクになります。',
+  '　・[[記事名]]：閉じ括弧の「]]」まで入力すると、その記事へ飛ぶリンクに変わります。記事が無い場合は赤い下線になり、押すとその見出しの作成画面が開きます。',
+  '　・[[記事名§目次名]]：たとえば[[おにぎり§具材]]で、「おにぎり」の記事の「具材」の目次まで直接飛びます。目次が無いときは、目次名の部分だけが赤くなります。',
+  '　・{{目次名}}：この記事内のその目次へ飛ぶリンクになります。',
+  '10. 記事のタイトル横の時計マークから、直近5回の編集履歴を見られます。日付を押すとその時の版が表示され、「復元する」で戻せます。'].join('\n')},
  {heading:'画像・映像・音声・説明文',media:[],html:[
   '・上のバーの「画像」「映像」「音声」を押してファイルを選ぶと、「ここに設置」が表示されます。置きたい場所のボタンを押すと配置されます。',
   '・画像・映像・音声の右上の×で削除できます。ドラッグして別の場所や別のセクションへ動かすこともできます。',
   '・配置すると、その下に説明を入力する欄が最初から表示されます。必要なときに入力してください。',
-  '・説明の欄でも、「URL」「文字の色」が使えます。',
+  '・説明の欄でも、「URL」「文字変更」が使えます。',
   '・音声や映像を再生しているあいだに「目次を追加」を押しても、再生は止まりません。',
   '・閲覧中に画像をタップ（クリック）すると、大きく拡大して見られます。もう一度タップすると閉じます。'].join('\n')},
  {heading:'閲覧・検索方法',media:[],html:[
@@ -1091,7 +1116,7 @@ const GUIDE={id:'guide',title:'YUpediaの使い方',tags:[],sections:[
   '検索結果が見つからないときは「ページを作成」から、その言葉の記事を作れます。',
   'ホーム画面の「記事数」を押すと、記事の一覧が表示されます。',
   '記事ページの「目次」は、右の「閉じる」を押すと閉じられ、本文が中央に寄ります。「目次を開く」で元に戻ります。一度閉じると、次に開くまですべての記事で閉じたままになります。',
-  '「デフォルト」の設定では、下にスクロールするとページバーが隠れ、上にスクロールすると再び表示されます。どのページでも、ある程度下にスクロールすると、画面右下に上へ戻るボタンが表示されます。左上の矢印で、1つ前のページに戻れます。その右の矢印では、戻ったページをやり直せます。'].join('\n')},
+  'どのページでも、ある程度下にスクロールすると、画面右下に上へ戻るボタンが表示されます。左上の矢印で1つ前のページに戻れ、その右の矢印で、戻ったページをやり直せます。ページバーの出し方は、設定で変えられます。'].join('\n')},
  {heading:'タブについて',media:[],html:[
   '検索バーの右にある□のマーク（中の数字は開いているタブの数）を押すと、タブのページが開きます。',
   'タブごとに別々の記事やページを開いておけます。タブの名前を押すと、そのページに切り替わります。',
@@ -1100,28 +1125,24 @@ const GUIDE={id:'guide',title:'YUpediaの使い方',tags:[],sections:[
  {heading:'ブックマークについて',media:[],html:[
   '記事ページ・検索結果・履歴ページ・この使い方ページにある星マークを押すと、ブックマークに登録できます。もう一度押すと外れます。間違えたときは、画面下の「キャンセル」で元に戻せます。',
   '右上の星アイコンでブックマーク一覧を開けます。「並べ替え」から、追加順・見出し順・最近開いた順に切り替えられます。',
-  '一覧のごみ箱アイコンを押すと削除モードになり、「全選択」でまとめて選んでから「削除する」を押すと、まとめて外せます。'].join('\n')},
+  '一覧のごみ箱アイコンを押すと削除モードになり、「全選択」（もう一度押すと解除）でまとめて選んでから「削除する」を押すと、まとめて外せます。'].join('\n')},
  {heading:'履歴について',media:[],html:[
   '検索した言葉や開いた記事は、右上の時計アイコンの履歴ページに、日付ごと（新しい5日分）に並びます。',
   '項目を押すと、その記事や検索結果をもう一度開けます。見出しが記事と一致する項目には星マークが表示され、そこからブックマークにも登録できます。',
-  'ごみ箱アイコンで削除モードにして、「全選択」でまとめて選んでから「削除する」を押すと、まとめて消せます。日付の横のチェックで、その日の分をまとめて選ぶこともできます。'].join('\n')},
+  'ごみ箱アイコンで削除モードにして、「全選択」（もう一度押すと解除）でまとめて選んでから「削除する」を押すと、まとめて消せます。日付の横のチェックで、その日の分をまとめて選ぶこともできます。'].join('\n')},
  {heading:'設定について',media:[],html:[
-  '・文字サイズ：小・中・大・特大から選べます。',
-  '・フォント：ゴシック・明朝体から選べます。ページ全体の文字の書体が切り替わります。',
-  '・背景の色：白・黒・時間に合わせる、から選べます。「時間に合わせる」は、18:00〜翌朝6:00が黒、それ以外が白になります。',
-  '・背景の画像：「インポートする」を押して画像ファイルを選ぶと、その画像が背景になります。文字が読みやすいように、本文の後ろには半透明の板が敷かれます。白・黒・時間に合わせるのどれかを選ぶと、画像は解除されます。画像を選んだときの文字色は、直前に選んでいた白・黒・時間の設定に従います。',
-  '・ホーム画面：「ロゴ」「履歴」「ブックマーク」にチェックを入れると、ホームに表示されます。履歴はページの左側、ブックマークは右側です。ブックマークは右上のプルダウンで並べ替えできます。',
-  '・使い方：この使い方のページを開きます。',
-  '・ページバーの表示方法：「デフォルト」は、上にスクロールするとページバーがフェードインし、下にスクロールするとフェードアウトします。「矢印」にすると、画面の端に▽が表示され、押すとページバーが現れて矢印が△に変わり、もう一度押すとページバーが消えて▽に戻ります。どちらか1つだけ選べます。',
-  '・ページバーを表示する位置：上・下・右・左から選べます。',
-  '・ページバーの並び順：設定画面のページバーの絵で、ボタンをドラッグして位置を変えられます。ボタンを押すと右上に×が出て、押すと消せます。右上の＋から、消したボタンを追加できます。設定ボタンだけは消せません。',
-  '・ロゴ・アイコン画像：ロゴやファビコンが表示されないときは、ここで画像を選ぶとブラウザに保存され、画像ファイルがなくても表示されます。何も設定しなければ、内蔵の文字ロゴが使われます。'].join('\n')},
+  '・文字サイズ（小・中・大・特大）、フォント（ゴシック・明朝体）、背景の色（白・黒・時間に合わせる）、背景の画像を設定できます。「時間に合わせる」は、18:00〜翌朝6:00が黒になります。',
+  '・ホーム画面：ロゴ・履歴・ブックマークを表示するか選べます。',
+  '・ページバーの表示方法：「常に表示」「最上部」「デフォルト」「矢印」から1つ選びます。常に表示は、いつでも表示します。最上部は、ページの一番上にいるときだけ表示します。デフォルトは、上にスクロールするとフェードインし、下にスクロールするとフェードアウトします。矢印は、画面の端の▽を押すと現れ（△に変化）、△を押すと隠れます。',
+  '・ページバーの表示位置：上・下・右・左から選べます。',
+  '・ページバーの並び順：ページバーの絵の上で、ボタンをドラッグして並べ替えられます。ボタンを押すと右上に×が出て、押すと消せます。下の「追加できるボタン」から、消したボタンや「空白」（ボタンの間隔）を追加できます。設定ボタンだけは消せません。',
+  '・ロゴ・アイコン画像：ロゴやファビコンが表示されないときは、ここで画像を選ぶとブラウザに保存されます。'].join('\n')},
  {heading:'データのエクスポート・インポート・削除',media:[],html:[
-  '他の端末へ共有：共有メニューが開くので、AirDrop・LINE・メール・クラウドなどへそのまま送れます。受け取った側で「インポート」を押してそのファイルを選びます。共有メニューが使えない環境では、ファイルとして保存されます。',
-  'エクスポート：すべての記事・ブックマーク・履歴・設定・背景やロゴの画像を、1つのファイルとして保存します。ときどきバックアップとして保存しておくと安心です。',
-  'インポート：エクスポートしたファイルを選ぶと、確認のあとにデータが読み込まれます。現在のデータはすべて消えて、ファイルの内容に置き換わります。',
-  '全データ削除：記事・ブックマーク・履歴・設定・一時保存・保存した画像をすべて消します。元に戻せないので、必要ならエクスポートしてから実行してください。',
-  '注意：ブラウザの閲覧データ（サイトデータ）を削除すると、記事も消えてしまいます。'].join('\n')}
+  '・エクスポート：「すべてエクスポート」は、記事・ブックマーク・履歴・設定・画像を1つのファイルに保存します。「記事をエクスポート」は、一覧から選んだ記事だけを保存します。ときどきバックアップしておくと安心です。',
+  '・他の端末へ共有：エクスポートと同じ選び方で、ファイルを端末の共有メニュー（AirDrop・LINE・メール・クラウドなど）へそのまま送れます。共有メニューが使えない環境では共有できません。',
+  '・インポート：「すべて」のファイルを選ぶと、確認のあと現在のデータがすべて置き換わります。「記事」のファイルを選ぶと、その記事だけが追加されます（同じ記事は上書き、同じ見出しの別の記事がある場合は「（2）」を付けて追加されます）。',
+  '・全データ削除：記事・ブックマーク・履歴・設定・一時保存・保存した画像をすべて消します。元に戻せないので、必要ならエクスポートしてから実行してください。',
+  '・注意：ブラウザの閲覧データ（サイトデータ）を削除すると、記事も消えてしまいます。'].join('\n')}
 ]};
 function renderGuide(){
   setTitle('使い方 -YUpedia');
@@ -1170,7 +1191,7 @@ function renderSettings(){
   setTitle('設定 -YUpedia');
   const th=settings.theme,fs=settings.fontSize||'m',ff=FONT_STACKS[settings.fontFamily]?settings.fontFamily:'gothic';
   const bgOn=!!(settings.bgImage&&assets.bg);
-  const bm=settings.barMode==='arrow'?'arrow':'default',bp=currentPos();
+  const bm=['always','attop','default','arrow'].includes(settings.barMode)?settings.barMode:'default',bp=currentPos();
   $('#view').innerHTML=`<div class="page"><h1 class="h1" style="margin-bottom:16px">設定</h1>
   <div class="card pad set-card"><div class="set-t">文字サイズ</div>
     <div class="theme-opts">
@@ -1199,10 +1220,14 @@ function renderSettings(){
     <p class="hint">ホーム画面に表示する項目を選びます。</p></div>
   <div class="card pad set-card"><div class="set-t">ページバーの表示方法</div>
     <div class="theme-opts">
+      <button class="theme-opt ${bm==='always'?'on':''}" data-act="barmode" data-v="always">常に表示</button>
+      <button class="theme-opt ${bm==='attop'?'on':''}" data-act="barmode" data-v="attop">最上部</button>
+    </div>
+    <div class="theme-opts" style="margin-top:12px">
       <button class="theme-opt ${bm==='default'?'on':''}" data-act="barmode" data-v="default">デフォルト</button>
       <button class="theme-opt ${bm==='arrow'?'on':''}" data-act="barmode" data-v="arrow">矢印</button>
     </div>
-    <p class="hint">デフォルト：上にスクロールするとページバーが現れ、下にスクロールすると消えます。矢印：画面の端に表示される矢印（▽△）を押して、ページバーを出し入れします。どちらか1つだけ選べます。</p>
+    <p class="hint">常に表示：いつでもページバーを表示します。最上部：ページの一番上にいるときだけ表示します。デフォルト：上にスクロールするとフェードインし、下にスクロールするとフェードアウトします。矢印：画面の端の矢印（▽△）を押して出し入れします。4つのうち1つだけ選べます。</p>
     <div class="set-t" style="margin-top:18px">ページバーを表示する位置</div>
     <div class="theme-opts">
       <button class="theme-opt ${bp==='top'?'on':''}" data-act="barpos" data-v="top">上に表示</button>
@@ -1212,14 +1237,14 @@ function renderSettings(){
     </div></div>
   <div class="card pad set-card"><div class="set-t">ページバーの並び順</div>
     ${mockHTML()}
-    <p class="hint">ボタンをドラッグすると位置を変えられます。ボタンを押すと右上に×が出て、押すとそのボタンを消せます。右上の＋で、消したボタンを追加できます（設定ボタンだけは消せません）。変更はすぐページバーに反映されます。</p>
+    <p class="hint">ボタンをドラッグすると位置を変えられます。ボタンを押すと右上に×が出て、押すとそのボタンを消せます。「空白」を追加すると、ボタンの間隔を空けられます（設定ボタンだけは消せません）。変更はすぐページバーに反映されます。</p>
     <div class="btn-row" style="margin-top:10px"><button class="btn" data-act="bar-reset">初期の並びに戻す</button></div></div>
   <div class="card pad set-card"><div class="set-t">使い方</div>
     <a class="btn" href="#/guide">使い方のページを開く</a></div>
   <div class="card pad set-card"><div class="set-t">データのインポート・エクスポート</div>
     <div class="btn-row"><button class="btn primary" data-act="share">他の端末へ共有</button><button class="btn" data-act="export">エクスポート</button><button class="btn" data-act="import">インポート</button></div>
-    <p class="hint">「他の端末へ共有」を押すと共有メニューが開き、AirDrop・LINE・メール・クラウドなどへそのまま送れます。受け取った側は「インポート」でそのファイルを選びます。共有メニューが使えない環境では、ファイルとして保存されます。</p>
-    <p class="hint">エクスポートは、すべての記事・ブックマーク・履歴・設定・背景やロゴの画像を1つのファイルに保存します。インポートは、選んだファイルの内容で現在のデータをすべて置き換えます。</p></div>
+    <p class="hint">「他の端末へ共有」は、押すと「すべて共有」か「記事を共有」を選べ、共有メニュー（AirDrop・LINE・メール・クラウドなど）からそのまま送れます。共有メニューが使えない環境では共有できません（ファイルは保存されません）。</p>
+    <p class="hint">「エクスポート」は、「すべてエクスポート」（記事・ブックマーク・履歴・設定・画像）か、選んだ記事だけの「記事をエクスポート」を選べます。インポートでは、「すべて」のファイルは現在のデータをすべて置き換え、「記事」のファイルはその記事だけを追加します。</p></div>
   <div class="card pad set-card"><div class="set-t">ロゴ・アイコン画像</div>
     <div class="btn-row">
       <button class="btn" data-act="asset-pick" data-k="logo">ロゴを選ぶ</button>
@@ -1261,23 +1286,28 @@ async function resetAsset(key){
 }
 
 /* ---------- エクスポート / インポート / 全削除 ---------- */
-function buildExport(){
+function buildExport(ids){
+  if(ids){
+    const set=new Set(ids),arts=state.articles.filter(a=>set.has(a.id));
+    const data={app:'YUpedia',version:3,scope:'articles',exportedAt:new Date().toISOString(),articles:arts};
+    return {blob:new Blob([JSON.stringify(data)],{type:'application/json'}),name:'YUpedia-articles-'+dateKey(Date.now())+'.json',count:arts.length};
+  }
   const as={};Object.entries(assets).forEach(([k,v])=>{if(v)as[k]=v});
   const data={app:'YUpedia',version:3,exportedAt:new Date().toISOString(),articles:state.articles,bookmarks:bms,history:hist,opened,settings,assets:as};
-  return {blob:new Blob([JSON.stringify(data)],{type:'application/json'}),name:'YUpedia-'+dateKey(Date.now())+'.json'};
+  return {blob:new Blob([JSON.stringify(data)],{type:'application/json'}),name:'YUpedia-'+dateKey(Date.now())+'.json',count:state.articles.length};
 }
 /* 共有：端末の「共有メニュー」からそのまま送る（共有できないときはダウンロードしない）
-   共有画面を開くにはタップ直後に呼ぶ必要があるため、ファイルは設定画面を開いたときに先に作っておく */
+   共有画面を開くにはタップ直後に呼ぶ必要があるため、「すべて共有」のファイルは設定画面を開いたときに先に作っておく */
 let shareCands=null;
-function buildShareCands(){
-  const {blob,name}=buildExport();
+function buildShareCands(ids){
+  const {blob,name}=buildExport(ids);
   const base=name.replace(/\.json$/,'');
   return [new File([blob],name,{type:'application/json'}),new File([blob],name,{type:'text/plain'}),new File([blob],base+'.txt',{type:'text/plain'})];
 }
 function prepareShare(){shareCands=null;setTimeout(()=>{try{if($('[data-act="share"]'))shareCands=buildShareCands()}catch{}},50)}
-function shareData(){
+function shareData(ids){
   if(!navigator.share){toast('この端末・ブラウザには共有画面がありません（HTTPSのページで開くと使える場合があります）');return}
-  let cands;try{cands=shareCands||buildShareCands()}catch{toast('共有用のデータを作れませんでした');return}
+  let cands;try{cands=ids?buildShareCands(ids):(shareCands||buildShareCands())}catch{toast('共有用のデータを作れませんでした');return}
   let f=null;
   if(navigator.canShare)f=cands.find(x=>{try{return navigator.canShare({files:[x]})}catch{return false}})||null;
   if(!f){toast('この端末・ブラウザではファイルの共有画面を開けませんでした');return}
@@ -1285,13 +1315,47 @@ function shareData(){
     .then(()=>toast('共有しました'))
     .catch(err=>{if(err&&err.name==='AbortError')return;toast('共有画面を開けませんでした（'+((err&&err.name)||'エラー')+'）')});
 }
-function exportData(){
-  const {blob,name}=buildExport();
+function exportData(ids){
+  const {blob,name,count}=buildExport(ids);
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');a.href=url;a.download=name;
   document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),3000);
-  toast('エクスポートしました（記事'+state.articles.length+'件）');
+  toast('エクスポートしました（記事'+count+'件）');
+}
+/* 「すべて」か「記事を選ぶ」かを選ぶ画面 → 記事の選択画面（エクスポート・共有で共通） */
+function openTransfer(kind){
+  const word=kind==='share'?'共有':'エクスポート';
+  const box=document.createElement('div');box.className='modal-box';
+  box.innerHTML=`<button type="button" class="modal-x icon-btn" aria-label="閉じる">${ic('x')}</button><h3>${word}</h3><p>どちらを${word}しますか？</p><div class="col-btns"><button type="button" class="btn primary" data-r="all">すべて${word}</button><button type="button" class="btn" data-r="pick">記事を${word}</button></div>`;
+  const close=openModal(box);
+  box.onclick=e=>{
+    const b=e.target.closest('[data-r]');if(!b)return;
+    if(b.dataset.r==='all'){close();if(kind==='share')shareData();else exportData()}
+    else if(b.dataset.r==='pick')showPicker(box,kind,close,word);
+  };
+}
+function showPicker(box,kind,close,word){
+  const list=sortedArticles(),sel=new Set();
+  box.classList.add('wide');
+  box.innerHTML=`<button type="button" class="modal-x icon-btn" aria-label="閉じる">${ic('x')}</button><h3>記事を${word}</h3>${
+    list.length?`<div class="row" style="margin-bottom:8px"><button type="button" class="btn" data-r="toggle">全選択</button></div><div class="sel-list">${list.map(a=>`<label class="sel-row"><input type="checkbox" class="chk blue" data-id="${a.id}"><span>${esc(a.title)}</span></label>`).join('')}</div><div class="row end" style="margin-top:12px"><button type="button" class="btn primary" data-r="go" disabled>0件を${word}</button></div>`
+    :'<p>記事がありません</p>'}`;
+  $('.modal-x',box).addEventListener('click',close);
+  const upd=()=>{const g=$('[data-r="go"]',box);if(g){g.disabled=!sel.size;g.textContent=sel.size+'件を'+word}};
+  box.onchange=e=>{const c=e.target.closest('input[data-id]');if(!c)return;if(c.checked)sel.add(c.dataset.id);else sel.delete(c.dataset.id);upd()};
+  box.onclick=e=>{
+    const b=e.target.closest('[data-r]');if(!b)return;
+    if(b.dataset.r==='toggle'){
+      const all=sel.size===list.length;
+      $$('input[data-id]',box).forEach(c=>{c.checked=!all;if(!all)sel.add(c.dataset.id);else sel.delete(c.dataset.id)});
+      upd();
+    }else if(b.dataset.r==='go'){
+      if(!sel.size)return;
+      const ids=[...sel];close();
+      if(kind==='share')shareData(ids);else exportData(ids);
+    }
+  };
 }
 const normTags=t=>Array.isArray(t)?t.filter(x=>typeof x==='string'&&x).map(String):[];
 const normSecs=(secs,needSrc)=>(Array.isArray(secs)?secs:[]).map(s=>({
@@ -1311,6 +1375,7 @@ function parseImport(text){
   if(!d||!Array.isArray(d.articles))throw new Error('bad format');
   const seen=new Set(),articles=[];
   d.articles.map(normArticle).filter(Boolean).forEach(a=>{if(!seen.has(a.id)){seen.add(a.id);articles.push(a)}});
+  if(d.scope==='articles')return {scope:'articles',articles};
   const as={};
   ['bg','logo','icon'].forEach(k=>{const v=d.assets&&d.assets[k];if(typeof v==='string'&&/^data:image\//.test(v))as[k]=v});
   return {
@@ -1328,6 +1393,23 @@ function pickImport(){
     const f=inp.files[0];if(!f)return;
     let data;
     try{data=parseImport(await f.text())}catch{toast('読み込めないファイルです（YUpediaのエクスポートファイルを選んでください）');return}
+    if(data.scope==='articles'){
+      /* 「記事をエクスポート」したファイル：その記事だけを追加する（ほかのデータは消えない） */
+      if(!data.articles.length){toast('ファイルに記事がありません');return}
+      const okA=await confirmDialog({title:'記事をインポートしますか？',message:data.articles.length+'件の記事を追加します。同じ記事（同じID）がある場合は上書きされます。ほかのデータは消えません。',okText:'インポートする',cancelText:'キャンセル'});
+      if(okA!==true)return;
+      let n=0;
+      for(const a of data.articles){
+        let t=a.title,k=1;
+        while(state.articles.some(x=>x.id!==a.id&&x.title===t)){k++;t=a.title+'（'+k+'）'}
+        a.title=t;
+        try{await DB.put(a)}catch{toast('インポートに失敗しました（容量不足の可能性があります）');return}
+        const i=state.articles.findIndex(x=>x.id===a.id);
+        if(i>=0)state.articles[i]=a;else state.articles.push(a);
+        n++;
+      }
+      renderSettings();toast('記事を'+n+'件インポートしました');return;
+    }
     const ok=await confirmDialog({title:'警告',message:'このページをエクスポートしていない場合データがすべて消えますがよろしいですか',okText:'する',cancelText:'しない',danger:true,warn:true,okFirst:true});
     if(ok!==true)return;
     try{await DB.replaceAll(data.articles);await DB.clearDrafts();await DB.replaceAssets(data.assets)}catch{toast('インポートに失敗しました');return}
@@ -1428,7 +1510,7 @@ function renumberSecs(){
 
 function renderEditor(){
   const y=window.scrollY,a=ed.a;
-  $('#view').innerHTML=`<div class="page" id="editor"><div class="page-head"><h1 class="h1">${ed.isNew?'ページを作成':'ページを編集'}</h1><div class="head-btns"><button class="btn" data-act="cancel">キャンセル</button><button class="btn" data-act="draft" title="Ctrl+S">一時保存</button><button class="btn primary" data-act="save">保存する</button></div></div><div class="field-label">見出し</div><div class="card"><input id="titleInput" class="title-input" type="text" autocomplete="off"></div><div id="secs">${secsHTML(a)}</div></div>`;
+  $('#view').innerHTML=`<div class="page" id="editor"><div class="page-head"><h1 class="h1">${ed.isNew?'ページを作成':'ページを編集'}</h1><div class="head-btns"><button class="btn" data-act="cancel">キャンセル</button><button class="btn" data-act="draft" title="Ctrl+Shift+S">一時保存</button><button class="btn primary" data-act="save" title="Ctrl+S">保存する</button></div></div><div class="field-label">見出し</div><div class="card"><input id="titleInput" class="title-input" type="text" autocomplete="off"></div><div id="secs">${secsHTML(a)}</div></div>`;
   $('#titleInput').value=a.title;
   $$('.section').forEach((el,i)=>fillSection(el,a.sections[i]));
   window.scrollTo(0,y);ed.lastRange=null;
@@ -1734,42 +1816,201 @@ $('#view').addEventListener('compositionend',e=>{
   if(rich)setTimeout(()=>{if(ed&&document.body.contains(rich))autoLink(rich)},0);
 });
 
-/* ---- 文字の色 ---- */
-const COLORS=[['緑','#16a34a','#fff'],['黄','#eab308','#111'],['赤','#dc2626','#fff'],['青','#2563eb','#fff'],['灰','#6b7280','#fff'],['黒','#000000','#fff']];
-function openColorModal(){
-  if(!getRange()){toast('先に、文字を入力したい本文（または説明文）中の位置をクリックしてください');return}
-  const box=document.createElement('div');box.className='modal-box square';
-  box.innerHTML=`<button class="modal-x icon-btn" aria-label="閉じる">${ic('x')}</button><div class="color-grid">${COLORS.map(([n,c,t])=>`<button class="color-btn" data-c="${c}" style="background:${c};color:${t}">${n}</button>`).join('')}</div>`;
-  const close=openModal(box);
-  box.addEventListener('click',e=>{const b=e.target.closest('.color-btn');if(!b)return;close();applyColor(b.dataset.c)});
+/* ---- 文字変更（色・太字・斜体・下線・大きさ） ---- */
+const TEXT_COLORS=[['緑','#16a34a'],['黄','#eab308'],['赤','#dc2626'],['青','#2563eb'],['灰','#6b7280'],['黒','#000000'],['紫','#9333ea'],['水色','#38bdf8'],['オレンジ','#f97316'],['茶色','#8b5a2b'],['ピンク','#ec4899'],['黄緑','#84cc16']];
+const TEXT_SIZES=[['小',13],['標準',16],['大',24],['特大',32],['最大',44]];
+function clearFindMarks(){try{if(window.CSS&&CSS.highlights){CSS.highlights.delete('find-all');CSS.highlights.delete('find-cur')}}catch{}}
+function closePanel(p){if(!p)return;if(p.id==='findPanel')clearFindMarks();p.remove()}
+function closePanels(){$$('.float-panel').forEach(closePanel)}
+function normHex(v){
+  v=String(v||'').trim().replace(/^#/,'').toLowerCase();
+  if(/^[0-9a-f]{3}$/.test(v))v=v.split('').map(c=>c+c).join('');
+  return /^[0-9a-f]{6}$/.test(v)?'#'+v:null;
 }
-function applyColor(c){
-  const r=getRange();if(!r)return;
-  const rich=richOf(r);if(!rich)return;
-  rich.focus();
-  const s=getSelection();s.removeAllRanges();s.addRange(r);
-  document.execCommand('styleWithCSS',false,true);
-  document.execCommand('foreColor',false,c);
-  const s2=getSelection();if(s2.rangeCount)ed.lastRange=s2.getRangeAt(0).cloneRange();
-  commitSoon();
-}
-
-function applyBold(){
-  const r=getRange();if(!r){toast('先に、太字にしたい文字を選択するか、入力したい位置をクリックしてください');return}
-  const rich=richOf(r);if(!rich)return;
+/* 保存しておいた選択範囲を戻してから、書式を変える */
+function withSel(fn){
+  const r=getRange();
+  if(!r){toast('先に、文字を変えたい部分を選択するか、入力したい位置をクリックしてください');return false}
+  const rich=richOf(r);if(!rich)return false;
   rich.focus();
   const sel=getSelection();sel.removeAllRanges();sel.addRange(r);
-  document.execCommand('styleWithCSS',false,true);
-  document.execCommand('bold');
+  fn(rich,sel);
   const s2=getSelection();if(s2.rangeCount)ed.lastRange=s2.getRangeAt(0).cloneRange();
-  commitSoon();
+  commitSoon();return true;
+}
+function applyColor(c){withSel(()=>{document.execCommand('styleWithCSS',false,true);document.execCommand('foreColor',false,c)})}
+function applyCmd(cmd){withSel(()=>{document.execCommand('styleWithCSS',false,true);document.execCommand(cmd)})}
+function applySize(px){
+  const r0=getRange();
+  if(r0&&r0.collapsed){toast('大きさを変えたい文字を選択してください');return}
+  withSel((rich,sel)=>{
+    document.execCommand('styleWithCSS',false,false);
+    document.execCommand('fontSize',false,'7');
+    document.execCommand('styleWithCSS',false,true);
+    const made=[];
+    $$('font[size="7"]',rich).forEach(f=>{
+      const sp=document.createElement('span');
+      sp.setAttribute('style','font-size:calc(var(--fz) * '+px+'px)');
+      while(f.firstChild)sp.appendChild(f.firstChild);
+      $$('[style*="font-size"]',sp).forEach(x=>x.style.removeProperty('font-size'));
+      f.replaceWith(sp);made.push(sp);
+    });
+    if(made.length){
+      const nr=document.createRange();nr.setStartBefore(made[0]);nr.setEndAfter(made[made.length-1]);
+      sel.removeAllRanges();sel.addRange(nr);
+    }
+  });
+}
+function openTextPanel(){
+  if(!ed||ed.preview)return;
+  const old=$('#textPanel');if(old){closePanel(old);return}
+  if(!getRange()){toast('先に、文字を変えたい部分を選択するか、入力したい位置をクリックしてください');return}
+  const p=document.createElement('div');p.id='textPanel';p.className='float-panel';
+  p.innerHTML=`<button type="button" class="modal-x icon-btn" data-t="close" aria-label="閉じる">${ic('x')}</button>
+  <div class="set-t" style="margin:0 0 10px">文字変更</div>
+  <div class="lbl">文字の色</div>
+  <div class="swatches">${TEXT_COLORS.map(([n,c])=>`<button type="button" class="swatch" data-c="${c}" title="${n}" aria-label="${n}" style="background:${c}"></button>`).join('')}</div>
+  <div class="row" style="margin-top:10px"><input type="color" id="tpPick" class="color-pick" value="#2563eb" aria-label="色を選ぶ"><input id="tpHex" class="m-input" placeholder="#2563eb" maxlength="7" autocomplete="off" spellcheck="false" style="flex:1;min-width:90px"><button type="button" class="btn" data-t="color">適用</button></div>
+  <div class="lbl" style="margin-top:14px">装飾</div>
+  <div class="row"><button type="button" class="btn" data-t="bold"><b>B</b> 太字</button><button type="button" class="btn" data-t="italic"><i>I</i> 斜体</button><button type="button" class="btn" data-t="underline"><u>U</u> 下線</button></div>
+  <div class="lbl" style="margin-top:14px">大きさ（文字を選択してから）</div>
+  <div class="row">${TEXT_SIZES.map(([n,px])=>`<button type="button" class="btn" data-t="size" data-px="${px}">${n}</button>`).join('')}</div>`;
+  document.body.appendChild(p);
+  const pick=$('#tpPick',p),hex=$('#tpHex',p);
+  p.addEventListener('mousedown',e=>{if(!e.target.closest('input'))e.preventDefault()});   // 本文の選択位置を保持
+  pick.addEventListener('input',()=>{hex.value=pick.value});
+  hex.addEventListener('input',()=>{const c=normHex(hex.value);if(c)pick.value=c});
+  hex.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing){e.preventDefault();const c=normHex(hex.value);if(c)applyColor(c);else toast('カラーコードは #2563eb や #26b のように入力してください')}});
+  p.addEventListener('click',e=>{
+    const sw=e.target.closest('.swatch');
+    if(sw){applyColor(sw.dataset.c);hex.value=sw.dataset.c;pick.value=sw.dataset.c;return}
+    const b=e.target.closest('[data-t]');if(!b||!ed)return;
+    switch(b.dataset.t){
+      case 'close':closePanel(p);break;
+      case 'color':{const c=normHex(hex.value)||(hex.value.trim()?null:normHex(pick.value));if(!c){toast('カラーコードは #2563eb や #26b のように入力してください');return}applyColor(c);break}
+      case 'bold':case 'italic':case 'underline':applyCmd(b.dataset.t);break;
+      case 'size':applySize(+b.dataset.px);break;
+    }
+  });
+}
+
+/* ---- 検索と置き換え（Ctrl+H） ---- */
+const findRoots=()=>$$('#editor .rich,#editor .cap-rich');
+function textNodesOf(root){
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>(n.parentElement&&n.parentElement.closest('a'))?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
+  const out=[];let n;while((n=w.nextNode()))out.push(n);return out;
+}
+function findMatches(q){
+  const ql=q.toLowerCase(),out=[];
+  for(const root of findRoots())for(const n of textNodesOf(root)){
+    const t=n.nodeValue.toLowerCase();let i=0;
+    while((i=t.indexOf(ql,i))>=0){out.push({n,s:i});i+=ql.length}
+  }
+  return out;
+}
+const headFields=()=>[$('#titleInput'),...$$('#editor .sec-heading')].filter(Boolean);
+function headCount(q){
+  const ql=q.toLowerCase();let c=0;
+  headFields().forEach(f=>{const t=f.value.toLowerCase();let i=0;while((i=t.indexOf(ql,i))>=0){c++;i+=ql.length}});
+  return c;
+}
+function findInfo(t){const el=$('#fInfo');if(el)el.textContent=t}
+function markFind(ms,cur,q){
+  clearFindMarks();
+  try{
+    if(window.Highlight&&window.CSS&&CSS.highlights){
+      const mk=m=>{const r=document.createRange();r.setStart(m.n,m.s);r.setEnd(m.n,m.s+q.length);return r};
+      if(ms.length)CSS.highlights.set('find-all',new Highlight(...ms.map(mk)));
+      if(cur)CSS.highlights.set('find-cur',new Highlight(mk(cur)));
+      return true;
+    }
+  }catch{}
+  return false;
+}
+function findRefresh(){
+  const q=($('#fFind')||{}).value||'';
+  if(!ed)return;
+  ed.fr=null;ed.fpos=null;
+  if(!q){clearFindMarks();findInfo('');return}
+  const ms=findMatches(q),hc=headCount(q);
+  markFind(ms,null,q);
+  findInfo(`本文など ${ms.length}件`+(hc?`、見出し・目次名 ${hc}件`:''));
+}
+function findNext(){
+  if(!ed)return;
+  const q=$('#fFind').value;if(!q){findInfo('検索する単語を入力してください');return}
+  const ms=findMatches(q),hc=headCount(q);
+  if(!ms.length){ed.fr=null;ed.fpos=null;clearFindMarks();findInfo(hc?`本文には見つかりません（見出し・目次名に${hc}件）`:'見つかりません');return}
+  let pick=null;
+  if(ed.fpos&&document.body.contains(ed.fpos.startContainer)){
+    for(const m of ms){const r=document.createRange();r.setStart(m.n,m.s);if(r.compareBoundaryPoints(Range.START_TO_START,ed.fpos)>=0){pick=m;break}}
+  }
+  if(!pick)pick=ms[0];
+  const r=document.createRange();r.setStart(pick.n,pick.s);r.setEnd(pick.n,pick.s+q.length);
+  ed.fr=r.cloneRange();
+  const np=document.createRange();np.setStart(pick.n,pick.s+q.length);np.collapse(true);ed.fpos=np;
+  if(!markFind(ms,pick,q)){const sel=getSelection();sel.removeAllRanges();sel.addRange(r)}
+  const el=pick.n.parentElement;if(el&&el.scrollIntoView)el.scrollIntoView({block:'center'});
+  findInfo(`${ms.length}件中 ${ms.indexOf(pick)+1}件目`+(hc?`（ほかに見出し・目次名 ${hc}件）`:''));
+}
+function findReplaceOne(){
+  if(!ed)return;
+  const q=$('#fFind').value;if(!q)return;
+  const rep=$('#fRep').value,r=ed.fr;
+  if(r&&document.body.contains(r.startContainer)&&r.toString().toLowerCase()===q.toLowerCase()){
+    r.deleteContents();
+    const tn=document.createTextNode(rep);r.insertNode(tn);
+    const np=document.createRange();np.setStartAfter(tn);np.collapse(true);ed.fpos=np;ed.fr=null;
+    commit();
+  }
+  findNext();
+}
+function findReplaceAll(){
+  if(!ed)return;
+  const q=$('#fFind').value;if(!q){findInfo('検索する単語を入力してください');return}
+  const rep=$('#fRep').value;
+  const re=new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi');
+  const ql=q.toLowerCase();
+  let n=0;
+  for(const root of findRoots())for(const t of textNodesOf(root)){
+    if(t.nodeValue.toLowerCase().includes(ql))t.nodeValue=t.nodeValue.replace(re,()=>{n++;return rep});
+  }
+  headFields().forEach(f=>{if(f.value.toLowerCase().includes(ql))f.value=f.value.replace(re,()=>{n++;return rep})});
+  ed.fr=null;ed.fpos=null;
+  commit();findRefresh();
+  findInfo(n?`${n}件を置き換えました`:'見つかりません');
+}
+function openFind(){
+  if(!ed||ed.preview)return;
+  let p=$('#findPanel');
+  if(p){const i=$('#fFind',p);i.focus();i.select();return}
+  p=document.createElement('div');p.id='findPanel';p.className='float-panel';
+  p.innerHTML=`<button type="button" class="modal-x icon-btn" data-f="close" aria-label="閉じる">${ic('x')}</button><div class="set-t" style="margin:0 0 10px">検索と置き換え</div><input id="fFind" class="m-input" placeholder="検索する単語" autocomplete="off"><input id="fRep" class="m-input" placeholder="置き換える単語" autocomplete="off" style="margin-top:6px"><div class="row" style="margin-top:8px"><button type="button" class="btn" data-f="next">次を検索</button><button type="button" class="btn" data-f="rep">置換</button><button type="button" class="btn" data-f="all">すべて置換</button></div><div id="fInfo" class="hint" style="margin:8px 0 0"></div>`;
+  document.body.appendChild(p);
+  const fi=$('#fFind',p);
+  const lr=getRange();
+  if(lr&&!lr.collapsed){const t=lr.toString();if(t&&t.length<=100&&!/\n/.test(t))fi.value=t}
+  fi.addEventListener('input',findRefresh);
+  fi.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing&&e.keyCode!==229){e.preventDefault();findNext()}});
+  $('#fRep',p).addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing&&e.keyCode!==229){e.preventDefault();findReplaceOne()}});
+  p.addEventListener('click',e=>{
+    const b=e.target.closest('[data-f]');if(!b)return;
+    switch(b.dataset.f){
+      case 'close':closePanel(p);break;
+      case 'next':findNext();break;
+      case 'rep':findReplaceOne();break;
+      case 'all':findReplaceAll();break;
+    }
+  });
+  fi.focus();fi.select();
+  if(fi.value)findRefresh();
 }
 
 /* ---- プレビュー（保存せずに、いまの内容を閲覧モードで確認する） ---- */
 function startPreview(){
   if(!ed||ed.preview)return;
   commit();
-  ed.placing=null;updatePlaceBanner();
+  ed.placing=null;updatePlaceBanner();closePanels();
   const a=ed.a;
   const pseudo={id:a.id||'preview',title:(a.title||'').trim()||'（無題）',tags:[],sections:a.sections.map(x=>({sid:x.sid,heading:x.heading,html:sanitize(x.html),media:x.media.map(m=>({...m,caption:(typeof m.caption==='string')?sanitize(m.caption):null}))}))};
   ed.preview=true;ed.prevY=window.scrollY;
@@ -1825,19 +2066,13 @@ view.addEventListener('click',e=>{
     case 'bg-import':pickAsset('bg');break;
     case 'asset-pick':pickAsset(el.dataset.k);break;
     case 'asset-reset':resetAsset(el.dataset.k);break;
-    case 'share':shareData();break;
-    case 'barmode':settings.barMode=el.dataset.v;arrowOpen=false;scrollHidden=false;LS.set('mywiki.settings',settings);applyBarSettings();rerenderSettings();toast('設定を保存しました');break;
+    case 'share':openTransfer('share');break;
+    case 'barmode':settings.barMode=el.dataset.v;arrowOpen=false;scrollHidden=false;LS.set('mywiki.settings',settings);applyBarSettings();if(settings.barMode==='attop'){scrollHidden=window.scrollY>20;applyBar()}rerenderSettings();toast('設定を保存しました');break;
     case 'barpos':settings.barPos=el.dataset.v;arrowOpen=false;scrollHidden=false;LS.set('mywiki.settings',settings);applyBarSettings();rerenderSettings();toast('設定を保存しました');break;
-    case 'bar-x':{const mi=el.closest('.mi');if(!mi||mi.dataset.id==='settings')break;saveBarItems(getBarItems().filter(x=>x!==mi.dataset.id));rerenderSettings();break}
+    case 'bar-x':{const mi=el.closest('.mi');if(!mi||mi.dataset.id==='settings')break;const idx=$$('.mi',$('#mockBar')).indexOf(mi);const l=getBarItems();l.splice(idx,1);saveBarItems(l);rerenderSettings();break}
     case 'bar-reset':saveBarItems(BAR_DEFAULT.slice());rerenderSettings();toast('初期の並びに戻しました');break;
-    case 'bar-plus':{
-      const menu=$('#mockMenu');if(!menu)break;
-      if(!menu.hidden){menu.hidden=true;break}
-      const cur=getBarItems(),miss=Object.keys(BAR_DEFS).filter(k=>!cur.includes(k));
-      menu.innerHTML=miss.length?miss.map(k=>`<button type="button" data-act="bar-add" data-id="${k}">${k==='tabs'?'<span class="tab-btn" style="width:22px;height:22px;border-width:2px;font-size:12px">'+tabs.length+'</span>':k==='home'?ic('home',18):ic(BAR_ICON[k],18)}${BAR_DEFS[k].n}</button>`).join(''):'<span class="hint" style="margin:6px">追加できるボタンはありません</span>';
-      menu.hidden=false;break}
     case 'bar-add':saveBarItems(getBarItems().concat(el.dataset.id));rerenderSettings();break;
-    case 'export':exportData();break;
+    case 'export':openTransfer('export');break;
     case 'import':pickImport();break;
     case 'wipe':wipeAll();break;
     /* 削除モード（履歴・ブックマーク共通） */
@@ -1851,10 +2086,12 @@ view.addEventListener('click',e=>{
       break;
     case 'del-all':
       if(el.dataset.k==='hist'){
-        historyGroups().forEach(g=>g.items.forEach(it=>histSel.add(it.i)));
+        const ids=[];historyGroups().forEach(g=>g.items.forEach(it=>ids.push(it.i)));
+        if(ids.length&&ids.every(i=>histSel.has(i)))histSel.clear();else ids.forEach(i=>histSel.add(i));
         renderHistory();
       }else{
-        sortedBM().forEach(({a})=>bmSel.add(a.id));
+        const ids=sortedBM().map(({a})=>a.id);
+        if(ids.length&&ids.every(i=>bmSel.has(i)))bmSel.clear();else ids.forEach(i=>bmSel.add(i));
         renderBookmarks();
       }
       break;
@@ -1974,8 +2211,7 @@ $('#subbar').innerHTML=`
   <button class="tb" data-act="tb-image">${ic('image',18)}画像</button>
   <button class="tb" data-act="tb-video">${ic('video',18)}映像</button>
   <button class="tb" data-act="tb-audio">${ic('mic',18)}音声</button>
-  <button class="tb" data-act="tb-color">${ic('palette',18)}文字の色</button>
-  <button class="tb" data-act="tb-bold" title="太字 (Ctrl+B)">${ic('bold',18)}太字</button>
+  <button class="tb" data-act="tb-text" title="色・太字・斜体・下線・大きさ">${ic('type',18)}文字変更</button>
   <span class="tb-sep"></span>
   <button class="tb" data-act="tb-undo" title="元に戻す (Ctrl+Z)" aria-label="左矢印（元に戻す）">${ic('left',18)}</button>
   <button class="tb" data-act="tb-redo" title="やり直す (Ctrl+Y)" aria-label="右矢印（やり直す）">${ic('right',18)}</button>
@@ -1988,38 +2224,44 @@ $('#subbar').addEventListener('click',e=>{
     case 'tb-image':pickFile('image');break;
     case 'tb-video':pickFile('video');break;
     case 'tb-audio':pickFile('audio');break;
-    case 'tb-color':openColorModal();break;
-    case 'tb-bold':applyBold();break;
+    case 'tb-text':openTextPanel();break;
     case 'tb-preview':startPreview();break;
     case 'tb-undo':undo();break;
     case 'tb-redo':redo();break;
   }
 });
 
-/* キーボード：Ctrl+Z / Ctrl+Y / Ctrl+S（一時保存） */
+/* キーボード：Ctrl+Z / Ctrl+Y / Ctrl+S（保存） / Ctrl+Shift+S（一時保存） / Ctrl+H（検索と置き換え） */
 document.addEventListener('keydown',e=>{
   if(!ed)return;
   if(ed.preview)return;
   const mod=e.ctrlKey||e.metaKey;if(!mod)return;
   if(e.target.closest&&(e.target.closest('#header')||e.target.closest('.modal-back')))return;
   const k=e.key.toLowerCase();
+  if(k==='h'){e.preventDefault();openFind();return}
+  if(e.target.closest&&e.target.closest('.float-panel'))return;
   if(k==='z'&&!e.shiftKey){e.preventDefault();undo()}
   else if(k==='y'||(k==='z'&&e.shiftKey)){e.preventDefault();redo()}
-  else if(k==='s'){e.preventDefault();saveDraft()}
+  else if(k==='s'){e.preventDefault();if(e.shiftKey)saveDraft();else saveEditor()}
+});
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape')return;
+  const pn=e.target.closest&&e.target.closest('.float-panel');
+  if(pn)closePanel(pn);
 });
 document.addEventListener('beforeinput',e=>{
   if(ed&&(e.inputType==='historyUndo'||e.inputType==='historyRedo')&&!(e.target.closest&&e.target.closest('#header')))e.preventDefault();
 });
 
 /* ================= ページバー ================= */
-const BAR_DEFS={home:{n:'ホーム'},back:{n:'戻る'},fwd:{n:'進む'},search:{n:'検索'},tabs:{n:'タブ'},new:{n:'ページ作成'},bookmarks:{n:'ブックマーク'},history:{n:'履歴'},settings:{n:'設定'},guide:{n:'使い方'}};
+const BAR_DEFS={home:{n:'ホーム'},back:{n:'戻る'},fwd:{n:'進む'},search:{n:'検索'},tabs:{n:'タブ'},new:{n:'ページ作成'},bookmarks:{n:'ブックマーク'},history:{n:'履歴'},settings:{n:'設定'},guide:{n:'使い方'},space:{n:'空白'}};
 const BAR_DEFAULT=['home','back','fwd','search','tabs','new','bookmarks','history','settings'];
 const BAR_ICON={home:'home',back:'left',fwd:'right',search:'search',new:'plus',bookmarks:'star',history:'clock',settings:'gear',guide:'help'};
 const BAR_HREF={new:'#/new',bookmarks:'#/bookmarks',history:'#/history',settings:'#/settings',guide:'#/guide'};
 const isVertical=()=>{const p=currentPos();return p==='left'||p==='right'};
 function currentPos(){return ['top','bottom','left','right'].includes(settings.barPos)?settings.barPos:'top'}
 function getBarItems(){
-  const l=Array.isArray(settings.barItems)?settings.barItems.filter((x,i,a)=>BAR_DEFS[x]&&a.indexOf(x)===i):BAR_DEFAULT.slice();
+  const l=Array.isArray(settings.barItems)?settings.barItems.filter((x,i,a)=>BAR_DEFS[x]&&(x==='space'||a.indexOf(x)===i)):BAR_DEFAULT.slice();
   if(!l.includes('settings'))l.push('settings');
   return l;
 }
@@ -2029,6 +2271,7 @@ function barItemHTML(id){
     case 'home':return `<a class="logo bar-it" id="hdrLogo" href="#/" title="ホーム"></a>`;
     case 'back':return `<button type="button" class="icon-btn bar-it" id="backBtn" title="1つ前のページに戻る" aria-label="戻る">${ic('left')}<span class="bl">戻る</span></button>`;
     case 'fwd':return `<button type="button" class="icon-btn bar-it" id="fwdBtn" title="次のページに進む" aria-label="進む">${ic('right')}<span class="bl">進む</span></button>`;
+    case 'space':return `<span class="bar-it bar-gap" aria-hidden="true"></span>`;
     case 'search':return `<div class="bar-it bar-search" id="barSearchSlot"></div>`;
     case 'tabs':return `<a class="tab-link bar-it" href="#/tabs" title="タブ" aria-label="タブ"><span class="tab-btn" id="tabBtn">0</span><span class="bl">タブ</span></a>`;
     default:return `<a class="icon-btn bar-it" href="${BAR_HREF[id]}" title="${n}" aria-label="${n}">${ic(BAR_ICON[id])}<span class="bl">${n}</span></a>`;
@@ -2047,7 +2290,7 @@ function renderBar(){
 let scrollHidden=false,arrowOpen=false;
 function applyBar(){
   const arrow=settings.barMode==='arrow',pos=currentPos();
-  const hide=arrow?!arrowOpen:scrollHidden;
+  const hide=arrow?!arrowOpen:(settings.barMode==='always'?false:scrollHidden);
   $('#header').classList.toggle('hide',hide);
   document.body.classList.toggle('hdr-hidden',hide);
   document.body.classList.toggle('bar-opened',arrow&&arrowOpen);
@@ -2071,6 +2314,7 @@ const saveBarItems=l=>{settings.barItems=l;LS.set('mywiki.settings',settings);re
 /* ---- 設定：ページバーの並び順（ドラッグで入れ替え／クリックで×） ---- */
 function mockInner(id){
   const n=BAR_DEFS[id].n;
+  if(id==='space')return `<span class="mi-space">空白</span>`;
   if(id==='home')return logoHTML('');
   if(id==='search')return `<span class="mi-search">${ic('search',16)}<span>YUpediaを検索</span></span>`;
   if(id==='tabs')return `<span class="tab-btn">${tabs.length>99?'99+':tabs.length}</span><span class="bl">${n}</span>`;
@@ -2079,8 +2323,15 @@ function mockInner(id){
 function mockItem(id){
   return `<div class="mi" data-id="${id}" title="${BAR_DEFS[id].n}">${mockInner(id)}${id==='settings'?'':`<button type="button" class="mi-x" data-act="bar-x" title="このボタンを消す">${ic('x',12)}</button>`}</div>`;
 }
+function addMenuHTML(){
+  const cur=getBarItems();
+  return Object.keys(BAR_DEFS).filter(k=>k==='space'||!cur.includes(k)).map(k=>{
+    const icon=k==='space'?'<span class="mi-space">空白</span>':k==='tabs'?'<span class="tab-btn" style="width:22px;height:22px;border-width:2px;font-size:12px">'+tabs.length+'</span>':ic(k==='home'?'home':BAR_ICON[k],18);
+    return `<button type="button" data-act="bar-add" data-id="${k}" title="${k==='space'?'ボタンの間隔を空けます':BAR_DEFS[k].n+'を追加'}">${icon}${k==='space'?'':BAR_DEFS[k].n}</button>`;
+  }).join('');
+}
 function mockHTML(){
-  return `<div class="mock-wrap"><div class="mock-bar ${isVertical()?'v':'h'}" id="mockBar">${getBarItems().map(mockItem).join('')}</div><button type="button" class="mock-plus" data-act="bar-plus" title="ボタンを追加">${ic('plus',18)}</button></div><div id="mockMenu" class="mock-menu" hidden></div>`;
+  return `<div class="mock-wrap"><div class="mock-bar ${isVertical()?'v':'h'}" id="mockBar">${getBarItems().map(mockItem).join('')}</div></div><div class="lbl" style="margin-top:16px">追加できるボタン（押すと最後に追加されます）</div><div id="mockMenu" class="mock-menu">${addMenuHTML()}</div>`;
 }
 function initMock(){
   const bar=$('#mockBar');if(!bar)return;
@@ -2140,7 +2391,10 @@ function showHeader(){scrollHidden=false;applyBar()}
 window.addEventListener('scroll',()=>{
   const y=window.scrollY;
   const tb=$('#toTopBtn');if(tb)tb.hidden=!(y>400);
-  if(settings.barMode==='arrow'){lastY=y;return}
+  const bmode=settings.barMode;
+  if(bmode==='arrow'){lastY=y;return}
+  if(bmode==='always')return;
+  if(bmode==='attop'){const hid=y>20;if(hid!==scrollHidden){scrollHidden=hid;applyBar()}return}
   if(Math.abs(y-lastY)<6)return;
   if(y>lastY&&y>60){if(!hasOpenDD())hideHeader()}else showHeader();
   lastY=y;
