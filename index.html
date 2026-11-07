@@ -409,12 +409,6 @@ body.pane #header,body.pane #barToggle{display:none!important}
 #header.bar-h{padding-top:calc(6px * var(--bsc));padding-bottom:calc(6px * var(--bsc));min-height:calc(56px * var(--bsc))}
 #header.bar-v .icon-btn,#header.bar-v .tab-link{width:100%;height:auto;min-height:calc(40px * var(--bsc))}
 #header.bar-v .logo,#header.bar-v .logo .logo-crop{width:100%}
-.bar-resize{position:absolute;z-index:3;touch-action:none}
-.bar-resize:hover,.bar-resize.on{background:var(--primary);opacity:.4}
-body.bar-top .bar-resize{left:0;right:0;bottom:-6px;height:12px;cursor:ns-resize}
-body.bar-bottom .bar-resize{left:0;right:0;top:-6px;height:12px;cursor:ns-resize}
-body.bar-left .bar-resize{top:0;bottom:0;right:-6px;width:12px;cursor:ew-resize}
-body.bar-right .bar-resize{top:0;bottom:0;left:-6px;width:12px;cursor:ew-resize}
 /* ===== 編集バー（記号だけのボタン）・閲覧の虫眼鏡・プレビューのテロップ ===== */
 .tb.ico{padding:6px 10px}
 .tb.primary-tb{background:var(--primary);color:#fff;border-color:transparent}
@@ -425,6 +419,35 @@ body.bar-right .bar-resize{top:0;bottom:0;left:-6px;width:12px;cursor:ew-resize}
 .telop .btn{background:#fff;color:#111;padding:4px 14px}
 .mock-menu.del-target{border-color:#dc2626;background:rgba(220,38,38,.08)}
 .art-row .h-word{flex:1 1 auto;max-width:none}
+
+
+/* ===== 検索バーの×・左下のメニュー・目次パネル・差分 ===== */
+.s-clear{width:30px;height:30px;border:0;background:transparent;border-radius:50%;cursor:pointer;color:var(--sub);display:grid;place-items:center;flex:none;padding:0}
+.s-clear:hover{background:var(--hover);color:var(--text)}
+.s-input:placeholder-shown+.s-clear{display:none}
+.fab-wrap{position:fixed;left:calc(18px + var(--ol));bottom:calc(18px + var(--ob));z-index:120;display:flex;flex-direction:column-reverse;gap:8px;align-items:center}
+.fab-btn,.fab-it{width:46px;height:46px;background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow);color:var(--text)}
+.fab-menu{display:flex;flex-direction:column-reverse;gap:8px}
+.fab-it.star.on{color:#f59e0b}
+.mock-menu-wrap{margin-top:16px;border:1px solid transparent;border-radius:12px;padding:6px}
+.mock-menu-wrap.del-target{border-color:#dc2626;background:rgba(220,38,38,.08)}
+.mock-menu-wrap .row{justify-content:space-between}
+.toc-item{display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--border);padding:2px 0;background:var(--card)}
+.toc-item.dragging{z-index:5;box-shadow:var(--shadow);opacity:.92}
+.toc-grip{cursor:grab;touch-action:none;padding:6px;color:var(--sub);line-height:0;border-radius:8px}
+.toc-grip:hover{background:var(--hover)}
+.toc-go{flex:1;min-width:0;text-align:left;background:none;border:0;padding:8px 6px;cursor:pointer;color:var(--text);border-radius:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:calc(14px*var(--fz))}
+.toc-go:hover{background:var(--hover)}
+#editor .section{scroll-margin-top:calc(var(--ot) + var(--sh) + 12px)}
+.diff{border:1px solid var(--border);border-radius:10px;overflow:hidden;font-size:calc(14px*var(--fz))}
+.dl{display:flex;gap:8px;padding:2px 10px;white-space:pre-wrap;word-break:break-word}
+.dl-add{background:rgba(34,197,94,.2)}
+.dl-del{background:rgba(239,68,68,.2);text-decoration:line-through}
+.dl-gap{color:var(--sub);justify-content:center;font-style:italic}
+.dl-h{font-weight:700}
+.dm{width:14px;flex:none;color:var(--sub);font-weight:700}
+.key-row{display:flex;gap:12px;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)}
+.key-row kbd{min-width:120px;font-family:inherit;font-weight:700;background:var(--input);border:1px solid var(--border);border-radius:6px;padding:2px 8px;font-size:calc(13px*var(--fz))}
 
 /* ===== モーダル / トースト ===== */
 .modal-back{position:fixed;inset:0;background:rgba(0,0,0,.5);display:grid;place-items:center;z-index:300;padding:12px}
@@ -506,7 +529,7 @@ body.bar-right .bar-resize{top:0;bottom:0;left:-6px;width:12px;cursor:ew-resize}
 <div id="placeBanner" class="place-banner" hidden></div>
 <div id="toast" class="toast"></div>
 <div id="snack" class="snack"></div>
-<button type="button" id="vfBtn" class="icon-btn vf-btn" title="ページ内を検索 (Ctrl+H)" aria-label="ページ内を検索" hidden></button>
+<div id="fabWrap" class="fab-wrap" hidden><div id="fabMenu" class="fab-menu" hidden></div><button type="button" id="fabBtn" class="icon-btn fab-btn" title="メニュー" aria-label="メニュー"></button></div>
 <div id="prevTelop" class="telop" hidden><span>この記事は保存されていません</span><button type="button" class="btn">戻る</button></div>
 <button type="button" id="toTopBtn" class="icon-btn totop" title="ページ上部へ戻る" aria-label="上部へ戻る" hidden></button>
 
@@ -582,6 +605,7 @@ const ICONS={
  home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
  tri:'<polygon points="4 7 20 7 12 19"/>',
  grip:'<path d="M4 7h16M4 12h16M4 17h16"/>',
+ dots:'<circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>',
  book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
  full:'<path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/>',
  moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
@@ -848,7 +872,7 @@ function openLightbox(src){
 let hdrSearch;
 function buildSearch(big){
   const el=document.createElement('div');el.className='search-wrap'+(big?' big':'');
-  el.innerHTML=`<div class="search-box"><button type="button" class="s-btn" title="検索">${ic('search')}</button><input class="s-input" type="text" placeholder="YUpediaを検索" autocomplete="off" enterkeyhint="search"><div class="s-dd" hidden></div></div>`;
+  el.innerHTML=`<div class="search-box"><button type="button" class="s-btn" title="検索">${ic('search')}</button><input class="s-input" type="text" placeholder="YUpediaを検索" autocomplete="off" enterkeyhint="search"><button type="button" class="s-clear" title="入力を消す" aria-label="入力を消す">${ic('x',16)}</button><div class="s-dd" hidden></div></div>`;
   const input=$('.s-input',el),dd=$('.s-dd',el);
   let sel=-1;
   const rows=()=>$$('.dd-row',dd);
@@ -897,6 +921,7 @@ function buildSearch(big){
     }else if(e.key==='Escape')dd.hidden=true;
   });
   $('.s-btn',el).addEventListener('click',()=>{dd.hidden=true;doSearch(input.value)});
+  $('.s-clear',el).addEventListener('click',()=>{input.value='';renderDD();input.focus()});
   return {el,input,dd};
 }
 document.addEventListener('click',e=>{
@@ -994,11 +1019,11 @@ function route(){
   window.scrollTo(0,0);lastY=0;showHeader();
   hdrSearch.el.hidden=false;
   if(page!=='tabs'&&page!=='split'&&!PANE)trackTab(h);
-  isArticlePage=(page==='article'||page==='guide'||page==='version');
+  isArticlePage=(page==='article'||page==='guide'||page==='version'||page==='diff');
   const tb=$('#toTopBtn');if(tb)tb.hidden=true;
-  const vfb=$('#vfBtn');if(vfb)vfb.hidden=!isArticlePage;
+  const fw=$('#fabWrap');if(fw){fw.hidden=!isArticlePage;$('#fabMenu').hidden=true}
   const tlp=$('#prevTelop');if(tlp)tlp.hidden=true;
-  const pages={home:renderHome,search:()=>renderSearch(arg),article:()=>renderArticle(arg),edit:()=>renderEdit(arg),'new':()=>renderNew(arg),tabs:renderTabs,split:renderSplit,trash:renderTrash,share:renderShare,articles:renderArticles,history:renderHistory,bookmarks:renderBookmarks,settings:renderSettings,guide:renderGuide,versions:()=>renderVersions(arg),version:()=>renderVersion(arg)};
+  const pages={home:renderHome,search:()=>renderSearch(arg),article:()=>renderArticle(arg),edit:()=>renderEdit(arg),'new':()=>renderNew(arg),tabs:renderTabs,split:renderSplit,trash:renderTrash,share:renderShare,articles:renderArticles,diff:renderDiff,history:renderHistory,bookmarks:renderBookmarks,settings:renderSettings,guide:renderGuide,versions:()=>renderVersions(arg),version:()=>renderVersion(arg)};
   (pages[page]||renderHome)();
 }
 
@@ -1026,6 +1051,7 @@ function pageName(h){
     case 'history':return '履歴';
     case 'trash':return 'ゴミ箱';
     case 'share':return '共有';
+    case 'diff':return '差分';
     case 'articles':return 'すべての記事';
     case 'split':return '分割表示';
     case 'bookmarks':return 'ブックマーク';
@@ -1186,7 +1212,7 @@ function articleHTML(a,o={}){
   let tools='';
   if(o.guide)tools=starBtn('guide');
   else if(!o.ver&&!o.preview)tools=`<a class="icon-btn" href="#/edit/${a.id}" title="編集">${ic('pencil')}</a><button class="icon-btn danger" data-act="del-article" data-id="${a.id}" title="削除">${ic('trash')}</button><a class="icon-btn" href="#/versions/${a.id}" title="編集履歴">${ic('clock')}</a>${starBtn(a.id)}`;
-  const banner=o.preview?'':o.ver?`<div class="ver-banner">${esc(fmtDT(o.ver.t))} 時点の版を表示しています。<a href="#/versions/${o.ver.id}">編集履歴へ戻る</a><a href="#/article/${o.ver.id}">最新の記事へ</a><button type="button" class="mini-btn" data-act="restore-version" data-id="${o.ver.id}" data-idx="${o.ver.idx}">復元する</button></div>`:'';
+  const banner=o.preview?'':o.ver?`<div class="ver-banner">${esc(fmtDT(o.ver.t))} 時点の版を表示しています。<a href="#/versions/${o.ver.id}">編集履歴へ戻る</a><a href="#/article/${o.ver.id}">最新の記事へ</a><a href="#/diff/${o.ver.id}/${o.ver.idx}/prev">差分を表示</a><button type="button" class="mini-btn" data-act="restore-version" data-id="${o.ver.id}" data-idx="${o.ver.idx}">復元する</button></div>`:'';
   const openBtn=toc?`<button type="button" class="mini-btn toc-open" data-act="toc-toggle">目次を開く</button>`:'';
   const closedCls=(!toc||!settings.tocOpen)?' toc-closed':'';
   return `<div class="page wide${closedCls}">${banner}<div class="art-head"><h1 class="h1">${esc(a.title)}</h1>${tools}${openBtn}</div><div class="art-wrap">${toc}<div class="art-body">${secs}</div></div></div>`;
@@ -1283,7 +1309,7 @@ function renderVersions(id){
   const vs=a.versions||[];
   const items=[];
   for(let i=vs.length-1;i>=0&&items.length<5;i--){
-    items.push(`<li class="h-item"><a class="h-word" href="#/version/${a.id}/${i}"><span>${esc(fmtDT(vs[i].t))}</span></a>${i===vs.length-1?'<span class="ver-badge">最新</span>':''}</li>`);
+    items.push(`<li class="h-item"><a class="h-word" href="#/version/${a.id}/${i}"><span>${esc(fmtDT(vs[i].t))}</span></a>${i===vs.length-1?'<span class="ver-badge">最新</span>':''}<a class="mini-btn" href="#/diff/${a.id}/${i}/prev">差分</a></li>`);
   }
   $('#view').innerHTML=`<div class="page"><div class="page-head"><h1 class="h1">編集履歴</h1><a class="btn" href="#/article/${a.id}">記事に戻る</a></div><p class="hint" style="margin:0 0 14px">「${esc(a.title)}」の直近5回分の保存です。日付を押すと、その時の版を見られます。</p>${
     items.length?`<ul class="ver-list">${items.join('')}</ul>`:'<div class="empty">編集履歴はありません<div class="hint">この記事を次に保存したときから記録されます。</div></div>'}</div>`;
@@ -1305,12 +1331,13 @@ const GUIDE={id:'guide',title:'YUpediaの使い方',tags:[],sections:[
   'YUpediaは、自分の知識やメモをまとめて記事にできる、ブラウザ上のWikiです。',
   '記事には文章・画像・音声を載せられ、記事同士をリンクでつなげられます。',
   '記事や履歴などのデータは、お使いのブラウザ内に保存され、外部には送信されません。',
-  '別の端末へ移したいときは、設定の「他の端末へ共有」を押して共有メニューから送り、受け取った側で「インポート」します。バックアップには「エクスポート」を使います。'].join('\n')},
+  '別の端末へ移したいときは、設定の「他の端末へ共有」から送ります（共有ページが開きます）。バックアップには「エクスポート」を使います。'].join('\n')},
  {heading:'記事の作成・編集方法',media:[],html:[
   '1. 画面右上の「＋」を押すと、ページ作成画面が開きます。作った記事は、記事ページや検索結果の鉛筆マークから編集できます。',
   '2. 最初に「見出し」（記事のタイトル）を入力します。',
   '3. 「目次を追加」を押すと、その場所に新しいセクションが増えます。セクションごとに、目次の名前と本文を入力します。目次が2つ以上あると、閲覧ページに目次が表示されます。',
-  '4. 上のバーは記号のボタンで、左から「元に戻す・やり直す」「URL・画像・映像・音声」「文字変更・検索と置き換え（虫眼鏡）・プレビュー」の順に並んでいます。右端の「破棄する・キャンセル・一時保存・保存する」も、このバーにあります。',
+  '4. 上のバーは記号のボタンで、左から「元に戻す・やり直す」「目次（≡）」「URL・画像・映像・音声」「文字変更・検索と置き換え（虫眼鏡）・プレビュー」の順に並んでいます。右端の「破棄する・キャンセル・一時保存・保存する」も、このバーにあります。',
+  '　・目次（≡）：目次の一覧が開きます。押すとその位置へ移動し、左のつまみをドラッグすると、目次の順序を入れ替えられます。',
   '　・URL：本文中の入れたい位置をクリックしてから押します。YUpedia内の記事、この記事の目次、外部サイトのURLのリンクを入れられます。',
   '　・文字変更：色・太字・斜体・下線・大きさを変えられます。文字を選択するとその部分に、選択しないと本文全体に反映されます（本文をクリックしていなくても使えます）。いまの状態のボタンは灰色になります。色は12色のパレットのほか、色の選択やカラーコード（例：#2563eb）でも決められます。',
   '　・プレビュー（Ctrl+P）：その時点の内容を、保存せずに閲覧モードで確認できます。画面下の「この記事は保存されていません」の横の「戻る」（もう一度Ctrl+P）で編集に戻ります。',
@@ -1322,7 +1349,7 @@ const GUIDE={id:'guide',title:'YUpediaの使い方',tags:[],sections:[
   '　・[[記事名]]：閉じ括弧の「]]」まで入力すると、その記事へ飛ぶリンクに変わります。記事が無い場合は赤い下線になり、押すとその見出しの作成画面が開きます。',
   '　・[[記事名§目次名]]：たとえば[[おにぎり§具材]]で、「おにぎり」の記事の「具材」の目次まで直接飛びます。目次が無いときは、目次名の部分だけが赤くなります。',
   '　・{{目次名}}：この記事内のその目次へ飛ぶリンクになります。',
-  '10. 記事のタイトル横の時計マークから、直近5回の編集履歴を見られます。日付を押すとその時の版が表示され、「復元する」で戻せます。'].join('\n')},
+  '10. 記事のタイトル横の時計マークから、直近5回の編集履歴を見られます。日付を押すとその時の版が表示され、「復元する」で戻せます。「差分」を押すと、前の版や最新との変更点（緑＝追加、赤＝削除）を見比べられます。'].join('\n')},
  {heading:'画像・映像・音声・説明文',media:[],html:[
   '・上のバーの「画像」「映像」「音声」を押してファイルを選ぶと、「ここに設置」が表示されます。置きたい場所のボタンを押すと配置されます。画像は、Ctrl+Vでクリップボードから貼り付けたり、他のページからドラッグして入れることもできます（いまのセクションの最後に追加されます）。',
   '・画像・映像・音声の右上の×で削除できます。ドラッグして別の場所や別のセクションへ動かすこともできます。',
@@ -1333,6 +1360,8 @@ const GUIDE={id:'guide',title:'YUpediaの使い方',tags:[],sections:[
  {heading:'閲覧・検索方法',media:[],html:[
   '上の検索バーにキーワードを入れてEnterキー（または虫眼鏡）を押すと、見出し・目次・本文から記事を探せます。',
   '入力中は候補の記事が最大8件表示され、一致した文字は太字になります。↑↓キーで選んでEnterで開けます（何も入力せずにEnterを押しても何も起こりません）。検索結果は、見出しが一致する記事が先に、続いて目次名・本文が一致する記事の順に並びます。入力欄が空のときは、最近の検索履歴が表示されます。候補の右の×は、検索バーの候補から消すだけで、履歴ページには残ります。',
+  '検索バーに文字を入れると右端に×が出て、押すと入力を全部消せます。',
+  '記事を見ているときは、画面左下の「︙」を押すと、検索・目次・編集・削除・編集履歴・ブックマークのボタンが開きます。',
   '検索結果が見つからないときは「ページを作成」から、その言葉の記事を作れます。',
   'ホーム画面の「記事数」を押すと「すべての記事」のページが開きます。見出しの右の鉛筆（編集）・ごみ箱（削除）・時計（編集履歴）・星（ブックマーク）が使え、右上の「並べ替え」で順番を変えられます。',
   '記事ページの「目次」は、右の「閉じる」を押すと閉じられ、本文が中央に寄ります。「目次を開く」で元に戻ります。一度閉じると、次に開くまですべての記事で閉じたままになります。',
@@ -1343,6 +1372,9 @@ const GUIDE={id:'guide',title:'YUpediaの使い方',tags:[],sections:[
   'ごみ箱のマークでそのタブを閉じられます。上の「すべて削除」で全部のタブを閉じられ、一番下の「新しく追加」で新しいタブが増えます。',
   '削除したときに画面下に表示される「キャンセル」を押すと、元に戻せます。この表示は、左右にドラッグするとすぐ消せます（ブックマークの追加などでも同じです）。',
   '「分割表示」を押すと、画面を縦線で2つに分けて、2つのタブのページを並べて見られます。それぞれ上のプルダウンで表示するページを選べます（スマホなどの縦長の画面では、上下に分かれます）。'].join('\n')},
+ {heading:'ショートカット・通知',media:[],html:[
+  '「?」キーを押すと、ショートカット一覧が開きます（設定の「使い方」からも開けます）。',
+  'しばらくエクスポートしていないと、画面下に「バックアップしていません」と知らせます。日数は設定の「バックアップの通知」で変えられます。'].join('\n')},
  {heading:'ゴミ箱について',media:[],html:[
   '記事を削除すると、すぐには消えず、ゴミ箱に30日間残ります。削除したときの画面下の「キャンセル」で、すぐ元に戻せます。',
   '設定の「ゴミ箱を開く」から、削除した記事を「復元」したり、「完全に削除」したりできます。30日を過ぎた記事は自動で消えます。'].join('\n')},
@@ -1359,14 +1391,14 @@ const GUIDE={id:'guide',title:'YUpediaの使い方',tags:[],sections:[
   '・文字サイズ（小・中・大・特大）、フォント（ゴシック・明朝体）、背景の色（白・黒・時間に合わせる・カスタム）、背景の画像を設定できます。「カスタム」は、パレットやカラーコードで好きな色にでき、文字色は自動で白か黒になります。',
   '・ホーム画面：ロゴ・履歴・ブックマークを表示するか選べます。ホーム画面の「履歴」「ブックマーク」の文字を押すと、それぞれのページが開きます。',
   '・タブの名前：ブラウザのタブに表示される名前（例：設定 -YUpedia）の「YUpedia」の部分を変えられます。',
-  '・ページバーの表示方法：「常に表示」「最上部」「デフォルト」「矢印」から1つ選びます。常に表示は、いつでも表示します。最上部は、ページの一番上にいるときだけ表示します。デフォルトは、上にスクロールするとフェードインし、下にスクロールするとフェードアウトします。矢印は、画面の端の▽を押すと現れ（△に変化）、△を押すと隠れます。矢印はドラッグで位置を動かせます。矢印を押すかCtrl+Mで開いたバーは、矢印を押すまで閉じません。画面の端にカーソルを近づける・端をクリックする・端から内側へなぞると開き、その場合はバーのボタンやバー以外を押すと閉じます。バーの端をドラッグすると、バーの大きさを変えられます。',
+  '・ページバーの表示方法：「常に表示」「最上部」「デフォルト」「矢印」から1つ選びます。常に表示は、いつでも表示します。最上部は、ページの一番上にいるときだけ表示します。デフォルトは、上にスクロールするとフェードインし、下にスクロールするとフェードアウトします。矢印は、画面の端の▽を押すと現れ（△に変化）、△を押すと隠れます。矢印はドラッグで位置を動かせます。矢印を押して開いたバーは、矢印を押すまで閉じません。Ctrl+Mで開いたバーは、バー以外を押すと閉じます。画面の端をクリックする・端から内側へなぞっても開き、その場合はバーのボタンやバー以外を押すと閉じます（検索バーの×では閉じません）。バーの大きさは、同じ項目の「ページバーの大きさ」で変えられます。',
   '・ページバーの表示位置：上・下・右・左から選べます。',
-  '・ページバーの並び順：ページバーの絵の上で、ボタンをドラッグして並べ替えられます。ボタンを押すと右上に×が出て、押すと消せます。下の「追加できるボタン」を押すか、ドラッグして好きな位置に落とすと追加できます。「空白」（ボタンの間隔）や、全画面表示・ゴミ箱・すべての記事のボタンもあり、同じボタンを何個でも置けます（設定ボタンは最低1つ必要です）。ページバーのボタンを「追加できるボタン」の欄にドラッグしても消せます。検索バーは、どのページでも中央の同じ位置に表示されます。',
+  '・ページバーの並び順：ページバーの絵の上で、ボタンをドラッグして並べ替えられます。ボタンを押すと右上に×が出て、押すと消せます。下の「追加できるボタン」を押すか、ドラッグして好きな位置に落とすと追加できます。「空白」（ボタンの間隔）や、全画面表示・ゴミ箱・すべての記事のボタンもあります。バーにないボタンは、「追加できるボタン」の︙を押すと表示され、押すかドラッグして追加できます。バーのボタンをその欄にドラッグしても消せます（設定ボタンは最低1つ必要です）。検索バーは、どのページでも中央の同じ位置に表示されます。',
   '・ロゴ・アイコン画像：ロゴやファビコンが表示されないときは、ここで画像を選ぶとブラウザに保存されます。'].join('\n')},
  {heading:'データのエクスポート・インポート・削除',media:[],html:[
   '・エクスポート：「すべてエクスポート」は、記事・ブックマーク・履歴・設定・画像を1つのファイルに保存します。「記事をエクスポート」は、一覧から選んだ記事だけを保存します。ファイルは自動で圧縮され、「編集履歴を含めない」を選ぶとさらに小さくなります。ときどきバックアップしておくと安心です。',
-  '・他の端末へ共有：共有ページが開き、共有メニュー（AirDrop・LINE・メールなど）・データのコピー・直接送受信（2台でコードを交換するだけ。サーバー不要）から送り方を選べます。送るのは「すべて」か「選んだ記事」です。',
-  '・インポート：「すべて」のファイルを選ぶと、確認のあと現在のデータがすべて置き換わります。「記事」のファイルを選ぶと、その記事だけが追加されます（同じ記事は上書き、同じ見出しの別の記事がある場合は「（2）」を付けて追加されます）。コピーしたデータは「貼り付けてインポート」で読み込めます。',
+  '・他の端末へ共有：共有ページが開き、データのコピー・直接送受信（2台でコードを交換するだけ）から送り方を選べます。送るのは「すべて」か「選んだ記事」です。',
+  '・インポート：「すべて」のファイルを選ぶと、確認のあと現在のデータがすべて置き換わります。「記事」のファイルを選ぶと、その記事だけが追加されます（同じ記事は上書き、同じ見出しの別の記事がある場合は「（2）」を付けて追加されます）。コピーしたデータは、共有ページの「貼り付けて受け取る」で読み込めます。',
   '・全データ削除：記事・ブックマーク・履歴・設定・一時保存・保存した画像をすべて消します。元に戻せないので、必要ならエクスポートしてから実行してください。',
   '・注意：ブラウザの閲覧データ（サイトデータ）を削除すると、記事も消えてしまいます。'].join('\n')}
 ]};
@@ -1430,7 +1462,7 @@ function renderArticles(){
 
 /* ---------- 設定（順番：文字サイズ／フォント／背景の色／ホーム画面／使い方／データ／ロゴ・アイコン／データ削除） ---------- */
 let setReorder=false;
-const SET_DEFAULT=['fontsize','fontfamily','bg','home','sitename','barmode','barorder','guide','data','assets','trash','wipe'];
+const SET_DEFAULT=['fontsize','fontfamily','bg','home','sitename','barmode','barorder','guide','data','backup','assets','trash','wipe'];
 function setOrderList(){
   const o=Array.isArray(settings.setOrder)?settings.setOrder.filter((x,i,a)=>SET_DEFAULT.includes(x)&&a.indexOf(x)===i):[];
   SET_DEFAULT.forEach(x=>{if(!o.includes(x))o.push(x)});
@@ -1442,6 +1474,7 @@ function renderSettings(){
   const bgOn=!!(settings.bgImage&&assets.bg);
   const bm=['always','attop','default','arrow'].includes(settings.barMode)?settings.barMode:'default',bp=currentPos();
   const cbg=normHex(settings.customBg)||'#fef3c7';
+  const bd=settings.backupDays===undefined?14:+settings.backupDays;
   const card=(id,inner,cls='')=>`<div class="card pad set-card${cls}" data-card="${id}">${inner}<span class="drag-h" title="ドラッグして移動">${ic('grip',20)}</span></div>`;
   const cards={
   fontsize:card('fontsize',`<div class="set-t">文字サイズ</div>
@@ -1464,7 +1497,7 @@ function renderSettings(){
       <button class="theme-opt ${!bgOn&&th==='custom'?'on':''}" data-act="bg-custom"><span class="sw" style="background:${cbg}"></span>カスタム</button>
       <button class="theme-opt ${bgOn?'on':''}" data-act="bg-import"><span class="sw img"></span>インポートする</button>
     </div>
-    <p class="hint">「時間に合わせる」は、18:00〜翌朝6:00が黒、それ以外が白になります。「カスタム」は、パレットやカラーコードで好きな色を決められます（文字の色は背景に合わせて自動で白か黒になります）。「インポートする」は、選んだ画像ファイルを背景にします。白・黒・時間に合わせる・カスタムのどれかを選ぶと、画像は解除されます。変更は自動的にこのブラウザへ保存されます。</p>`),
+    <p class="hint">「時間に合わせる」は18時〜翌6時が黒。「カスタム」はパレットかカラーコードで色を決められます。</p>`),
   home:card('home',`<div class="set-t">ホーム画面</div>
     <label class="chk-row"><input type="checkbox" class="chk blue" data-act="home-logo" ${settings.homeLogo?'checked':''}>ロゴ（中央に表示）</label>
     <label class="chk-row"><input type="checkbox" class="chk blue" data-act="home-hist" ${settings.homeHist?'checked':''}>履歴（ページの左側に表示）</label>
@@ -1472,7 +1505,7 @@ function renderSettings(){
     <p class="hint">ホーム画面に表示する項目を選びます。</p>`),
   sitename:card('sitename',`<div class="set-t">タブの名前</div>
     <div class="row"><input id="siteNameInput" class="m-input" maxlength="40" autocomplete="off" placeholder="YUpedia" value="${esc(settings.siteName||'')}" style="flex:1;min-width:0"><button type="button" class="btn" data-act="sitename-save">保存</button></div>
-    <p class="hint">ブラウザのタブに表示される名前（例：設定 -YUpedia）の「YUpedia」の部分を変えられます。空にすると「YUpedia」に戻ります。</p>`),
+    <p class="hint">ブラウザのタブに出る名前の「YUpedia」の部分を変えます。</p>`),
   barmode:card('barmode',`<div class="set-t">ページバーの表示方法</div>
     <div class="theme-opts">
       <button class="theme-opt ${bm==='always'?'on':''}" data-act="barmode" data-v="always">常に表示</button>
@@ -1482,24 +1515,29 @@ function renderSettings(){
       <button class="theme-opt ${bm==='default'?'on':''}" data-act="barmode" data-v="default">デフォルト</button>
       <button class="theme-opt ${bm==='arrow'?'on':''}" data-act="barmode" data-v="arrow">矢印</button>
     </div>
-    <p class="hint">常に表示：いつでもページバーを表示します。最上部：ページの一番上にいるときだけ表示します。デフォルト：上にスクロールするとフェードインし、下にスクロールするとフェードアウトします。矢印：画面の端の矢印（▽△）を押して出し入れします。矢印はドラッグで位置を動かせます。矢印を押すかCtrl+Mで開いたバーは、矢印を押すまで閉じません。画面の端にカーソルを近づける・端をクリックする・端から内側へなぞると開き、その場合はバーのボタンやバー以外を押すと閉じます。バーの端をドラッグすると、バーの大きさを変えられます。4つのうち1つだけ選べます。</p>
+    <p class="hint">常に表示／最上部（ページの一番上のときだけ）／デフォルト（上スクロールで出て、下スクロールで消える）／矢印（▽△やCtrl+Mで出し入れ）。1つだけ選べます。</p>
     <div class="set-t" style="margin-top:18px">ページバーを表示する位置</div>
     <div class="theme-opts">
       <button class="theme-opt ${bp==='top'?'on':''}" data-act="barpos" data-v="top">上に表示</button>
       <button class="theme-opt ${bp==='bottom'?'on':''}" data-act="barpos" data-v="bottom">下に表示</button>
       <button class="theme-opt ${bp==='right'?'on':''}" data-act="barpos" data-v="right">右に表示</button>
       <button class="theme-opt ${bp==='left'?'on':''}" data-act="barpos" data-v="left">左に表示</button>
-    </div>`),
+    </div>
+    <div class="set-t" style="margin-top:18px">ページバーの大きさ</div>
+    <div class="row"><input type="range" id="barScaleRange" min="70" max="180" step="5" value="${Math.round((+settings.barScale||1)*100)}" style="flex:1;min-width:120px"><span id="barScaleVal" style="min-width:48px;text-align:right">${Math.round((+settings.barScale||1)*100)}%</span><button type="button" class="btn" data-act="bar-scale-reset">標準</button></div>`),
   barorder:card('barorder',`<div class="set-t">ページバーの並び順</div>
     ${mockHTML()}
-    <p class="hint">ボタンをドラッグすると位置を変えられます。ボタンを押すと右上に×が出て、押すとそのボタンを消せます。「空白」でボタンの間隔を空けられ、全画面表示などのボタンも追加できます（設定ボタンは最低1つ必要です）。変更はすぐページバーに反映されます。</p>
-    <div class="btn-row" style="margin-top:10px"><button class="btn" data-act="bar-reset">初期の並びに戻す</button><button class="btn" data-act="bar-scale-reset">バーの大きさを戻す</button></div>`),
+    <p class="hint">ドラッグで並べ替え。ボタンを押すと出る×で消せます。︙でバーにないボタンを追加できます。</p>
+    <div class="btn-row" style="margin-top:10px"><button class="btn" data-act="bar-reset">初期の並びに戻す</button></div>`),
   guide:card('guide',`<div class="set-t">使い方</div>
-    <a class="btn" href="#/guide">使い方のページを開く</a>`),
+    <div class="btn-row"><a class="btn" href="#/guide">使い方のページを開く</a><button type="button" class="btn" data-act="shortcuts">ショートカット一覧</button></div>`),
+  backup:card('backup',`<div class="set-t">バックアップの通知</div>
+    <div class="theme-opts">${[0,7,14,30].map(d=>`<button class="theme-opt ${bd===d?'on':''}" data-act="backup-days" data-v="${d}">${d?d+'日':'しない'}</button>`).join('')}</div>
+    <p class="hint">最後のエクスポートからこの日数がたつと知らせます。${settings.lastBackup?'（最後：'+fmtDT(settings.lastBackup)+'）':''}</p>`),
   data:card('data',`<div class="set-t">データのインポート・エクスポート</div>
-    <div class="btn-row"><button class="btn primary" data-act="share">他の端末へ共有</button><button class="btn" data-act="export">エクスポート</button><button class="btn" data-act="import">インポート</button><button class="btn" data-act="import-paste">貼り付けてインポート</button></div>
-    <p class="hint">「他の端末へ共有」を押すと共有ページが開き、共有メニュー・コピー・直接送受信（サーバー不要）から送り方を選べます。</p>
-    <p class="hint">「エクスポート」は、「すべてエクスポート」（記事・ブックマーク・履歴・設定・画像）か、選んだ記事だけの「記事をエクスポート」を選べます。ファイルは圧縮され、「編集履歴を含めない」にするとさらに小さくなります。インポートでは、「すべて」のファイルは現在のデータをすべて置き換え、「記事」のファイルはその記事だけを追加します。</p>`),
+    <div class="btn-row"><button class="btn primary" data-act="share">他の端末へ共有</button><button class="btn" data-act="export">エクスポート</button><button class="btn" data-act="import">インポート</button></div>
+    <p class="hint">「他の端末へ共有」で共有ページを開きます。</p>
+    <p class="hint">エクスポートは、すべて・選んだ記事のどちらも可能です。ファイルは圧縮されます。</p>`),
   assets:card('assets',`<div class="set-t">ロゴ・アイコン画像</div>
     <div class="btn-row">
       <button class="btn" data-act="asset-pick" data-k="logo">ロゴを選ぶ</button>
@@ -1509,13 +1547,13 @@ function renderSettings(){
     </div>`),
   trash:card('trash',`<div class="set-t">ゴミ箱</div>
     <a class="btn" href="#/trash">ゴミ箱を開く（${state.trash.length}件）</a>
-    <p class="hint">削除した記事は${TRASH_DAYS}日間ゴミ箱に残り、復元できます。</p>`),
+    <p class="hint">削除した記事は${TRASH_DAYS}日間残ります。</p>`),
   wipe:card('wipe',`<div class="set-t">データの削除</div>
     <p>記事・ブックマーク・履歴・設定・一時保存・保存した画像をすべて削除します。この操作は元に戻せません。</p>
     <button class="btn danger" data-act="wipe">全データを削除</button>`,' danger-zone')
   };
   $('#view').innerHTML=`<div class="page${setReorder?' reorder':''}"><div class="set-head"><h1 class="h1">設定</h1><button type="button" class="btn${setReorder?' primary':''}" data-act="set-reorder">${setReorder?'完了':'並び替え'}</button>${setReorder?'<button type="button" class="btn" data-act="set-reset">デフォルトに戻す</button>':''}</div>${setOrderList().map(id=>cards[id]).join('')}</div>`;
-  initMock();prepareShare();
+  initMock();
   if(setReorder)initSortable($('#view .page'),{item:'.set-card',handle:'.drag-h',done:l=>{settings.setOrder=l;LS.set('mywiki.settings',settings)}});
 }
 /* 縦に並んだ項目を、つまみのドラッグで並べ替える */
@@ -1614,15 +1652,7 @@ async function readImportText(file){
   }
   return new TextDecoder().decode(buf);
 }
-/* 共有：端末の「共有メニュー」からそのまま送る（共有できないときはダウンロードしない）
-   共有画面を開くにはタップ直後に呼ぶ必要があるため、「すべて共有」のファイルは設定画面を開いたときに先に作っておく */
-let shareCands=null,xferLight=true;
-function buildShareCands(ids,light){
-  const {blob,name}=buildExport(ids,light);
-  const base=name.replace(/\.json$/,'');
-  return [new File([blob],name,{type:'application/json'}),new File([blob],name,{type:'text/plain'}),new File([blob],base+'.txt',{type:'text/plain'})];
-}
-function prepareShare(){shareCands=null;setTimeout(()=>{try{if($('[data-act="share"]'))shareCands=buildShareCands(null,true)}catch{}},50)}
+let xferLight=true;
 async function copyText(t){
   try{await navigator.clipboard.writeText(t);return true}catch{}
   try{const ta=document.createElement('textarea');ta.value=t;ta.style.cssText='position:fixed;opacity:0;top:0;left:0';document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');ta.remove();return ok}catch{return false}
@@ -1630,27 +1660,6 @@ async function copyText(t){
 function copyData(ids,light){
   let json;try{json=buildExport(ids,light).json}catch{toast('データを作れませんでした');return}
   copyText(json).then(ok=>toast(ok?'データをコピーしました（'+Math.round(json.length/1024)+'KB）。貼り付けて送れます':'コピーできませんでした'));
-}
-/* 共有画面が開けなかったとき：理由を表示し、代わりにデータをコピーして送れるようにする（ダウンロードはしない） */
-function openShareFail(reason,ids,light){
-  const box=document.createElement('div');box.className='modal-box';
-  box.innerHTML=`<button type="button" class="modal-x icon-btn" aria-label="閉じる">${ic('x')}</button><h3>共有画面を開けませんでした</h3><p>${esc(reason)}</p><p>代わりに、データをコピーして、メールやメモなどに貼り付けて送れます。受け取った端末では、設定の「貼り付けてインポート」に貼り付けてください。</p><div class="row end"><button type="button" class="btn primary" data-r="copy">データをコピーする</button></div>`;
-  const close=openModal(box);
-  box.onclick=e=>{if(e.target.closest('[data-r="copy"]')){close();copyData(ids,light)}};
-}
-function shareData(ids,light){
-  if(light===undefined)light=true;
-  let cands;
-  try{cands=(ids||!light)?buildShareCands(ids,light):(shareCands||buildShareCands(null,true))}catch{openShareFail('共有用のデータを作れませんでした。',ids,light);return}
-  if(!navigator.share){openShareFail('このブラウザには共有機能がありません（HTTPSのページで開いたChrome・Safariなどで使えます）。',ids,light);return}
-  let f=null;
-  if(navigator.canShare)f=cands.find(x=>{try{return navigator.canShare({files:[x]})}catch{return false}})||null;
-  if(!f)f=cands[2];
-  try{
-    navigator.share({files:[f],title:'YUpediaのデータ'})
-      .then(()=>toast('共有しました'))
-      .catch(err=>{if(err&&err.name==='AbortError')return;openShareFail('共有画面を開けませんでした（'+((err&&err.name)||'エラー')+'）。',ids,light)});
-  }catch(err){openShareFail('共有画面を開けませんでした（'+((err&&err.name)||'エラー')+'）。',ids,light)}
 }
 async function exportData(ids,light){
   const {json,name,count}=buildExport(ids,light);
@@ -1660,14 +1669,14 @@ async function exportData(ids,light){
   const a=document.createElement('a');a.href=url;a.download=fname;
   document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),3000);
+  settings.lastBackup=Date.now();LS.set('mywiki.settings',settings);
   toast('エクスポートしました（記事'+count+'件・'+Math.round(blob.size/1024)+'KB）');
 }
 /* 送り方の選択（共有・コピー・エクスポート・直接送信で共通） */
-const XFER_WORD={share:'共有',export:'エクスポート',copy:'コピー',p2p:'直接送信'};
+const XFER_WORD={export:'エクスポート',copy:'コピー',p2p:'直接送信'};
 function doXfer(kind,ids){
   const light=xferLight;
-  if(kind==='share')shareData(ids,light);
-  else if(kind==='copy')copyData(ids,light);
+  if(kind==='copy')copyData(ids,light);
   else if(kind==='p2p')openP2PSend(ids,light);
   else exportData(ids,light);
 }
@@ -1708,10 +1717,9 @@ function showPicker(box,kind,close,word){
 function renderShare(){
   setTitle('共有 -YUpedia');
   $('#view').innerHTML=`<div class="page"><div class="page-head"><h1 class="h1">共有</h1></div>
-  <p class="hint" style="margin:0 0 14px">記事を別の端末へ移す方法を選べます。受け取る側は、設定の「インポート」「貼り付けてインポート」、または下の「受け取る側」を使います。</p>
-  <div class="card pad set-card"><div class="set-t">① 共有メニューで送る</div><p class="hint" style="margin:0 0 12px">AirDrop・LINE・メール・クラウドなどへ、ファイルとして送ります。</p><div class="btn-row"><button type="button" class="btn primary" data-act="xfer" data-k="share">共有メニューを開く</button></div></div>
-  <div class="card pad set-card"><div class="set-t">② コピーして送る</div><p class="hint" style="margin:0 0 12px">データを文字としてコピーします。メールやメモなどに貼り付けて送れます（共有メニューが開けないときに便利です）。</p><div class="btn-row"><button type="button" class="btn" data-act="xfer" data-k="copy">データをコピー</button><button type="button" class="btn" data-act="import-paste">貼り付けて受け取る</button></div></div>
-  <div class="card pad set-card"><div class="set-t">③ 直接送受信（サーバー不要）</div><p class="hint" style="margin:0 0 12px">2台の端末を同時に開いて、短いコードを交換するだけで、データを直接送れます。ファイルやメニューは使いません。</p><div class="btn-row"><button type="button" class="btn" data-act="xfer" data-k="p2p">送る側</button><button type="button" class="btn" data-act="p2p-recv">受け取る側</button></div></div></div>`;
+  <p class="hint" style="margin:0 0 14px">記事を別の端末へ移す方法を選びます。</p>
+  <div class="card pad set-card"><div class="set-t">① コピーして送る</div><p class="hint" style="margin:0 0 12px">データを文字としてコピーし、メールやメモなどに貼り付けて送ります。</p><div class="btn-row"><button type="button" class="btn primary" data-act="xfer" data-k="copy">データをコピー</button><button type="button" class="btn" data-act="import-paste">貼り付けて受け取る</button></div></div>
+  <div class="card pad set-card"><div class="set-t">② 直接送受信</div><p class="hint" style="margin:0 0 12px">2台を同時に開き、短いコードを交換するだけで、データを直接送れます。</p><div class="btn-row"><button type="button" class="btn primary" data-act="xfer" data-k="p2p">送る側</button><button type="button" class="btn" data-act="p2p-recv">受け取る側</button></div></div></div>`;
 }
 const RTC_CFG={iceServers:[{urls:'stun:stun.l.google.com:19302'}]};
 const encCode=d=>btoa(unescape(encodeURIComponent(JSON.stringify({t:d.type,s:d.sdp}))));
@@ -2038,6 +2046,7 @@ function commit(){
     ed.idx=ed.stack.length-1;
   }
   updateUndoBtns();
+  const tp=$('#tocPanel');if(tp&&!$('.toc-item.dragging'))fillTocList(tp,!!(ed&&!ed.preview));
 }
 const commitSoon=()=>{if(!ed)return;clearTimeout(ed.timer);ed.timer=setTimeout(commit,600)};
 function loadState(){ed.a=clone(ed.stack[ed.idx].a);ed.placing=null;renderEditor()}
@@ -2516,17 +2525,163 @@ function startPreview(){
   document.body.classList.remove('editing');$('#subbar').hidden=true;
   $('#view').innerHTML=articleHTML(pseudo,{preview:true});
   resolveWikiLinks($('#view'),pseudo);
-  $('#prevTelop').hidden=false;$('#vfBtn').hidden=false;
+  $('#prevTelop').hidden=false;$('#fabWrap').hidden=false;$('#fabMenu').hidden=true;
   window.scrollTo(0,0);setTitle(pseudo.title+'（プレビュー） -YUpedia');
 }
 function endPreview(){
   if(!ed||!ed.preview)return;
-  ed.preview=false;$('#prevTelop').hidden=true;$('#vfBtn').hidden=true;closePanels();
+  ed.preview=false;$('#prevTelop').hidden=true;$('#fabWrap').hidden=true;$('#fabMenu').hidden=true;closePanels();
   document.body.classList.add('editing');$('#subbar').hidden=false;
   renderEditor();window.scrollTo(0,ed.prevY||0);
   setTitle((ed.isNew?'ページ作成':(ed.a.title+'を編集'))+' -YUpedia');
 }
 
+/* ---- 閲覧画面の左下メニュー（︙）：検索・目次・編集・削除・編集履歴・ブックマーク ---- */
+function fabContext(){
+  if(ed&&ed.preview)return {kind:'preview'};
+  const seg=String(location.hash||'#/').replace(/^#\/?/,'').split('/');
+  if(seg[0]==='article')return {kind:'article',id:decodeURIComponent(seg[1]||'')};
+  if(seg[0]==='guide')return {kind:'guide',id:'guide'};
+  return {kind:'other'};
+}
+function toggleFab(){
+  const m=$('#fabMenu');
+  if(!m.hidden){m.hidden=true;return}
+  const c=fabContext();
+  const btn=(k,icon,t)=>`<button type="button" class="icon-btn fab-it" data-fab="${k}" title="${t}" aria-label="${t}">${icon}</button>`;
+  const star=id=>{const on=isBM(id);return `<button type="button" class="icon-btn fab-it star${on?' on':''}" data-act="bm-toggle" data-id="${id}" data-s="22" title="ブックマーク" aria-label="ブックマーク">${ic('star',22,on)}</button>`};
+  let h=btn('find',ic('search',22),'ページ内を検索 (Ctrl+H)')+btn('toc',ic('grip',22),'目次');
+  if(c.kind==='article'){
+    const a=getArticle(c.id);
+    if(a)h+=`<a class="icon-btn fab-it" href="#/edit/${a.id}" title="編集" aria-label="編集">${ic('pencil',22)}</a>`+btn('del',ic('trash',22),'削除')+`<a class="icon-btn fab-it" href="#/versions/${a.id}" title="編集履歴" aria-label="編集履歴">${ic('clock',22)}</a>`+star(a.id);
+  }else if(c.kind==='guide')h+=star('guide');
+  m.innerHTML=h;m.hidden=false;
+}
+/* ---- 簡易の目次パネル（編集中はドラッグで順序を変えられる） ---- */
+function tocItems(){
+  if(ed&&!ed.preview){syncFromDOM();return ed.a.sections.map((s,i)=>({i,label:(s.heading||'').trim()||'（目次なし '+(i+1)+'）'}))}
+  return $$('#view .v-sec').map((el,i)=>{const h=$('h2',el);return h?{i,label:h.textContent.trim()}:null}).filter(Boolean);
+}
+function fillTocList(p,edit){
+  const items=tocItems();
+  const nl=document.createElement('div');nl.id='tocList';
+  nl.innerHTML=items.length?items.map(it=>`<div class="toc-item" data-card="${it.i}">${edit?`<span class="toc-grip" title="ドラッグして移動">${ic('grip',18)}</span>`:''}<button type="button" class="toc-go" data-i="${it.i}" title="${esc(it.label)}">${esc(it.label)}</button></div>`).join(''):'<div class="hint" style="margin:0">目次がありません</div>';
+  const old=$('#tocList',p);if(old)old.replaceWith(nl);else p.appendChild(nl);
+  if(edit&&items.length)initSortable(nl,{item:'.toc-item',handle:'.toc-grip',done:order=>reorderSections(order)});
+}
+function reorderSections(order){
+  if(!ed||ed.preview)return;
+  if(order.every((v,i)=>+v===i))return;
+  commit();
+  const secs=ed.a.sections,neo=order.map(i=>secs[+i]).filter(Boolean);
+  if(neo.length!==secs.length)return;
+  ed.a.sections=neo;ed.placing=null;
+  renderEditor();commit();
+  const p=$('#tocPanel');if(p)fillTocList(p,true);
+}
+function openTocPanel(){
+  const old=$('#tocPanel');if(old){closePanel(old);return}
+  const edit=!!(ed&&!ed.preview);
+  const p=document.createElement('div');p.id='tocPanel';p.className='float-panel'+(edit?'':' vf');
+  p.innerHTML=`<button type="button" class="modal-x icon-btn" data-k="close" aria-label="閉じる">${ic('x')}</button><div class="set-t" style="margin:0 0 6px">目次</div>${edit?'<div class="hint" style="margin:0 0 8px">左のつまみをドラッグすると、順序を変えられます。</div>':''}`;
+  document.body.appendChild(p);
+  fillTocList(p,edit);
+  p.addEventListener('click',e=>{
+    if(e.target.closest('[data-k="close"]')){closePanel(p);return}
+    const g=e.target.closest('.toc-go');if(!g)return;
+    const i=+g.dataset.i;
+    const el=edit?$$('#editor .section')[i]:$$('#view .v-sec')[i];
+    if(el&&el.scrollIntoView)el.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+}
+/* ---- ショートカット一覧（?キー） ---- */
+function openShortcuts(){
+  const rows=[['Ctrl+S','保存する（編集中）'],['Ctrl+Shift+S','一時保存（編集中）'],['Ctrl+Z / Ctrl+Y','元に戻す／やり直す（編集中）'],['Ctrl+H','検索と置き換え（編集中）／ページ内検索（閲覧中）'],['Ctrl+P','プレビューの表示・終了（編集中）'],['Ctrl+V','クリップボードの画像を追加（編集中）'],['Ctrl+M','ページバーの開閉（矢印のとき）'],['↑ ↓ Enter','検索候補の選択と決定（検索バー）'],['?','この一覧']];
+  const box=document.createElement('div');box.className='modal-box wide';
+  box.innerHTML=`<button type="button" class="modal-x icon-btn" aria-label="閉じる">${ic('x')}</button><h3>ショートカット一覧</h3><div style="overflow:auto">${rows.map(([k,t])=>`<div class="key-row"><kbd>${esc(k)}</kbd><span>${esc(t)}</span></div>`).join('')}</div><p class="hint" style="margin:12px 0 0">Macでは、Ctrlの代わりに⌘も使えます。</p>`;
+  openModal(box);
+}
+document.addEventListener('keydown',e=>{
+  if(e.key!=='?'||e.ctrlKey||e.metaKey||e.altKey)return;
+  const t=e.target;if(t&&t.closest&&t.closest('input,textarea,select,[contenteditable="true"]'))return;
+  if(modal)return;
+  e.preventDefault();openShortcuts();
+});
+/* ---- バックアップの通知（最後のエクスポートから一定日数がたったとき） ---- */
+function checkBackup(){
+  if(PANE)return;
+  const days=settings.backupDays===undefined?14:+settings.backupDays;
+  if(!days||!state.articles.length)return;
+  const now=Date.now();
+  if(!settings.lastBackup){settings.lastBackup=now;LS.set('mywiki.settings',settings);return}
+  const today=dateKey(now);
+  if(settings.backupAsked===today)return;
+  const n=Math.floor((now-settings.lastBackup)/86400000);
+  if(n>=days){
+    settings.backupAsked=today;LS.set('mywiki.settings',settings);
+    snack(n+'日間バックアップしていません','エクスポート',()=>openTransfer('export'));
+  }
+}
+/* ---- 編集履歴の差分（緑＝追加、赤＝削除） ---- */
+const plainText=h=>{
+  const t=String(h||'').replace(/<br\s*\/?>/gi,'\n').replace(/<\/(div|p|li)>/gi,'\n');
+  return new DOMParser().parseFromString('<body>'+t,'text/html').body.textContent||'';
+};
+function docLines(a){
+  if(!a.title&&!(a.sections||[]).length)return [];
+  const out=['# '+a.title];
+  (a.sections||[]).forEach(s=>{
+    if(s.heading)out.push('## '+s.heading);
+    plainText(s.html).replace(/\n+$/,'').split('\n').forEach(l=>out.push(l));
+    if(s.media&&s.media.length)out.push('［画像・音声・映像 '+s.media.length+'件］');
+  });
+  return out;
+}
+function diffLines(a,b){
+  const n=a.length,m=b.length;
+  const dp=Array.from({length:n+1},()=>new Uint32Array(m+1));
+  for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)dp[i][j]=a[i]===b[j]?dp[i+1][j+1]+1:Math.max(dp[i+1][j],dp[i][j+1]);
+  const out=[];let i=0,j=0;
+  while(i<n&&j<m){
+    if(a[i]===b[j]){out.push({t:'=',s:a[i]});i++;j++}
+    else if(dp[i+1][j]>=dp[i][j+1]){out.push({t:'-',s:a[i]});i++}
+    else{out.push({t:'+',s:b[j]});j++}
+  }
+  while(i<n)out.push({t:'-',s:a[i++]});
+  while(j<m)out.push({t:'+',s:b[j++]});
+  return out;
+}
+function renderDiff(arg){
+  const [id,nStr,base]=String(arg).split('/'),idx=+nStr;
+  const a=getArticle(id),v=a&&a.versions&&a.versions[idx];
+  if(!a||!v)return renderNotFound();
+  setTitle(a.title+'の差分 -YUpedia');
+  let oldDoc,newDoc,desc;
+  if(base==='cur'){oldDoc=v;newDoc=a;desc=fmtDT(v.t)+' の版 → 最新の記事'}
+  else{const pv=a.versions[idx-1];oldDoc=pv||{title:'',sections:[]};newDoc=v;desc=(pv?fmtDT(pv.t):'（最初）')+' → '+fmtDT(v.t)}
+  const A=docLines(oldDoc),B=docLines(newDoc);
+  let body;
+  if(A.length*B.length>4e6)body='<div class="empty">記事が大きすぎるため、差分を表示できません</div>';
+  else{
+    const d=diffLines(A,B),has=d.some(x=>x.t!=='=');
+    if(!has)body='<div class="empty">変更はありません</div>';
+    else{
+      const keep=new Array(d.length).fill(false);
+      d.forEach((x,i)=>{if(x.t!=='=')for(let k=Math.max(0,i-2);k<=Math.min(d.length-1,i+2);k++)keep[k]=true});
+      let html='',gap=0;
+      const flush=()=>{if(gap){html+=`<div class="dl dl-gap">… 変更のない行 ${gap}行 …</div>`;gap=0}};
+      d.forEach((x,i)=>{
+        if(!keep[i]){gap++;return}
+        flush();
+        const cls=x.t==='+'?'dl-add':x.t==='-'?'dl-del':'';
+        html+=`<div class="dl ${cls}${/^#{1,2} /.test(x.s)?' dl-h':''}"><span class="dm">${x.t==='='?'':x.t}</span><span>${esc(x.s)||'&nbsp;'}</span></div>`;
+      });
+      flush();body=`<div class="diff">${html}</div>`;
+    }
+  }
+  const mode=base==='cur'?'cur':'prev';
+  $('#view').innerHTML=`<div class="page"><div class="page-head"><h1 class="h1">差分</h1><a class="btn" href="#/versions/${a.id}">編集履歴へ戻る</a></div><p class="hint" style="margin:0 0 10px">「${esc(a.title)}」：${esc(desc)}（緑＝追加、赤＝削除）</p><div class="sort-row"><a class="btn sort-opt${mode==='prev'?' on':''}" href="#/diff/${a.id}/${idx}/prev">前の版との差分</a><a class="btn sort-opt${mode==='cur'?' on':''}" href="#/diff/${a.id}/${idx}/cur">最新との差分</a><a class="btn" href="#/version/${a.id}/${idx}">この版を表示</a></div>${body}</div>`;
+}
 /* ---- 閲覧モードの検索（Ctrl+H） ---- */
 const vf={ms:[],i:-1,q:''};
 function vfCollect(q){
@@ -2572,7 +2727,7 @@ document.addEventListener('keydown',e=>{
   if(!(e.ctrlKey||e.metaKey)||e.altKey||e.shiftKey)return;
   const k=e.key.toLowerCase();
   if(k==='p'&&ed){e.preventDefault();if(ed.preview)endPreview();else startPreview();return}   // Ctrl+P：プレビュー
-  if(k==='m'&&settings.barMode==='arrow'&&!PANE){e.preventDefault();setArrow(!arrowOpen,true)}   // Ctrl+M：ページバーを開閉
+  if(k==='m'&&settings.barMode==='arrow'&&!PANE){e.preventDefault();setArrow(!arrowOpen,'key')}   // Ctrl+M：ページバーを開閉
 });
 /* ---- 画像の追加（Ctrl+Vの貼り付け／他のページからのドラッグ） ---- */
 function secIndexFor(target){
@@ -2715,9 +2870,12 @@ view.addEventListener('click',e=>{
     case 'asset-reset':resetAsset(el.dataset.k);break;
     case 'share':navigate('#/share');break;
     case 'xfer':openTransfer(el.dataset.k);break;
+    case 'bar-menu-toggle':addMenuOpen=!addMenuOpen;rerenderSettings();break;
+    case 'shortcuts':openShortcuts();break;
+    case 'backup-days':settings.backupDays=+el.dataset.v;LS.set('mywiki.settings',settings);rerenderSettings();toast('設定を保存しました');break;
     case 'p2p-recv':openP2PReceive();break;
     case 'set-reset':settings.setOrder=null;LS.set('mywiki.settings',settings);rerenderSettings();toast('設定の並び順を初期に戻しました');break;
-    case 'bar-scale-reset':delete settings.barScale;LS.set('mywiki.settings',settings);document.documentElement.style.setProperty('--bsc','1');measureBar();toast('バーの大きさを初期に戻しました');break;
+    case 'bar-scale-reset':delete settings.barScale;LS.set('mywiki.settings',settings);document.documentElement.style.setProperty('--bsc','1');measureBar();rerenderSettings();break;
     case 'import-paste':openPasteImport();break;
     case 'set-reorder':setReorder=!setReorder;rerenderSettings();break;
     case 'sitename-save':saveSiteName();break;
@@ -2853,6 +3011,14 @@ view.addEventListener('drop',e=>{
   moveMedia(dm.si,dm.mid,targetSi,targetMid,before);
 });
 view.addEventListener('input',e=>{if(ed&&e.target.closest('.rich,.cap-rich,.sec-heading,#titleInput'))commitSoon()});
+view.addEventListener('input',e=>{
+  if(e.target.id!=='barScaleRange')return;
+  const v=(+e.target.value)/100;settings.barScale=v;
+  document.documentElement.style.setProperty('--bsc',String(v));
+  const l=$('#barScaleVal');if(l)l.textContent=Math.round(v*100)+'%';
+  measureBar();
+});
+view.addEventListener('change',e=>{if(e.target.id==='barScaleRange')LS.set('mywiki.settings',settings)});
 document.addEventListener('paste',e=>{
   if(!ed||ed.preview)return;
   if(e.target.closest&&e.target.closest('.float-panel,.modal-back'))return;
@@ -2890,6 +3056,8 @@ $('#subbar').innerHTML=`
   <button class="tb ico" data-act="tb-undo" title="元に戻す (Ctrl+Z)" aria-label="元に戻す">${ic('left',18)}</button>
   <button class="tb ico" data-act="tb-redo" title="やり直す (Ctrl+Y)" aria-label="やり直す">${ic('right',18)}</button>
   <span class="tb-sep"></span>
+  <button class="tb ico" data-act="tb-toc" title="目次（ドラッグで順序変更）" aria-label="目次">${ic('grip',18)}</button>
+  <span class="tb-sep"></span>
   <button class="tb ico" data-act="tb-url" title="URL" aria-label="URL">${ic('link',18)}</button>
   <button class="tb ico" data-act="tb-image" title="画像" aria-label="画像">${ic('image',18)}</button>
   <button class="tb ico" data-act="tb-video" title="映像" aria-label="映像">${ic('video',18)}</button>
@@ -2916,6 +3084,7 @@ $('#subbar').addEventListener('click',e=>{
     case 'tb-undo':undo();break;
     case 'tb-redo':redo();break;
     case 'tb-find':openFind();break;
+    case 'tb-toc':openTocPanel();break;
     case 'discard':discardEditor();break;
     case 'cancel':cancelEditor();break;
     case 'draft':saveDraft();break;
@@ -2981,13 +3150,12 @@ function renderBar(){
   h.innerHTML=si<0
     ?`<div class="bar-grp">${items.map(barItemHTML).join('')}</div>`
     :`<div class="bar-grp pre">${items.slice(0,si).map(barItemHTML).join('')}</div>${barItemHTML('search')}<div class="bar-grp post">${items.slice(si+1).map(barItemHTML).join('')}</div>`;
-  h.insertAdjacentHTML('beforeend','<div class="bar-resize" title="ドラッグして大きさを変える"></div>');
   const slot=$('#barSearchSlot',h);if(slot&&hdrSearch)slot.appendChild(hdrSearch.el);
   renderLogos();updateNav();updateTabBtn();measureBar();
 }
-let scrollHidden=false,arrowOpen=false,arrowSticky=false,arrowOpenedAt=0,toggleDragged=false;
-/* 矢印で開く：sticky=true（矢印・Ctrl+M）なら矢印を押すまで閉じない／false（画面の端・なぞり）ならバーのボタンやバー以外を押すと閉じる */
-function setArrow(open,sticky){arrowOpen=open;arrowSticky=open&&!!sticky;if(open)arrowOpenedAt=Date.now();applyBar()}
+let scrollHidden=false,arrowOpen=false,arrowHow='',arrowOpenedAt=0,toggleDragged=false;
+/* 矢印で開く方法：'btn'＝矢印を押した（矢印を押すまで閉じない）／'key'＝Ctrl+M（バー以外を押すと閉じる）／'edge'＝画面の端（バーのボタンやバー以外を押すと閉じる） */
+function setArrow(open,how){arrowOpen=open;arrowHow=open?how:'';if(open)arrowOpenedAt=Date.now();applyBar()}
 /* ▽△ボタンの位置（ページバーが上下なら左右に、左右なら上下に動かせる） */
 function placeToggle(){
   const t=$('#barToggle');if(!t)return;
@@ -3020,51 +3188,30 @@ const edgeBox=()=>({w:document.documentElement.clientWidth,h:document.documentEl
 function nearEdge(x,y,px){const p=currentPos(),b=edgeBox();return p==='top'?y<=px:p==='bottom'?y>=b.h-px:p==='left'?x<=px:x>=b.w-px}
 function inwardDist(dx,dy){const p=currentPos();return p==='top'?dy:p==='bottom'?-dy:p==='left'?dx:-dx}
 const arrowClosed=()=>settings.barMode==='arrow'&&!arrowOpen&&!PANE;
-document.addEventListener('mousemove',e=>{if(e.buttons||!arrowClosed())return;if(nearEdge(e.clientX,e.clientY,3))setArrow(true,false)});
 document.addEventListener('pointerdown',e=>{
   if(!arrowClosed())return;
   if(e.target.closest&&e.target.closest('#barToggle,.modal-back,.float-panel'))return;
-  if(nearEdge(e.clientX,e.clientY,14))setArrow(true,false);
+  if(nearEdge(e.clientX,e.clientY,14))setArrow(true,'edge');
 });
 (function(){
   let ts=null,ms=null;
   document.addEventListener('touchstart',e=>{if(!arrowClosed()||e.touches.length!==1){ts=null;return}const t=e.touches[0];ts=nearEdge(t.clientX,t.clientY,28)?{x:t.clientX,y:t.clientY}:null},{passive:true});
-  document.addEventListener('touchmove',e=>{if(!ts)return;if(!arrowClosed()){ts=null;return}const t=e.touches[0];if(inwardDist(t.clientX-ts.x,t.clientY-ts.y)>=28){ts=null;setArrow(true,false)}},{passive:true});
+  document.addEventListener('touchmove',e=>{if(!ts)return;if(!arrowClosed()){ts=null;return}const t=e.touches[0];if(inwardDist(t.clientX-ts.x,t.clientY-ts.y)>=28){ts=null;setArrow(true,'edge')}},{passive:true});
   document.addEventListener('touchend',()=>{ts=null},{passive:true});
   document.addEventListener('mousedown',e=>{ms=(arrowClosed()&&nearEdge(e.clientX,e.clientY,28))?{x:e.clientX,y:e.clientY}:null});
-  document.addEventListener('mousemove',e=>{if(ms&&e.buttons&&arrowClosed()&&inwardDist(e.clientX-ms.x,e.clientY-ms.y)>=28){ms=null;setArrow(true,false)}});
+  document.addEventListener('mousemove',e=>{if(ms&&e.buttons&&arrowClosed()&&inwardDist(e.clientX-ms.x,e.clientY-ms.y)>=28){ms=null;setArrow(true,'edge')}});
   document.addEventListener('mouseup',()=>{ms=null});
 })();
-/* 矢印を押して（またはCtrl+Mで）開いたときは、矢印を押すまで閉じない。画面の端から開いたときだけ、バーのボタンやバー以外を押すと閉じる（検索履歴の×では閉じない） */
+/* 閉じ方：矢印を押して開いたときは、矢印を押すまで閉じない。Ctrl+Mで開いたときは、バー以外を押すと閉じる。画面の端から開いたときは、バーのボタンやバー以外を押すと閉じる（検索バーの×・検索履歴の×では閉じない） */
 document.addEventListener('click',e=>{
-  if(settings.barMode!=='arrow'||!arrowOpen||arrowSticky)return;
+  if(settings.barMode!=='arrow'||!arrowOpen||arrowHow==='btn')return;
   if(Date.now()-arrowOpenedAt<450)return;
   const t=e.target;
-  if(t.closest('#barToggle,.dd-x'))return;
-  if(t.closest('#header')){if(t.closest('a,button,.dd-row'))setTimeout(()=>{arrowOpen=false;arrowSticky=false;applyBar()},0);return}
+  if(t.closest('#barToggle,.dd-x,.s-clear'))return;
+  if(t.closest('#header')){if(arrowHow==='edge'&&t.closest('a,button,.dd-row'))setTimeout(()=>{arrowOpen=false;arrowHow='';applyBar()},0);return}
   if(t.closest('.modal-back,.float-panel'))return;
-  arrowOpen=false;arrowSticky=false;applyBar();
+  arrowOpen=false;arrowHow='';applyBar();
 });
-/* ページバーの端をドラッグして、バーの大きさを変える */
-(function(){
-  let d=null;
-  document.addEventListener('pointerdown',e=>{
-    const h=e.target.closest&&e.target.closest('.bar-resize');if(!h)return;
-    const r=$('#header').getBoundingClientRect();
-    d={pid:e.pointerId,h,sc:+settings.barScale||1,size:isVertical()?r.width:r.height,x:e.clientX,y:e.clientY};
-    h.classList.add('on');try{h.setPointerCapture(e.pointerId)}catch{}
-    e.preventDefault();
-  });
-  document.addEventListener('pointermove',e=>{
-    if(!d||e.pointerId!==d.pid)return;
-    const p=currentPos();
-    const delta=p==='top'?e.clientY-d.y:p==='bottom'?d.y-e.clientY:p==='left'?e.clientX-d.x:d.x-e.clientX;
-    const sc=Math.max(.7,Math.min(1.8,d.sc*(d.size+delta)/d.size));
-    settings.barScale=sc;document.documentElement.style.setProperty('--bsc',String(sc));measureBar();
-  });
-  const end=e=>{if(!d||e.pointerId!==d.pid)return;d.h.classList.remove('on');d=null;LS.set('mywiki.settings',settings)};
-  document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
-})();
 function applyBar(){
   const arrow=settings.barMode==='arrow',pos=currentPos();
   const hide=arrow?!arrowOpen:(settings.barMode==='always'?false:scrollHidden);
@@ -3106,13 +3253,14 @@ function mockItem(id,i,arr){
 }
 function addMenuHTML(){
   const cur=getBarItems();
-  return Object.keys(BAR_DEFS).filter(k=>k!=='search'||!cur.includes('search')).map(k=>{
+  return Object.keys(BAR_DEFS).filter(k=>k==='space'||!cur.includes(k)).map(k=>{
     const icon=k==='space'?'<span class="mi-space">空白</span>':k==='tabs'?'<span class="tab-btn" style="width:22px;height:22px;border-width:2px;font-size:12px">'+tabs.length+'</span>':ic(k==='home'?'home':BAR_ICON[k],18);
     return `<button type="button" data-act="bar-add" data-id="${k}" title="${k==='space'?'ボタンの間隔を空けます':BAR_DEFS[k].n+'を追加'}">${icon}${k==='space'?'':BAR_DEFS[k].n}</button>`;
   }).join('');
 }
+let addMenuOpen=false;
 function mockHTML(){
-  return `<div class="mock-wrap"><div class="mock-bar ${isVertical()?'v':'h'}" id="mockBar">${getBarItems().map(mockItem).join('')}</div></div><div class="lbl" style="margin-top:16px">追加できるボタン（押すと最後に追加。ドラッグすると好きな位置に追加できます。ページバーのボタンをこの欄にドラッグすると消せます。同じボタンを何個でも置けます）</div><div id="mockMenu" class="mock-menu">${addMenuHTML()}</div>`;
+  return `<div class="mock-wrap"><div class="mock-bar ${isVertical()?'v':'h'}" id="mockBar">${getBarItems().map(mockItem).join('')}</div></div><div id="mockMenuWrap" class="mock-menu-wrap"><div class="row"><span class="lbl" style="margin:0">追加できるボタン</span><button type="button" class="icon-btn" data-act="bar-menu-toggle" title="ページバーにないボタンを表示" aria-label="ページバーにないボタンを表示">${ic('dots',20)}</button></div>${addMenuOpen?`<div id="mockMenu" class="mock-menu" style="margin-top:8px">${addMenuHTML()}</div>`:''}</div>`;
 }
 function initMock(){
   const bar=$('#mockBar');if(!bar)return;
@@ -3147,7 +3295,7 @@ function initMock(){
     }
     const r0=it.getBoundingClientRect();
     it.style.transform=`translate(${e.clientX-drag.gx-r0.left}px,${e.clientY-drag.gy-r0.top}px)`;
-    const mn=$('#mockMenu');
+    const mn=$('#mockMenuWrap');
     if(mn){const r=mn.getBoundingClientRect();mn.classList.toggle('del-target',e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom)}
   });
   const end=e=>{
@@ -3155,7 +3303,7 @@ function initMock(){
     const d=drag;drag=null;
     if(d.on){
       d.it.classList.remove('dragging');d.it.style.transform='';
-      const mn=$('#mockMenu');let del=false;
+      const mn=$('#mockMenuWrap');let del=false;
       if(mn){mn.classList.remove('del-target');const r=mn.getBoundingClientRect();del=e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom}
       if(del){   // 「追加できるボタン」の欄にドラッグすると消える
         const id=d.it.dataset.id,rest=$$('.mi',bar).filter(x=>x!==d.it).map(x=>x.dataset.id);
@@ -3261,12 +3409,24 @@ window.addEventListener('scroll',()=>{
     }
   });
   $('#toTopBtn').innerHTML=ic('up');
-  $('#vfBtn').innerHTML=ic('search',22);
-  $('#vfBtn').addEventListener('click',openViewFind);
+  $('#fabBtn').innerHTML=ic('dots',22);
+  $('#fabBtn').addEventListener('click',toggleFab);
+  $('#fabWrap').addEventListener('click',e=>{
+    const b=e.target.closest('[data-fab],[data-act],a.fab-it');if(!b||b.id==='fabBtn')return;
+    const c=fabContext();
+    if(b.dataset.act==='bm-toggle'){toggleBM(b.dataset.id);return}
+    $('#fabMenu').hidden=true;
+    switch(b.dataset.fab){
+      case 'find':openViewFind();break;
+      case 'toc':openTocPanel();break;
+      case 'del':if(c.id)deleteArticle(c.id);break;
+    }
+  });
+  document.addEventListener('click',e=>{if(!e.target.closest('#fabWrap'))$('#fabMenu').hidden=true});
   $('#prevTelop .btn').addEventListener('click',endPreview);
   $('#toTopBtn').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
   $('#barToggle').innerHTML=ic('tri',22);
-  $('#barToggle').addEventListener('click',()=>{if(toggleDragged)return;setArrow(!arrowOpen,true)});
+  $('#barToggle').addEventListener('click',()=>{if(toggleDragged)return;setArrow(!arrowOpen,'btn')});
   const st0=history.state;
   if(st0&&typeof st0.d==='number')curDepth=st0.d;
   else{try{history.replaceState({d:0},'')}catch{}}
@@ -3288,6 +3448,7 @@ window.addEventListener('scroll',()=>{
   }catch{toast('記事の保存領域を開けませんでした（このセッションのみ有効）')}
   applyBg();renderLogos();applyFavicon();
   route();
+  setTimeout(checkBackup,1500);
 })();
 </script>
 </body>
